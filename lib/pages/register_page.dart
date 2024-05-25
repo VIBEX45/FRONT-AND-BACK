@@ -112,7 +112,6 @@ final TextEditingController _confirmController = TextEditingController();
                 ),
                   TextField(
                     controller: _pwController,
-                    maxLength: 8,
                     inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-z A-Z 0-9]')), ],
                     decoration: const InputDecoration(
                         contentPadding: EdgeInsets.only(bottom: 5,left: 15),

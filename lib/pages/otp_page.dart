@@ -46,7 +46,7 @@ final TextEditingController _otpController = TextEditingController();
             //welcome back message
             Center(
               child: Text(
-                "Mohon isi data dengan benar",
+                "Mohon isi Kode dengan benar",
                 style: GoogleFonts.inter(
                   color: Colors.white,
                   fontSize: 16, 
@@ -65,14 +65,15 @@ final TextEditingController _otpController = TextEditingController();
                   TextField(
                     controller: _otpController,
                     maxLength: 8,
-                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-z A-Z 0-9]')), ],
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly, ],
                     decoration: const InputDecoration(
                         contentPadding: EdgeInsets.only(bottom: 5,left: 15),
                         border: OutlineInputBorder(),
                         hintFadeDuration: Duration(milliseconds: 300),
                         alignLabelWithHint: true,
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        hintText: 'Masukkan otp',
+                        hintText: 'Masukkan OTP',
                           hintStyle: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -84,7 +85,7 @@ final TextEditingController _otpController = TextEditingController();
               ),
             ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
 
             //login button
@@ -126,7 +127,7 @@ final TextEditingController _otpController = TextEditingController();
             ),
 
             const SizedBox(
-                height: 20,
+                height: 30,
               ),
             //login now
             
@@ -134,7 +135,7 @@ final TextEditingController _otpController = TextEditingController();
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
               Text(
-                "Kode OTP sudah dikirim ke Nomor Telepon",
+                "Kode OTP sudah dikirim",
                 ),
             ],
             ),
