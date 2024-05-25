@@ -2,8 +2,8 @@ import "package:cool_alert/cool_alert.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:google_fonts/google_fonts.dart";
-import "package:komas_latihan/pages/home_page.dart";
 import "package:komas_latihan/pages/login_page.dart";
+import "package:komas_latihan/pages/otp_page.dart";
 
 // ignore: must_be_immutable
 class RegisterPage extends StatefulWidget {
@@ -16,6 +16,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
 //controller
 final TextEditingController _emailController = TextEditingController();
+final TextEditingController _nomorController = TextEditingController();
 final TextEditingController _pwController = TextEditingController();
 final TextEditingController _confirmController = TextEditingController();
 
@@ -88,6 +89,27 @@ final TextEditingController _confirmController = TextEditingController();
                 const SizedBox(
                   height: 20,
                 ),
+                TextField(
+                    controller: _nomorController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.only(bottom: 5, left: 15),
+                        hintFadeDuration: Duration(milliseconds: 300),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        hintText: 'Masukkan Nomor Telepon',
+                          hintStyle: TextStyle(
+                            decorationStyle: TextDecorationStyle.dotted,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 221, 210, 210),
+                          ),
+                    ),
+                  ),
+                const SizedBox(
+                  height: 20,
+                ),
                   TextField(
                     controller: _pwController,
                     maxLength: 8,
@@ -148,13 +170,14 @@ final TextEditingController _confirmController = TextEditingController();
                   ),
                   onPressed: () {
                     String email = _emailController.text.trim();
+                    String telepon = _nomorController.text.trim();
                     String password = _pwController.text.trim();
                     String konfirm = _confirmController.text.trim();
                     
-                    if (email.isNotEmpty && password.isNotEmpty && konfirm.isNotEmpty) {
+                    if (email.isNotEmpty && password.isNotEmpty && konfirm.isNotEmpty && telepon.isNotEmpty) {
                       if (konfirm == password) {
                           Navigator.of(context).pop();
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(admin: true, login: false,),));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => otp()));
                       } else{
                         CoolAlert.show(
                             context: context,
