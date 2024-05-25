@@ -175,7 +175,7 @@ Widget savecancel(){
           onPressed: (){
             gambar != null?
             setState(() {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(admin: true),));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(admin: true, login: false,),));
               CoolAlert.show(
                 // backgroundColor: Colors.white,
                 context: context,

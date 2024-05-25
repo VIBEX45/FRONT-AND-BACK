@@ -212,6 +212,7 @@ class _PemesananState extends State<Pemesanan> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
             children:[
+              widget.admin?
               const Text(
                 'Fasilitas',
                 style: TextStyle(
@@ -219,6 +220,25 @@ class _PemesananState extends State<Pemesanan> {
                   fontWeight: FontWeight.bold,
                   color: Colors.black
                 ),
+              ):
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Fasilitas',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      
+                    },
+                    child: Icon(Icons.edit, color: Colors.black, size: 14,),
+                  )
+                ],
               ),
               const SizedBox(
                 height: 5,
@@ -278,6 +298,7 @@ class _PemesananState extends State<Pemesanan> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
             children:[
+              widget.admin?
               const Text(
                 'Fasilitas',
                 style: TextStyle(
@@ -285,6 +306,25 @@ class _PemesananState extends State<Pemesanan> {
                   fontWeight: FontWeight.bold,
                   color: Colors.black
                 ),
+              ):
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Fasilitas',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      
+                    },
+                    child: Icon(Icons.edit, color: Colors.black, size: 14,),
+                  )
+                ],
               ),
               const SizedBox(
                 height: 5,
@@ -458,7 +498,7 @@ class _PemesananState extends State<Pemesanan> {
                 },
                 borderRadius: BorderRadius.circular(15),
                 child: Container(
-                  alignment: Alignment.centerRight,
+                  alignment: Alignment.center,
                   height: 45,
                   width: 110,
                   decoration: BoxDecoration(
@@ -476,13 +516,11 @@ class _PemesananState extends State<Pemesanan> {
                     ],
                     color: Colors.white,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      "Pesan Kamar",
-                      style: TextStyle(fontSize: 12, color: warna2, fontWeight: FontWeight.bold),
-                    ),
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    widget.admin?
+                    "Pesan Kamar": "Kembali",
+                    style: TextStyle(fontSize: 12, color: warna2, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -519,13 +557,6 @@ class _PemesananState extends State<Pemesanan> {
               InkWell (
                 onTap: () {
                   Navigator.of(context).pop();
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Transaksi(
-                    harga : pesanlt1[index].hargabayar,
-                    kamar: pesanlt1[index].nokamar,
-                    lantai: pesanlt1[index].nomorlantai,
-                    
-
-                    ),));
                 },
                 borderRadius: BorderRadius.circular(15),
                 child: Container(
@@ -551,7 +582,7 @@ class _PemesananState extends State<Pemesanan> {
                     padding: const EdgeInsets.only(right: 15),
                     child: Text(
                       textAlign: TextAlign.center,
-                      "Ubah Kamar",
+                      "Kembali",
                       style: TextStyle(fontSize: 12, color: warna2, fontWeight: FontWeight.bold),
                     ),
                   ),

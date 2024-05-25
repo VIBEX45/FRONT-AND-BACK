@@ -5,16 +5,12 @@ import "package:flutter/widgets.dart";
 
 import "package:google_fonts/google_fonts.dart";
 import "package:komas_latihan/pages/home_page.dart";
+import "package:komas_latihan/pages/register_page.dart";
 
 
+// ignore: must_be_immutable
 class LoginPage extends StatefulWidget {
 
-  final void Function()? onTap;
-
-  LoginPage({
-    super.key,
-    this.onTap
-  });
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -154,7 +150,7 @@ bool pakai = true;
                     
                     if (email.isNotEmpty && password.isNotEmpty) {
                     Navigator.of(context).pop();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(admin: true),));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(admin: true, login : false),));
                     }
                   },
                   ),
@@ -176,7 +172,12 @@ bool pakai = true;
                 ),
 
               GestureDetector(
-              onTap: widget.onTap,
+              onTap: () {
+                setState(() {
+                  Navigator.of(context).pop();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage(),));
+                });
+              },
                 child: Text("Daftar sekarang",
                 style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),

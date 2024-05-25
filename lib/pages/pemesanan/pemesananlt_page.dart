@@ -1,21 +1,31 @@
-import 'package:komas_latihan/CostumView/lantai2.dart';
+import 'package:komas_latihan/CostumView/lantai.dart';
 import 'package:komas_latihan/pages/pemesanan_page.dart';
 import 'package:flutter/material.dart';
 
-class Pemesananlt2Page extends StatefulWidget {
-  const Pemesananlt2Page({super.key});
+
+
+// ignore: must_be_immutable
+class PemesananltPage extends StatefulWidget {
+   PemesananltPage({required this.admin, required this.lantaikamar});
+
+   bool admin;
+   bool lantaikamar;
+
   @override
-  State<Pemesananlt2Page> createState() => _Pemesananlt2PageState();
+  State<PemesananltPage> createState() => _Pemesananlt1pageState(admin : admin, lantaikamar: lantaikamar);
 }
 
-class _Pemesananlt2PageState extends State<Pemesananlt2Page> {
+class _Pemesananlt1pageState extends State<PemesananltPage> {
+  _Pemesananlt1pageState({required this.admin, required this.lantaikamar});
+  bool admin;
+
+  bool lantaikamar;
   
-  final List<Widget> screens = [
-    const Lantai2(),
-  ];
 
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currenscreen = const Lantai2();
+
+    bool bayar = true;
+    double tinggibar = 90;
 
   Color warna1 = Colors.brown.shade200;
   Color warna2 = Colors.brown;
@@ -26,7 +36,7 @@ class _Pemesananlt2PageState extends State<Pemesananlt2Page> {
       body:       
       PageStorage(
         bucket: bucket,
-        child: currenscreen,
+        child: Lantai(lantaikamar: lantaikamar),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       floatingActionButton: Padding(
@@ -34,9 +44,8 @@ class _Pemesananlt2PageState extends State<Pemesananlt2Page> {
         child: FloatingActionButton(
           onPressed: (){
             Navigator.of(context).pop();
-             
           },
-          backgroundColor: warna2,
+          backgroundColor:warna2,
           foregroundColor: Colors.white,
           shape: const CircleBorder(),
           mini: true,
@@ -45,27 +54,38 @@ class _Pemesananlt2PageState extends State<Pemesananlt2Page> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: warna2,
+        height: tinggibar,
+        shadowColor: Colors.black,
         child: SizedBox(
           height: 40,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
             //tab
-              const Column(
-                children: [
-                Padding(
-                  padding: EdgeInsets.only(right: 125),
-                  child: Text(
+              const Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                  Text(
                     textAlign: TextAlign.start,
                     "Rp",
                   style: TextStyle(color: Colors.white, fontSize: 12)
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child:
+                    Row(
+                      children: [
+                        Text(
+                          "500.000 - 800.000",
+                        style: TextStyle(color: Colors.white,fontSize: 15, fontWeight: FontWeight.bold)
+                        ),
+                      ],
+                    )
+                  ),
+                  ],
                 ),
-                Text(
-                  "500.000 - 800.000",
-                style: TextStyle(color: Colors.white,fontSize: 15, fontWeight: FontWeight.bold)
-                ),
-                ],
               ),
               InkWell (
                 onTap: () {
@@ -78,8 +98,8 @@ class _Pemesananlt2PageState extends State<Pemesananlt2Page> {
                     context: context,
                     builder: (BuildContext context){
                       return SizedBox(
-                        height: 300,
-                      child : Pemesanan(lantai: false,admin: true,),
+                        height: 310,
+                      child : Pemesanan(admin: admin,lantai: lantaikamar,),
 
                       );
                     }
@@ -87,7 +107,7 @@ class _Pemesananlt2PageState extends State<Pemesananlt2Page> {
                 },
                 borderRadius: BorderRadius.circular(15),
                 child: Container(
-                  alignment: Alignment.centerRight,
+                  alignment: Alignment.center,
                   height: 45,
                   width: 110,
                   decoration: BoxDecoration(
@@ -105,13 +125,16 @@ class _Pemesananlt2PageState extends State<Pemesananlt2Page> {
                     ],
                     color: Colors.white,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      "Pesan Kamar",
-                      style: TextStyle(fontSize: 12, color: warna2, fontWeight: FontWeight.bold),
-                    ),
+                  child: 
+                  admin?
+                  Text(
+                    textAlign: TextAlign.center,
+                    "Pesan Kamar",
+                    style: TextStyle(fontSize: 12, color: warna2, fontWeight: FontWeight.bold),
+                  ): Text(
+                    textAlign: TextAlign.center,
+                    "Lihat Kamar",
+                    style: TextStyle(fontSize: 12, color: warna2, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

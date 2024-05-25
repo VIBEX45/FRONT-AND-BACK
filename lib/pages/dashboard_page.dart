@@ -5,8 +5,7 @@ import 'package:komas_latihan/CostumView/pembayaran.dart';
 import 'package:komas_latihan/CostumView/info.dart';
 import 'package:komas_latihan/pages/home_page.dart';
 import 'package:komas_latihan/pages/intro_page.dart';
-import 'package:komas_latihan/pages/pemesanan/pemesananlt1_page.dart';
-import 'package:komas_latihan/pages/pemesanan/pemesananlt2_page.dart';
+import 'package:komas_latihan/pages/pemesanan/pemesananlt_page.dart';
 
 // ignore: must_be_immutable
 class DashboardPage extends StatefulWidget {
@@ -21,7 +20,6 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   _DashboardPageState({required this.admin});
   bool admin;
-
   bool isHovering = false;
 
   Color warna1 = Colors.brown.shade200;
@@ -95,10 +93,15 @@ class _DashboardPageState extends State<DashboardPage> {
                               ),
                               onTap: () {
                                 setState(() {
-                                  admin?
-                                  admin = false : admin = true;
+
+                                  if (admin == true) {
+                                  Navigator.of(context).pop();
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => IntroPage(login: false)));
+                                  } else {
+                                  Navigator.of(context).pop();
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(admin: true, login: false,)));
                                     
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(admin: admin)));
+                                  }
                                 });
                               },
                             ),
@@ -115,7 +118,8 @@ class _DashboardPageState extends State<DashboardPage> {
                               ),
                               onTap: (){
                                 setState(() {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => IntroPage()));
+                                  Navigator.of(context).pop();
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => IntroPage(login: true,)));
                                 });
                               },
                             ),
@@ -190,7 +194,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     Container(
                        alignment: Alignment.bottomCenter,
                       // padding: const EdgeInsets.only(bottom: 35),
-                      height: MediaQuery.of(context).size.height *0.85,
+                      height: MediaQuery.of(context).size.height *0.82,
                       width: MediaQuery.of(context).size.width,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -202,7 +206,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => 
-                                Pemesananlt1Page(admin: admin),
+                                PemesananltPage(admin: admin, lantaikamar: true,),
                                 ),
                               );
                               });
@@ -261,7 +265,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => 
-                                const Pemesananlt2Page(),
+                                PemesananltPage(admin: admin, lantaikamar: false,),
                                 ),
                               );
                               },

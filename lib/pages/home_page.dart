@@ -7,8 +7,9 @@ import 'package:komas_latihan/pages/profil_page.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
-  HomePage({required this.admin});
+  HomePage({required this.admin, required this.login});
   bool admin;
+  bool login;
 
 
   @override
@@ -18,7 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   
   _HomePageState({required this.admin});
-  bool admin = true;
+  bool admin;
 
   // final initialScreen = const DashboardPage(admin: true);
 
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
 
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currenscreen = DashboardPage(admin: true);
+  Widget anotherscreen = DashboardPage(admin: false);
 
   Color warna1 = Colors.brown.shade200;
   Color warna2 = Colors.brown;
@@ -45,7 +47,9 @@ class _HomePageState extends State<HomePage> {
       body: 
       PageStorage(
         bucket: bucket,
-        child: currenscreen,
+        child: 
+        admin?
+        currenscreen: anotherscreen
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Visibility(
@@ -82,6 +86,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: (){
                       setState(() {
                         currenscreen = DashboardPage(admin: admin);
+                        anotherscreen = DashboardPage(admin: admin);
                         currentab = 0;
                       });
                     },
@@ -109,6 +114,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: (){
                       setState(() {
                         currenscreen = MutasiPage(admin: admin,);
+                        anotherscreen = MutasiPage(admin: admin);
                         currentab = 1;
                       });
                     },
@@ -153,6 +159,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: (){
                       setState(() {
                         currenscreen = NotifikasiPage(admin: admin,);
+                        anotherscreen = NotifikasiPage(admin: admin);
                         currentab = 2;
                       });
                     },
@@ -180,6 +187,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: (){
                       setState(() {
                         currenscreen = const ProfilPage();
+                        anotherscreen = const ProfilPage();
                         currentab = 3;
                       });
                     },

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 
-class Lantai2 extends StatefulWidget {
-    const Lantai2({super.key});
+// ignore: must_be_immutable
+class Lantai extends StatefulWidget {
+    Lantai({required this.lantaikamar});
+
+    bool lantaikamar;
 
   @override
-  State<Lantai2> createState() => _Lantai2State();
+  State<Lantai> createState() => _LantaiState();
 }
 
-class _Lantai2State extends State<Lantai2> {
-  
-  double tinggi = 38;
-  double lebar = 60;
+class _LantaiState extends State<Lantai> {
+
+  AssetImage lantai1 = AssetImage('lib/src/images/2.jpeg');
+  AssetImage lantai2 = AssetImage('lib/src/images/1.jpeg');
 
   Color warna1 = Colors.brown.shade200;
   Color warna2 = Colors.brown;
@@ -19,22 +22,22 @@ class _Lantai2State extends State<Lantai2> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: 
-      ListView(
+      body: ListView(
         scrollDirection: Axis.vertical,
         children: [
           Container(
             height: 300.0,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('lib/src/images/1.jpeg'),
+                image: widget.lantaikamar? lantai1: lantai2,
                 fit: BoxFit.cover,
               ),
             ),
             child: Padding(
               padding: const EdgeInsets.only(right: 20, top: 10),
               child: Text(
-                "Lt.2",
+                widget.lantaikamar?
+                "Lt.1":"Lt.2",
                 textAlign: TextAlign.right,
                 style: TextStyle(fontSize: 34, 
                 color: Colors.white, 
@@ -69,12 +72,6 @@ class _Lantai2State extends State<Lantai2> {
                 Text(
                 "Kata pengantar adalah salah satu bagian awal atau pendahuluan dari sebuah karya tulis yang memuat beberapa bagian penting, sepertipembukaan, isi, dan penutup. Kamu tahu nggak kenapa kata pengantar terletak di awal karya tulis?\n\n\nFasilitas\nKamar mandi dalam\nTempat Tidur\nLemari",
                 style: TextStyle(fontSize: 10),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  height: 15,
                 ),
               ],
             ),

@@ -3,22 +3,21 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:komas_latihan/pages/home_page.dart";
+import "package:komas_latihan/pages/login_page.dart";
 
-class RegisterPage extends StatelessWidget {
-  
-  //controller
+// ignore: must_be_immutable
+class RegisterPage extends StatefulWidget {
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+
+//controller
 final TextEditingController _emailController = TextEditingController();
 final TextEditingController _pwController = TextEditingController();
 final TextEditingController _confirmController = TextEditingController();
-
-//tap to register page
-final void Function()? onTap;
-
-
- RegisterPage({
-  super.key,
-  this.onTap
- });
 
  //method register
  void register(){
@@ -91,7 +90,8 @@ final void Function()? onTap;
                 ),
                   TextField(
                     controller: _pwController,
-                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-z A-Z 0-9]'))],
+                    maxLength: 8,
+                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-z A-Z 0-9]')), ],
                     decoration: const InputDecoration(
                         contentPadding: EdgeInsets.only(bottom: 5,left: 15),
                         border: OutlineInputBorder(),
@@ -154,7 +154,7 @@ final void Function()? onTap;
                     if (email.isNotEmpty && password.isNotEmpty && konfirm.isNotEmpty) {
                       if (konfirm == password) {
                           Navigator.of(context).pop();
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(admin: true),));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(admin: true, login: false,),));
                       } else{
                         CoolAlert.show(
                             context: context,
@@ -195,7 +195,12 @@ final void Function()? onTap;
                 ),
 
               GestureDetector(
-                onTap: onTap,
+                onTap: () {
+                setState(() {
+                  Navigator.of(context).pop();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));
+                });
+                },
                 child: Text("Masuk di sini",
                 style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 
