@@ -84,7 +84,7 @@ class _BuktiTransferState extends State<BuktiTransfer> {
                 ),
 
                 gambar != null ?
-
+                gambar == null?
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Container(
@@ -106,6 +106,32 @@ class _BuktiTransferState extends State<BuktiTransfer> {
                       ),
                     ),
                   ):
+                  GestureDetector(
+                  onTap: (){
+                    selectimage();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width*0.7,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: Colors.black),
+                        boxShadow: [
+                          BoxShadow(
+                            spreadRadius: 2,
+                            blurRadius: 10,
+                            color: warna1.withOpacity(0.2)
+                          ),
+                        ],
+                        image: DecorationImage(
+                          image: FileImage(gambar!),
+                          fit: BoxFit.cover,
+                          ),
+                      ),
+                    ),
+                  )
+                ):
               DottedBorder(
                 color: Colors.black,
                 strokeWidth: 1,
@@ -175,6 +201,7 @@ Widget savecancel(){
           onPressed: (){
             gambar != null?
             setState(() {
+              Navigator.of(context).pop();
               Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
               CoolAlert.show(
                 // backgroundColor: Colors.white,

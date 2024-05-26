@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:komas_latihan/pages/buktitransfer_page.dart';
 import 'package:flutter/material.dart';
 
@@ -87,7 +88,18 @@ class _TransaksiState extends State<Transaksi> {
               ),
               InkWell (
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const BuktiTransfer(),));
+                  setState(() {
+                    if (check == false) {
+                    CoolAlert.show(
+                      context: context, 
+                      type: CoolAlertType.warning,
+                      title: 'Belum Dipilih',
+                      text: '\nsilahkan memilih kamar \nterlebih dahulu untuk dibayar\n',
+                      );
+                  }else{
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const BuktiTransfer(),));
+                  }
+                  });
                 },
                 borderRadius: BorderRadius.circular(15),
                 child: Container(

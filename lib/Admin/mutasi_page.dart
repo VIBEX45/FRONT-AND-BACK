@@ -1,10 +1,11 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cool_alert/cool_alert.dart';
 
 class AdminMtsi {
 
   bool readiable = false;
+  bool tolak = false;
   String nama;
   String nokamar;
   String harga;
@@ -31,7 +32,11 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
 
   int selectedIndex = 0;
 
+  bool perip = true;
+
   String ending = '...';
+  
+  bool gambar = true;
   
   String tanggal = DateFormat("dd-MM-yyyy").format(DateTime.now());
   
@@ -78,8 +83,18 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
               padding: const EdgeInsets.only(top: 8),
               child: Container(
                 alignment: Alignment.center,
-                child:const Text(
+                child:
+                perip?
+                const Text(
                     "Verifikasi",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15
+                    ),
+                  ):
+                  const Text(
+                    "Verifikasi Transaksi",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -91,257 +106,19 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
           ],
         ),
     ),
-      body: verifWidget(),
+      body: perip? daftarWidget(): verifwidget(selectedIndex)
     );
   }
   
-  Widget verifWidget(){
+  Widget daftarWidget(){
     return ListView.separated(itemBuilder: (context, index){
       return InkWell(
       onTap: () {
-          setState(() {  
-            showDialog(
-              context: context, 
-              builder: (context) => AlertDialog(
-                backgroundColor: Colors.white,
-                contentPadding: EdgeInsets.zero,
-                shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-                ),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: InkWell(
-                      onTap: (){
-                        setState(() {
-                          Navigator.of(context).pop();
-                          mutasi[index].readiable?
-                          null:
-                          CoolAlert.show(
-                            context: context,
-                            type: CoolAlertType.success,
-                            title: 'Berhasil',
-                            text: "\nTransaksi Berhasil Terverifikasi\n",
-                          );
-                          mutasi[index].readiable = true;
-                        });
-                      },
-                      borderRadius: BorderRadius.circular(15),
-                      child:  
-                      mutasi[index].readiable?
-                      
-                      Container(
-                        alignment: Alignment.center,
-                        height: 30,
-                        width: 90,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.red.shade400
-                        ),
-                        child: const Text(
-                          textAlign: TextAlign.center,
-                          'keluar',
-                          style: TextStyle(fontSize: 11, color: Colors.white),
-                        ),
-                      ):
-                      Container(
-                        alignment: Alignment.center,
-                        height: 30,
-                        width: 90,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.orange
-                        ),
-                        child: const Text(
-                          textAlign: TextAlign.center,
-                          'Verifikasi',
-                          style: TextStyle(fontSize: 11, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-                icon: Column(
-                  children: [ 
-                const Text(
-                  textAlign: TextAlign.center,
-                  'Transaksi',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 10,
-                  ),
-                  ),
-                  Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 5, top: 13),
-                      child: Text(
-                        'Profil',
-                        style: TextStyle(
-                          fontSize: 11, 
-                          fontWeight: FontWeight.w200
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          height: 35,
-                          width: 35,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: AssetImage('lib/src/images/3.jpeg'),
-                              fit: BoxFit.cover
-                              ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 18),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                mutasi[index].nokamar,
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                mutasi[index].nama,
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    garispemabatas()
-                  ],
-                ) ,
-                  ],
-                  ),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Bukti Transaksi',
-                      style: TextStyle(
-                        fontSize: 10, 
-                        fontWeight: FontWeight.w200
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Pembayaran',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'Rp.${mutasi[index].harga}',
-                          style: const TextStyle(
-                            fontSize: 10,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Container(
-                          alignment: Alignment.center,
-                          height: 80,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: const  BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('lib/src/images/dashboardkos.jpeg'),
-                              fit: BoxFit.cover
-                              ),
-                          ),
-                        ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: GestureDetector(
-                        onTap: () {
-                              
-                            },
-                            child: const Text(
-                            'Lihat Detail',
-                            style: TextStyle(
-                              fontSize: 10,
-                              decoration: TextDecoration.underline
-                            ),
-                            )
-                          ),
-                    ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    garispemabatas(),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    const Text(
-                      'Waktu Tinggal',
-                      style: TextStyle(
-                        fontSize: 10, 
-                        fontWeight: FontWeight.w200
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                            '${mutasi[index].bulanini} s/d ${mutasi[index].bulandepan}',
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            
-                          },
-                          child: const Text(
-                          'Edit',
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.underline, decorationColor: Colors.red
-                          ),
-                          )
-                        ),
-                      ],
-                    ),
-                  ],
-                ) ,
-              )
-              );
-          });
+        setState(() {
+           selectedIndex = index;
+
+           perip = false;
+        });
       },
       child: Container(
         margin: const EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 10),
@@ -372,7 +149,15 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
-                ),
+                ),  mutasi[index].tolak?
+                    Text(
+                      'Verifikasi Ditolak',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ):
                     mutasi[index].readiable?
                     const Text(
                       'lunas',
@@ -389,7 +174,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                         color: mutasi[index].warna,
                         fontWeight: FontWeight.bold
                       ),
-                    )
+                    ),
                   ],
                 ),
               ],
@@ -423,13 +208,401 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
     }, itemCount: mutasi.length);
   }
 
+  Widget verifwidget(int index){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: ListView(
+        children: [
+          const SizedBox(
+            height: 15,
+          ),
+          
+          Column(
+            children: [ 
+            Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 5, top: 13),
+                child: Text(
+                  'Profil',
+                  style: TextStyle(
+                    fontSize: 11, 
+                    fontWeight: FontWeight.w200
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 8
+              ),
+              Row(
+                children: [
+                  Container(
+                    height: 35,
+                    width: 35,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: AssetImage('lib/src/images/3.jpeg'),
+                        fit: BoxFit.cover
+                        ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          mutasi[index].nokamar,
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          mutasi[index].nama,
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                ],
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              garispemabatas()
+            ],
+          ) ,
+            ],
+            ),
+          
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                'Bukti Transaksi',
+                style: TextStyle(
+                  fontSize: 10, 
+                  fontWeight: FontWeight.w200
+                ),
+              ),
+              const SizedBox(
+                height: 10
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Pembayaran',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Rp.${mutasi[index].harga}',
+                    style: const TextStyle(
+                      fontSize: 10,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  gambar?
+                  Container(
+                    alignment: Alignment.center,
+                    height: 80,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: const  BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('lib/src/images/dashboardkos.jpeg'),
+                        fit: BoxFit.cover
+                        ),
+                    ),
+                  ):Container(
+                    alignment: Alignment.center,
+                    height: 400,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: const  BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('lib/src/images/dashboardkos.jpeg'),
+                        fit: BoxFit.fitWidth
+                        ),
+                    ),
+                  ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: GestureDetector(
+                  onTap: () {
+                        setState(() {
+                          if (gambar == true) {
+                            gambar = false;
+                          } else {
+                            gambar= true;
+                          }
+                        });
+                      },
+                      child: const Text(
+                      'Lihat Detail',
+                      style: TextStyle(
+                        fontSize: 10,
+                        decoration: TextDecoration.underline
+                      ),
+                      )
+                    ),
+              ),
+                ],
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              garispemabatas(),
+              const SizedBox(
+                height: 15,
+              ),
+              const Text(
+                'Waktu Tinggal',
+                style: TextStyle(
+                  fontSize: 10, 
+                  fontWeight: FontWeight.w200
+                ),
+              ),
+              const SizedBox(
+                height: 8
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                      '${mutasi[index].bulanini} s/d ${mutasi[index].bulandepan}',
+                    style: const TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        showDialog(
+                          context: context, 
+                          builder: (context) => AlertDialog(
+                            contentPadding: EdgeInsets.zero,
+                            shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            ),
+                            actions: [
+                              Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 25),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                      });
+                                      Navigator.of(context).pop();
+                                      
+                                    },
+                                    child: Text('oke',  style: TextStyle(fontSize: 12, color: warna2),)
+                                    ),
+                                ),
+                              ),
+                            ],
+                          )
+                          );
+
+                      });
+                    },
+                    child: const Text(
+                    'Edit',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline, decorationColor: Colors.red
+                    ),
+                    )
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 50,
+          ),
+          mutasi[index].readiable || mutasi[index].tolak?
+          const SizedBox(
+            height: 0,
+            width: 0,
+          ) :
+          savecancel(index),
+          
+          mutasi[index].readiable || mutasi[index].tolak?
+
+          Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: InkWell(
+                onTap: (){
+                  setState(() {
+                    perip = true;
+                    mutasi[index].tolak = false;
+                    mutasi[index].readiable = false;
+                  });
+                },
+                borderRadius: BorderRadius.circular(15),
+                child:  
+                Container(
+                  alignment: Alignment.center,
+                  height: 30,
+                  width: 90,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.red.shade400
+                  ),
+                  child: const Text(
+                    textAlign: TextAlign.center,
+                    'Batalkan',
+                    style: TextStyle(fontSize: 11, color: Colors.white),
+                  ),
+                )
+              ),
+            ):SizedBox(
+              height: 0,
+              width: 0,
+            ),
+
+            const SizedBox(
+              height: 20,
+            ),
+
+          Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: InkWell(
+                onTap: (){
+                  setState(() {
+                    perip = true;
+                  });
+                },
+                borderRadius: BorderRadius.circular(15),
+                child:  
+                Container(
+                  alignment: Alignment.center,
+                  height: 30,
+                  width: 90,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: warna2
+                  ),
+                  child: const Text(
+                    textAlign: TextAlign.center,
+                    'Kembali',
+                    style: TextStyle(fontSize: 11, color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+          
+          SizedBox(
+          height: 100,
+        )
+        
+          ]
+        ),
+    );
+  }
+
+  Widget savecancel(int index){
+  return Padding(
+    padding: const EdgeInsets.only(left: 20, right: 20),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        OutlinedButton(
+          onPressed: (){
+            setState(() {
+              perip = true;
+              mutasi[index].tolak?
+              
+              null:CoolAlert.show(
+                context: context,
+                type: CoolAlertType.error,
+                title: 'Ditolak',
+                text: "\nTransaksi Berhasil Ditolak\n",
+                
+              );
+              
+              mutasi[index].tolak = true;
+              
+            });
+          }, 
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          ),
+          child: const Text(
+            "Tolak",
+            style: TextStyle(
+              fontSize: 10,
+              letterSpacing: 2,
+              color: Colors.black
+            ),
+          ),
+          ),
+        ElevatedButton(
+          onPressed: (){
+            setState(() {
+              perip = true;
+              mutasi[index].readiable?
+              null:
+              CoolAlert.show(
+                context: context,
+                type: CoolAlertType.success,
+                title: 'Diverifikasi',
+                text: "\nTransaksi Berhasil Terverifikasi\n",
+              );
+              mutasi[index].readiable = true;
+            });
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: warna2,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
+          ),
+            child: const Text(
+            "Terima", style: TextStyle(
+              fontSize: 10,
+              letterSpacing: 2, 
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
   Widget garispemabatas(){
-    return const Text(
-      '________________________________________',
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        fontSize: 10,
-        fontWeight: FontWeight.w200,
+    return Container(
+      alignment: Alignment.center,
+      child: const Text(
+        '_________________________________________',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }

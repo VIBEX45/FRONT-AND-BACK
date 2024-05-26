@@ -17,13 +17,10 @@ class AdminNotif{
 class AdminNotifikasiPage extends StatefulWidget {
 
   @override
-  State<AdminNotifikasiPage> createState() => _NotifikasiPageState();
+  State<AdminNotifikasiPage> createState() => _AdminNotifikasiPageState();
 }
 
-class _NotifikasiPageState extends State<AdminNotifikasiPage> {
-  
-
-  int selectedIndex = 0;
+class _AdminNotifikasiPageState extends State<AdminNotifikasiPage> {
 
   String ending = '...';
 
