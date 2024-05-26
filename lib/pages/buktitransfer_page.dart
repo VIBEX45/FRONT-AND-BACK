@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:komas_latihan/pages/home_page.dart';
+import 'package:komas_latihan/User/home_page.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -175,7 +175,7 @@ Widget savecancel(){
           onPressed: (){
             gambar != null?
             setState(() {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(admin: true, login: false,),));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
               CoolAlert.show(
                 // backgroundColor: Colors.white,
                 context: context,

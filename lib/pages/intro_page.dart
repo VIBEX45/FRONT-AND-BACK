@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter/widgets.dart';
 // import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:komas_latihan/pages/home_page.dart';
+import 'package:komas_latihan/Admin/home_page.dart';
 import 'package:komas_latihan/pages/login_page.dart';
 
 // ignore: must_be_immutable
@@ -106,10 +106,10 @@ class IntroPage extends StatelessWidget {
                   ),
                   onPressed: () {
                     if (login == true) {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(admin: true,),));
                     }else{
                     Navigator.of(context).pop();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(admin: false, login: false,),));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AdminHomePage(),));
                     }
                   },
                   child: const Row(

@@ -2,7 +2,7 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:google_fonts/google_fonts.dart";
-import "package:komas_latihan/pages/home_page.dart";
+import "package:komas_latihan/User/home_page.dart";
 
 // ignore: must_be_immutable
 class otp extends StatefulWidget {
@@ -106,7 +106,7 @@ final TextEditingController _otpController = TextEditingController();
                     
                     if (otp.isNotEmpty) {
                         Navigator.of(context).pop();
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(admin: true, login: false,),));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
                     }
                   },
                   child: const Row(

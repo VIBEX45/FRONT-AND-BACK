@@ -3,23 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:komas_latihan/CostumView/chat.dart';
 import 'package:komas_latihan/CostumView/pembayaran.dart';
 import 'package:komas_latihan/CostumView/info.dart';
-import 'package:komas_latihan/pages/home_page.dart';
 import 'package:komas_latihan/pages/intro_page.dart';
 import 'package:komas_latihan/pages/pemesanan/pemesananlt_page.dart';
 
 // ignore: must_be_immutable
 class DashboardPage extends StatefulWidget {
-   DashboardPage({required this.admin});
-   bool admin;
   
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState(admin : admin);
+  State<DashboardPage> createState() => _DashboardPageState();
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  _DashboardPageState({required this.admin});
-  bool admin;
   bool isHovering = false;
 
   Color warna1 = Colors.brown.shade200;
@@ -93,15 +88,8 @@ class _DashboardPageState extends State<DashboardPage> {
                               ),
                               onTap: () {
                                 setState(() {
-
-                                  if (admin == true) {
                                   Navigator.of(context).pop();
                                   Navigator.push(context, MaterialPageRoute(builder: (context) => IntroPage(login: false)));
-                                  } else {
-                                  Navigator.of(context).pop();
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(admin: true, login: false,)));
-                                    
-                                  }
                                 });
                               },
                             ),
@@ -206,7 +194,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => 
-                                PemesananltPage(admin: admin, lantaikamar: true,),
+                                PemesananltPage(admin: true, lantaikamar: true,),
                                 ),
                               );
                               });
@@ -265,7 +253,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => 
-                                PemesananltPage(admin: admin, lantaikamar: false,),
+                                PemesananltPage(admin: true, lantaikamar: false,),
                                 ),
                               );
                               },

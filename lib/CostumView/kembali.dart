@@ -1,6 +1,4 @@
-import 'package:komas_latihan/pages/homePage/lantai1_page.dart';
-import 'package:komas_latihan/pages/homePage/lantai2_page.dart';
-import 'package:komas_latihan/pages/profil_page.dart';
+import 'package:komas_latihan/User/profil_page.dart';
 import 'package:flutter/material.dart';
 
 class Kembali extends StatefulWidget {
@@ -13,8 +11,6 @@ class Kembali extends StatefulWidget {
 class _KembaliState extends State<Kembali> {
 
   final List<Widget> screens = [
-    const Lantai1(),
-    const Lantai2(),
     const ProfilPage(),
   ];
 

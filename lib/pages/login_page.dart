@@ -4,12 +4,14 @@ import "package:flutter/services.dart";
 import "package:flutter/widgets.dart";
 
 import "package:google_fonts/google_fonts.dart";
-import "package:komas_latihan/pages/home_page.dart";
+import "package:komas_latihan/User/home_page.dart";
 import "package:komas_latihan/pages/register_page.dart";
 
 
 // ignore: must_be_immutable
 class LoginPage extends StatefulWidget {
+  LoginPage({required this.admin});
+  bool admin;
 
 
   @override
@@ -150,7 +152,7 @@ bool pakai = true;
                     
                     if (email.isNotEmpty && password.isNotEmpty) {
                     Navigator.of(context).pop();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(admin: true, login : false),));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
                     }
                   },
                   ),

@@ -220,7 +220,7 @@ final TextEditingController _confirmController = TextEditingController();
                 onTap: () {
                 setState(() {
                   Navigator.of(context).pop();
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(admin: true,),));
                 });
                 },
                 child: Text("Masuk di sini",

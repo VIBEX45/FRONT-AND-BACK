@@ -487,7 +487,9 @@ class _PemesananState extends State<Pemesanan> {
               ),
               InkWell (
                 onTap: () {
-                  Navigator.of(context).pop();
+                  widget.admin?
+                  setState(() {
+                    Navigator.of(context).pop();
                   Navigator.push(context, MaterialPageRoute(builder: (context) => Transaksi(
                     harga : pesanlt1[index].hargabayar,
                     kamar: pesanlt1[index].nokamar,
@@ -495,6 +497,11 @@ class _PemesananState extends State<Pemesanan> {
                     
 
                     ),));
+                  }):
+                  setState(() {
+                    Navigator.of(context).pop();
+                  });
+                  
                 },
                 borderRadius: BorderRadius.circular(15),
                 child: Container(

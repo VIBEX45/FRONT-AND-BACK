@@ -15,8 +15,6 @@ class Notif{
 }
 
 class NotifikasiPage extends StatefulWidget {
-  const NotifikasiPage({super.key, required this.admin});
-  final bool admin;
 
   @override
   State<NotifikasiPage> createState() => _NotifikasiPageState();
@@ -63,27 +61,6 @@ class _NotifikasiPageState extends State<NotifikasiPage> {
     return 
     tambah?
     Scaffold(
-      backgroundColor: Colors.white,
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton:
-      widget.admin?
-      null:
-      Padding(
-        padding: const EdgeInsets.only(top: 15),
-        child: FloatingActionButton(
-          onPressed: (){
-            setState(() {
-              tambah = false;
-            });
-          },
-          backgroundColor: warna2,
-          foregroundColor: Colors.white,
-          shape: const CircleBorder(),
-          mini: true,
-          child: const Icon(Icons.add),
-        ),
-      ),
-
       appBar: AppBar(
         toolbarHeight: 90,
         backgroundColor: warna2,
@@ -293,7 +270,6 @@ class _NotifikasiPageState extends State<NotifikasiPage> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            widget.admin?
             notif[index].read?
             Container(
               height: 50,
@@ -312,15 +288,6 @@ class _NotifikasiPageState extends State<NotifikasiPage> {
                 shape: BoxShape.circle,
               ),
               child: Badge(child: Icon(Icons.notifications, size: 25, color: Colors.grey.shade700)),
-            ):
-            Container(
-              height: 50,
-              width: 30,
-              padding: const EdgeInsets.all(10),
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-              ),
-              child: Icon(Icons.notifications, size: 25, color: Colors.grey.shade700),
             ),
             Expanded(
               child: Container(
@@ -338,7 +305,6 @@ class _NotifikasiPageState extends State<NotifikasiPage> {
                             fontSize: 14,
                           ),
                         ),
-                        widget.admin?
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -366,19 +332,8 @@ class _NotifikasiPageState extends State<NotifikasiPage> {
                               ),
                             ),
                           ],
-                        ):
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              notif[index].notifdesk.substring(0, 5) + ending,
-                              style: const TextStyle(
-                                fontSize: 12,
-                              ),
-                            ),
-                          ]
                         ),
-                      ],
+                        ],
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 5),
