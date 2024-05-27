@@ -9,6 +9,8 @@ import 'package:komas_latihan/pages/pemesanan/pemesananlt_page.dart';
 
 // ignore: must_be_immutable
 class AdminDashboardPage extends StatefulWidget {
+  const AdminDashboardPage({super.key});
+
 
   @override
   State<AdminDashboardPage> createState() => _AdminDashboardPageState();

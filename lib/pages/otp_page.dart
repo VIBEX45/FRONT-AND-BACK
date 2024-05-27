@@ -6,6 +6,8 @@ import "package:komas_latihan/User/home_page.dart";
 
 // ignore: must_be_immutable
 class otp extends StatefulWidget {
+  const otp({super.key});
+
 
   @override
   State<otp> createState() => _otpState();
@@ -58,7 +60,7 @@ final TextEditingController _otpController = TextEditingController();
             const SizedBox(
               height: 40,
             ),
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width*0.8,
               child: Column(
                 children: [
@@ -95,9 +97,9 @@ final TextEditingController _otpController = TextEditingController();
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    fixedSize: MaterialStatePropertyAll(Size(110, 40)),
+                    fixedSize: WidgetStatePropertyAll(const Size(110, 40)),
                     alignment: Alignment.center,
-                    backgroundColor: MaterialStateColor.resolveWith((states) {
+                    backgroundColor: WidgetStateColor.resolveWith((states) {
                         return Colors.brown;
                     })
                   ),

@@ -16,7 +16,7 @@ class Pesanlt1 {
 
 // ignore: must_be_immutable
 class Pemesanan extends StatefulWidget {
-  Pemesanan({required this.lantai, required this.admin});
+  Pemesanan({super.key, required this.lantai, required this.admin});
   bool lantai;
   bool admin;
 
@@ -236,7 +236,7 @@ class _PemesananState extends State<Pemesanan> {
                     onTap: () {
                       
                     },
-                    child: Icon(Icons.edit, color: Colors.black, size: 14,),
+                    child: const Icon(Icons.edit, color: Colors.black, size: 14,),
                   )
                 ],
               ),
@@ -322,7 +322,7 @@ class _PemesananState extends State<Pemesanan> {
                     onTap: () {
                       
                     },
-                    child: Icon(Icons.edit, color: Colors.black, size: 14,),
+                    child: const Icon(Icons.edit, color: Colors.black, size: 14,),
                   )
                 ],
               ),

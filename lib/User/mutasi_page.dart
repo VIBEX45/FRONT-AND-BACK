@@ -22,6 +22,8 @@ class Mtsi {
 
 
 class MutasiPage extends StatefulWidget {
+  const MutasiPage({super.key});
+
 
   @override
 State<MutasiPage> createState() => _MutasiPageState();

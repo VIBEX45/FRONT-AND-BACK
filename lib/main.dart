@@ -7,6 +7,8 @@ void main (){
 
 // ignore: must_be_immutable
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
 
   @override
   Widget build(BuildContext context) {

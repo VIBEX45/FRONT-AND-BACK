@@ -24,6 +24,8 @@ class AdminMtsi {
 
 
 class AdminMutasiPage extends StatefulWidget {
+  const AdminMutasiPage({super.key});
+
 
   @override
 State<AdminMutasiPage> createState() => _AdminMutasiPageState();
@@ -150,7 +152,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                     fontSize: 16,
                   ),
                 ),  mutasi[index].tolak?
-                    Text(
+                    const Text(
                       'Verifikasi Ditolak',
                       style: TextStyle(
                         fontSize: 13,
@@ -478,7 +480,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                   ),
                 )
               ),
-            ):SizedBox(
+            ):const SizedBox(
               height: 0,
               width: 0,
             ),
@@ -514,7 +516,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
               ),
             ),
           
-          SizedBox(
+          const SizedBox(
           height: 100,
         )
         

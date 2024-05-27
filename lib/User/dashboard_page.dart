@@ -8,6 +8,8 @@ import 'package:komas_latihan/pages/pemesanan/pemesananlt_page.dart';
 
 // ignore: must_be_immutable
 class DashboardPage extends StatefulWidget {
+  const DashboardPage({super.key});
+
   
 
   @override

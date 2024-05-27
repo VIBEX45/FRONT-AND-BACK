@@ -7,6 +7,8 @@ import 'package:komas_latihan/Admin/profil_page.dart';
 
 // ignore: must_be_immutable
 class AdminHomePage extends StatefulWidget {
+  const AdminHomePage({super.key});
+
   @override
   State<AdminHomePage> createState() => _AdminHomePageState();
 }

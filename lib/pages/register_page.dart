@@ -7,6 +7,8 @@ import "package:komas_latihan/pages/otp_page.dart";
 
 // ignore: must_be_immutable
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -65,7 +67,7 @@ final TextEditingController _confirmController = TextEditingController();
 
 
             //email textfield
-             Container(
+             SizedBox(
               width: MediaQuery.of(context).size.width*0.8,
               child: Column(
                 children: [
@@ -161,9 +163,9 @@ final TextEditingController _confirmController = TextEditingController();
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    fixedSize: MaterialStatePropertyAll(Size(110, 40)),
+                    fixedSize: WidgetStatePropertyAll(const Size(110, 40)),
                     alignment: Alignment.center,
-                    backgroundColor: MaterialStateColor.resolveWith((states) {
+                    backgroundColor: WidgetStateColor.resolveWith((states) {
                         return Colors.brown;
                     })
                   ),

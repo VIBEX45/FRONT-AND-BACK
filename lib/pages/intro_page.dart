@@ -7,7 +7,7 @@ import 'package:komas_latihan/pages/login_page.dart';
 
 // ignore: must_be_immutable
 class IntroPage extends StatelessWidget {
-  IntroPage({required this.login});
+  IntroPage({super.key, required this.login});
 
   bool login;
 
@@ -70,7 +70,7 @@ class IntroPage extends StatelessWidget {
               ),
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
 
@@ -98,9 +98,9 @@ class IntroPage extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    fixedSize: MaterialStatePropertyAll(Size(90, 30)),
+                    fixedSize: WidgetStatePropertyAll(const Size(90, 30)),
                     alignment: Alignment.center,
-                    backgroundColor: MaterialStateColor.resolveWith((states) {
+                    backgroundColor: WidgetStateColor.resolveWith((states) {
                         return Colors.brown;
                     })
                   ),

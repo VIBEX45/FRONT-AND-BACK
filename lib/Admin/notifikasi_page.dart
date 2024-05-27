@@ -15,6 +15,8 @@ class AdminNotif{
 }
 
 class AdminNotifikasiPage extends StatefulWidget {
+  const AdminNotifikasiPage({super.key});
+
 
   @override
   State<AdminNotifikasiPage> createState() => _AdminNotifikasiPageState();

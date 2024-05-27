@@ -10,7 +10,7 @@ import "package:komas_latihan/pages/register_page.dart";
 
 // ignore: must_be_immutable
 class LoginPage extends StatefulWidget {
-  LoginPage({required this.admin});
+  LoginPage({super.key, required this.admin});
   bool admin;
 
 
@@ -66,7 +66,7 @@ bool pakai = true;
 
             //email textfield
 
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width*0.8,
               child: Column(
                 children: [
@@ -124,9 +124,9 @@ bool pakai = true;
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    fixedSize: MaterialStatePropertyAll(Size(90, 40)),
+                    fixedSize: WidgetStatePropertyAll(const Size(90, 40)),
                     alignment: Alignment.center,
-                    backgroundColor: MaterialStateColor.resolveWith((states) {
+                    backgroundColor: WidgetStateColor.resolveWith((states) {
                         return Colors.brown;
                     })
                   ),
