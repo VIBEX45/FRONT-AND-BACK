@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:komas_latihan/User/home_page.dart';
@@ -5,6 +6,11 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:komas_latihan/utils/client_request.dart';
+
+import 'package:http/http.dart' as http;
+import 'package:komas_latihan/utils/settings.dart';
+import 'package:komas_latihan/utils/shared_pref.dart';
 
 class BuktiTransfer extends StatefulWidget {
   const BuktiTransfer({super.key});
@@ -20,13 +26,49 @@ class _BuktiTransferState extends State<BuktiTransfer> {
   Color warna2 = Colors.brown;
 
   File ? gambar;
+  String? imgPath;
 
   void selectimage() async{
     final img = await ImagePicker().pickImage(source :ImageSource.gallery);
 
     if(img == null) return;
     setState(() {
+      imgPath = img.path;
       gambar = File(img.path); 
+    });
+  }
+
+  Future<bool> uploadImage(String url, String multiPartField, dynamic filePath, String filename) async {
+    final streamedResponse = await ClientRequest.uploadFile(url, multiPartField, filePath, filename);
+    final response = await http.Response.fromStream(streamedResponse);
+    Map<String, dynamic> json = await jsonDecode(response.body);
+    debugPrint(json.toString());
+    if(json.isNotEmpty) return true;
+    else return false;
+  }
+  void getUsernameNuploadImage(String key, String url, String multiPartField, dynamic filePath){
+    MySharedPreferences.fetchFromShared(key).then((value){
+      String pathUrl = url+value![0];
+      uploadImage(pathUrl, multiPartField, filePath, "payment-proof_"+value[0]+".jpg").then((value){
+        if(value){
+          setState(() {
+          Navigator.of(context).pop();
+          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
+          CoolAlert.show(
+            // backgroundColor: Colors.white,
+            context: context,
+            type: CoolAlertType.success,
+            title: 'Berhasil',
+            text: "\nTunggu beberapa menit, Permintaan anda sedang diproses\n",
+          );
+          });
+        }
+        else{
+          debugPrint("Cannot Upload Image!");
+        }
+      });
+      
+      
     });
   }
 
@@ -199,21 +241,14 @@ Widget savecancel(){
           ),
         ElevatedButton(
           onPressed: (){
-            gambar != null?
-            setState(() {
-              Navigator.of(context).pop();
-              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
-              CoolAlert.show(
-                // backgroundColor: Colors.white,
-                context: context,
-                type: CoolAlertType.success,
-                title: 'Berhasil',
-                text: "\nTunggu beberapa menit, Permintaan anda sedang diproses\n",
+            if(gambar != null && imgPath != null){
+              getUsernameNuploadImage(
+                "_userLogged", 
+                MySettings.getUrl()+"room/payment/proof/", 
+                "payment-proof",
+                imgPath, 
               );
-            }):
-            setState(() {
-             
-            });
+            }
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: gambar != null? warna2: warna1,

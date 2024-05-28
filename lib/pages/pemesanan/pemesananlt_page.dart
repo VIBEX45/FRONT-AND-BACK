@@ -78,7 +78,7 @@ class _Pemesananlt1pageState extends State<PemesananltPage> {
                     Row(
                       children: [
                         Text(
-                          "500.000 - 800.000",
+                          "800.000",
                         style: TextStyle(color: Colors.white,fontSize: 15, fontWeight: FontWeight.bold)
                         ),
                       ],

@@ -4,9 +4,14 @@ import "package:flutter/services.dart";
 import "package:flutter/widgets.dart";
 
 import "package:google_fonts/google_fonts.dart";
+
+import 'package:komas_latihan/Admin/home_page.dart';
 import "package:komas_latihan/User/home_page.dart";
 import "package:komas_latihan/pages/register_page.dart";
-
+import "package:komas_latihan/utils/client_request.dart";
+import "package:komas_latihan/utils/settings.dart";
+import "package:shared_preferences/shared_preferences.dart";
+import "package:komas_latihan/utils/shared_pref.dart";
 
 // ignore: must_be_immutable
 class LoginPage extends StatefulWidget {
@@ -22,14 +27,53 @@ class LoginPage extends StatefulWidget {
 // ignore: must_be_immutable
 class _LoginPageState extends State<LoginPage> {
 
+  //email and pw tet controller 
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _pwController = TextEditingController();
 
-//email and pw tet controller 
-final TextEditingController _emailController = TextEditingController();
-final TextEditingController _pwController = TextEditingController();
+  String kondisi = TextEditingController().text.trim();
 
-String kondisi = TextEditingController().text.trim();
+  bool pakai = true;
 
-bool pakai = true;
+  Future<SharedPreferences>? sp;
+  Future<MySharedPreferences>? msp;
+
+  void login(String username, String password) async{
+    String url = MySettings.getUrl()+"login";
+    Map<String, dynamic> postBody = {
+      "userName": username,
+      "password": password
+    };
+
+    Future<List<String>?> fromPref;
+    Map<String, dynamic> resp = await ClientRequest.postData(url, postBody).then((value){
+      if(value["status"] == "OK"){
+
+        debugPrint(value.toString());
+        MySharedPreferences.saveToSharedList("_userLogged", [value["user_name"], value["role"].toString(), value["token"]]);
+        fromPref = MySharedPreferences.fetchFromShared("_userLogged").then((value){
+          debugPrint(value.toString());
+        });
+
+        switch(value["role"]){
+          case 1:{
+            Navigator.of(context).pop();
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AdminHomePage(),));
+          }break;
+          // case 2: {}break;
+          case 3: {
+            Navigator.of(context).pop();
+            Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
+          }break;
+        }
+      }
+      else{
+        debugPrint("Wrong username or password");
+        print("Wrong username or password");
+      }
+      return value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,14 +115,14 @@ bool pakai = true;
               child: Column(
                 children: [
                   TextField(
-                    controller: _emailController,
+                    controller: _usernameController,
                     inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9@.]'))],
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.only(bottom: 5, left: 15),
                         hintFadeDuration: Duration(milliseconds: 300),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        hintText: 'Masukkan Email',
+                        hintText: 'Masukkan Username',
                           hintStyle: TextStyle(
                             decorationStyle: TextDecorationStyle.dotted,
                             fontSize: 14,
@@ -146,13 +190,11 @@ bool pakai = true;
                   ),
                   
                   onPressed: () {
-                    String email = _emailController.text.trim();
+                    String username = _usernameController.text.trim();
                     String password = _pwController.text.trim();
 
-                    
-                    if (email.isNotEmpty && password.isNotEmpty) {
-                    Navigator.of(context).pop();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
+                    if (username.isNotEmpty && password.isNotEmpty) {
+                      login(username, password);
                     }
                   },
                   ),

@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MySharedPreferences{
 
-  static void saveToSharedList(String key, dynamic value) async{
+  static void saveToSharedList(String key, List<String> value) async{
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setStringList(key, value);
   }

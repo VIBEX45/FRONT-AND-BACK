@@ -4,6 +4,7 @@ import 'package:komas_latihan/Admin/dashboard_page.dart';
 import 'package:komas_latihan/Admin/mutasi_page.dart';
 import 'package:komas_latihan/Admin/notifikasi_page.dart';
 import 'package:komas_latihan/Admin/profil_page.dart';
+import 'package:komas_latihan/CostumView/tf_verify.dart';
 
 // ignore: must_be_immutable
 class AdminHomePage extends StatefulWidget {
@@ -20,9 +21,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
   // Bottom navBar
   int currentab = 0;
   final List<Widget> screens = [
-    AdminDashboardPage(),
-    AdminMutasiPage(),
-    AdminNotifikasiPage(),
+    const AdminDashboardPage(),
+    const AdminMutasiPage(),
+    const AdminNotifikasiPage(),
     const AdminProfilPage(),
   ];
 

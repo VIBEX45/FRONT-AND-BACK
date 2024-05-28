@@ -3,6 +3,9 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:komas_latihan/User/home_page.dart";
+import "package:komas_latihan/pages/login_page.dart";
+import "package:komas_latihan/utils/client_request.dart";
+import "package:komas_latihan/utils/settings.dart";
 
 // ignore: must_be_immutable
 class otp extends StatefulWidget {
@@ -15,13 +18,25 @@ class otp extends StatefulWidget {
 
 class _otpState extends State<otp> {
 
-//controller
-final TextEditingController _otpController = TextEditingController();
 
- //method register
- void register(){
+  //controller
+  final TextEditingController _otpController = TextEditingController();
 
- }
+  //method register
+  void sendOTP(String otp) {
+    String url = MySettings.getUrl().toString()+"register/user/"+otp; 
+
+    final response = ClientRequest.deleteData(url).then((value){
+      if(value["status"]== "OK"){
+        
+        Navigator.of(context).pop();
+        Navigator.push(context, MaterialPageRoute(builder: (context) =>LoginPage(admin: false),));
+      }
+      else{
+        debugPrint("Wrong OTP!");
+      }
+    });
+  } 
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +81,7 @@ final TextEditingController _otpController = TextEditingController();
                 children: [
                   TextField(
                     controller: _otpController,
-                    maxLength: 8,
+                    maxLength: 6,
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly, ],
                     decoration: const InputDecoration(
@@ -97,7 +112,7 @@ final TextEditingController _otpController = TextEditingController();
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    fixedSize: WidgetStatePropertyAll(const Size(110, 40)),
+                    fixedSize: const WidgetStatePropertyAll(Size(110, 40)),
                     alignment: Alignment.center,
                     backgroundColor: WidgetStateColor.resolveWith((states) {
                         return Colors.brown;
@@ -105,10 +120,8 @@ final TextEditingController _otpController = TextEditingController();
                   ),
                   onPressed: () {
                     String otp = _otpController.text.trim();
-                    
                     if (otp.isNotEmpty) {
-                        Navigator.of(context).pop();
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
+                        sendOTP(otp);
                     }
                   },
                   child: const Row(

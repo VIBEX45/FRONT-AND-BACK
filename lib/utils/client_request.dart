@@ -13,33 +13,58 @@ class ClientRequest{
     return json;
   }
 
+  static Future<List<Map<String, dynamic>>> getUsers(String url) async{
+    Uri uri = Uri.parse(url);
+    final response = await http.get(uri);
+    List<Map<String, dynamic>> json = jsonDecode(response.body);
+
+    return json;
+  }
+
+
   static Future<dynamic> postData(String url, Map<String, dynamic> postBody) async{
     Uri uri = Uri.parse(url);
     final response = await http.post(uri,
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+        "Content-Type": "application/x-www-form-urlencoded"
       },
       body: postBody,
       encoding: Encoding.getByName("utf-8")
     );
     Map<String, dynamic> json = jsonDecode(response.body);
+    print(json);
     return json;
   }
 
-  static Future<http.StreamedResponse> uploadFile(String url, String multiPartField, dynamic filePath) async{
+  static Future<http.StreamedResponse> uploadFile(String url, String multiPartField, dynamic filePath, String filename) async{
     Uri uri = Uri.parse(url);
     final request = http.MultipartRequest("PUT", uri);
 
-    await http.MultipartFile(
-      multiPartField, 
-      File(filePath).readAsBytes().asStream(),
-      File(filePath).lengthSync(),
-      filename: filePath.split["/"].last(),
-    );
+    request.headers.addAll({
+      "Content-Type": "multipart/form-data"
+    });
 
+    request.files.add(
+      http.MultipartFile(
+        multiPartField, 
+        File(filePath).readAsBytes().asStream(),
+        File(filePath).lengthSync(),
+        filename: filename,
+      )
+    );
+    
     final streamedResponse = request.send();
     return streamedResponse;
 
+  }
+
+
+  static Future<Map<String, dynamic>> deleteData(String url) async{
+    Uri uri = Uri.parse(url);
+    final response = await http.delete(uri);
+    Map<String, dynamic> json = jsonDecode(response.body);
+
+    return json;
   }
 
 

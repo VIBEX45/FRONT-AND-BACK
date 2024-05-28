@@ -1,6 +1,8 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:komas_latihan/utils/client_request.dart';
+import 'package:komas_latihan/utils/settings.dart';
 
 class AdminMtsi {
 
@@ -69,8 +71,42 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
 
   Color warna1 = Colors.brown.shade200;
   Color warna2 = Colors.brown;
-  @override
 
+  Future<List<Map<String, dynamic>>>? futureUsers;
+
+  Future<List<Map<String, dynamic>>> fetchUsers(url) async{
+    final response = await ClientRequest.getUsers(url);
+    List<Map<String, dynamic>>? usersVerifData;
+
+    response.forEach((e){
+      String roomUrl = MySettings.getUrl()+"room/"+e["roomId"];
+      ClientRequest.getData(roomUrl).then((value){
+        usersVerifData!.add({
+          "email": e["email"],
+          "username": e["user_name"],
+          "phonenumber": e["phone_number"],
+          "roleId": e["roleId"],
+          "roomnumber": value["roomNumber"],
+          "floornumber": value["roomFloor"]
+        });
+      });
+
+      
+    });
+
+    return usersVerifData!;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    futureUsers = fetchUsers(MySettings.getUrl()+ ("users"));
+
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -108,10 +144,121 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
           ],
         ),
     ),
-      body: perip? daftarWidget(): verifwidget(selectedIndex)
+      body: FutureBuilder(
+        future: futureUsers,
+        builder: (context, snapshot){
+          if(snapshot.hasData){
+            return verifyList(snapshot.data);
+          }
+          else{
+            return perip? daftarWidget(): verifwidget(selectedIndex);
+          }
+        },
+      ),
+      // body: perip? daftarWidget(): verifwidget(selectedIndex)
     );
   }
   
+  Widget verifyList(List<Map<String, dynamic>>? users){
+    return ListView.builder(
+      itemCount: users!.length,
+      itemBuilder: (context, index){
+      return InkWell(
+        onTap: () {
+          setState(() {
+            selectedIndex = index;
+
+            perip = false;
+          });
+        },
+        child: Container(
+          margin: const EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                users[index]["roomId"],
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+
+              const SizedBox(
+                height: 4,
+              ),
+
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                  Text(
+                    users[index]["username"],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),  mutasi[index].tolak?
+                      const Text(
+                        'Verifikasi Ditolak',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ):
+                      mutasi[index].readiable?
+                      const Text(
+                        'lunas',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ):
+                      Text(
+                        'Verifikasi',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: mutasi[index].warna,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                        const Text(
+                      'Masa Aktif',
+                      style: TextStyle(
+                        fontSize: 10,
+                      ),
+                    ),
+                    Text(
+                      '${mutasi[index].waktutinggal} hari',
+                      style: const TextStyle(
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+      }
+    );
+  }
+  
+
   Widget daftarWidget(){
     return ListView.separated(itemBuilder: (context, index){
       return InkWell(

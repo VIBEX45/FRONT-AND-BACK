@@ -4,6 +4,9 @@ import "package:flutter/services.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:komas_latihan/pages/login_page.dart";
 import "package:komas_latihan/pages/otp_page.dart";
+import "package:komas_latihan/utils/client_request.dart";
+import "package:komas_latihan/utils/settings.dart";
+import "package:komas_latihan/utils/shared_pref.dart";
 
 // ignore: must_be_immutable
 class RegisterPage extends StatefulWidget {
@@ -18,14 +21,43 @@ class _RegisterPageState extends State<RegisterPage> {
 
 //controller
 final TextEditingController _emailController = TextEditingController();
+final TextEditingController _usernameController = TextEditingController();
 final TextEditingController _nomorController = TextEditingController();
 final TextEditingController _pwController = TextEditingController();
 final TextEditingController _confirmController = TextEditingController();
 
  //method register
- void register(){
+ void register(String email, String username, String phonenumber, String password){
+  Map<String, dynamic> postBody = {
+    "email": email,
+    "userName": username,
+    "phoneNumber": phonenumber,
+    "password": password 
+    
+  };
+  String url = MySettings.getUrl()+"register";
+  final response = ClientRequest.postData(url, postBody).then((value){
+    if(value["status"]=="OK"){
+      Navigator.of(context).pop();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => otp()));
+    }
+    else{
+      debugPrint("Cant register!");
+    }
+  });
 
  }
+
+  String sanitizedNumber(String phoneNumber){
+    List<String> sanitized = phoneNumber.split("");
+    int start = 0; 
+    int end = sanitized.first == "0" ? 1 : 2;
+    sanitized.fillRange(start, end, "62");
+    phoneNumber = sanitized.join("");
+    return phoneNumber;
+    // debugPrint(phoneNumber);
+    // debugPrint("Sanitized"+sanitized.join("").toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +112,26 @@ final TextEditingController _confirmController = TextEditingController();
                         hintFadeDuration: Duration(milliseconds: 300),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         hintText: 'Masukkan Email',
+                          hintStyle: TextStyle(
+                            decorationStyle: TextDecorationStyle.dotted,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 221, 210, 210),
+                          ),
+                    ),
+                  ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                    controller: _usernameController,
+                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9@.]'))],
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.only(bottom: 5, left: 15),
+                        hintFadeDuration: Duration(milliseconds: 300),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        hintText: 'Masukkan Username',
                           hintStyle: TextStyle(
                             decorationStyle: TextDecorationStyle.dotted,
                             fontSize: 14,
@@ -171,14 +223,16 @@ final TextEditingController _confirmController = TextEditingController();
                   ),
                   onPressed: () {
                     String email = _emailController.text.trim();
+                    String username = _usernameController.text.trim();
                     String telepon = _nomorController.text.trim();
                     String password = _pwController.text.trim();
                     String konfirm = _confirmController.text.trim();
                     
-                    if (email.isNotEmpty && password.isNotEmpty && konfirm.isNotEmpty && telepon.isNotEmpty) {
+                    telepon = sanitizedNumber(telepon);
+                    
+                    if (email.isNotEmpty && username.isNotEmpty && password.isNotEmpty && konfirm.isNotEmpty && telepon.isNotEmpty) {
                       if (konfirm == password) {
-                          Navigator.of(context).pop();
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => otp()));
+                          register(email, username, telepon, konfirm);
                       } else{
                         CoolAlert.show(
                             context: context,

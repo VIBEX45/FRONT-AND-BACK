@@ -1,6 +1,7 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:komas_latihan/pages/buktitransfer_page.dart';
 import 'package:flutter/material.dart';
+import 'package:komas_latihan/utils/shared_pref.dart';
 
 
 // ignore: must_be_immutable
@@ -72,7 +73,7 @@ class _TransaksiState extends State<Transaksi> {
                 child: Column(
                   children: [
                   Padding(
-                    padding: EdgeInsets.only(right: 125),
+                    padding: EdgeInsets.only(right: 80),
                     child: Text(
                       textAlign: TextAlign.start,
                       "Rp",
@@ -80,7 +81,7 @@ class _TransaksiState extends State<Transaksi> {
                     ),
                   ),
                   Text(
-                    "500.000 - 800.000",
+                    "800.000",
                   style: TextStyle(color: Colors.white,fontSize: 15, fontWeight: FontWeight.bold)
                   ),
                   ],
@@ -97,7 +98,7 @@ class _TransaksiState extends State<Transaksi> {
                       text: '\nsilahkan memilih kamar \nterlebih dahulu untuk dibayar\n',
                       );
                   }else{
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const BuktiTransfer(),));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => BuktiTransfer(),));
                   }
                   });
                 },
