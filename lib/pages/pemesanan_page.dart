@@ -41,8 +41,8 @@ class _PemesananState extends State<Pemesanan> {
       floors.add(
         Pesanlt1(
           tombol: const Color.fromRGBO(217,217,217,1),
-          nokamar:'0'+(i+1).toString(),
-          nomorlantai: (i+1).toString(),
+          nokamar:(i+1).toString(),
+          nomorlantai: "2",
           selectedindex: i,
           harga: "800.000 / Bulan",
           hargabayar: 800000,
@@ -54,7 +54,7 @@ class _PemesananState extends State<Pemesanan> {
         Pesanlt1(
           tombol: const Color.fromRGBO(217,217,217,1),
           nokamar:'0'+(i+1).toString(),
-          nomorlantai: (i+1).toString(),
+          nomorlantai: "1",
           selectedindex: i,
           harga: "800.000 / Bulan",
           hargabayar: 800000,
