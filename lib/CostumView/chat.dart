@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Chat extends StatefulWidget {
   const Chat({super.key});
@@ -13,6 +14,7 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
+    final Uri whatsapp = Uri.parse('https://wa.me/6282153492615');
     return MouseRegion(
           onEnter: (f) {
             setState(() {
@@ -25,8 +27,8 @@ class _ChatState extends State<Chat> {
             });
           },
           child: InkWell(
-            onTap: () {
-            
+            onTap: () async {
+                await launchUrl(whatsapp);
             }, 
           child: Column(
             children: [
@@ -36,7 +38,7 @@ class _ChatState extends State<Chat> {
                 height: 45,
                 decoration: BoxDecoration(
                   color: isHovering ? const Color.fromARGB(255, 215, 237, 255) : Colors.white,
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(12),
                   boxShadow: const [
                     BoxShadow(
                       color: Colors.brown,

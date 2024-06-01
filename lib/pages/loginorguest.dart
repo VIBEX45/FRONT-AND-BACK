@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 // import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komas_latihan/Admin/admin_home_page.dart';
-import 'package:komas_latihan/pages/loginorguest.dart';
+import 'package:komas_latihan/Guest/guest_home_page.dart';
+import 'package:komas_latihan/pages/login_page.dart';
 
 // ignore: must_be_immutable
-class IntroPage extends StatelessWidget {
-  IntroPage({required this.login});
+class LoginOrGuest extends StatelessWidget {
+  LoginOrGuest({required this.login});
 
   bool login;
 
@@ -21,7 +22,7 @@ class IntroPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const SizedBox(height: 40),
+            const SizedBox(height: 50),
 
             //nameApk
             Center(
@@ -35,7 +36,12 @@ class IntroPage extends StatelessWidget {
             ),
 
             const SizedBox(
-              height: 40,
+              height: 15,
+            ),
+
+            
+            const SizedBox(
+              height: 25,
             ),
 
             //icon
@@ -49,21 +55,10 @@ class IntroPage extends StatelessWidget {
             ),
 
             //title
-            login?
             Text(
-              "Kenyamanan, Keamanan, dan Kekeluargaan",
+              "Sudah Punya Akun?",
               style: GoogleFonts.inter(
                 fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                // flex:CrossAxisAlignment.center
-              ),
-            ):
-            Text(
-              "Selamat Datang Ibu/Tuan Kost",
-              textAlign: TextAlign.center,
-              style: GoogleFonts.inter(
-                fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
                 // flex:CrossAxisAlignment.center
@@ -71,42 +66,75 @@ class IntroPage extends StatelessWidget {
             ),
 
             SizedBox(
-              height: 20,
+              height: 30,
             ),
 
-            //subtitle
-            login?
             Text(
-              "Semua dimulai di sini",
-              style: GoogleFonts.inter(fontSize: 18, color: Colors.white),
-            ):
-            Text(
-              "Anda Telah Menggunakan Admin Mode",
-              textAlign: TextAlign.center,
-              style: GoogleFonts.inter(fontSize: 18, color: Colors.white),
+              "Jika Sudah memiliki Akun silahkan Tekan next",
+              style: GoogleFonts.inter(fontSize: 16, color: Colors.white),
             ),
 
             const SizedBox(
-              height: 60,
+              height: 40,
+            ),
+
+            const SizedBox(
+              height: 40,
             ),
             
             //getStart
             // Padding(padding: 
+
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child:  Container(
-                alignment: Alignment.bottomRight,
+                alignment: Alignment.centerRight,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    fixedSize: MaterialStatePropertyAll(Size(90, 30)),
+                    fixedSize: MaterialStatePropertyAll(Size(100, 30)),
                     alignment: Alignment.center,
                     backgroundColor: MaterialStateColor.resolveWith((states) {
                         return Colors.brown;
                     })
                   ),
                   onPressed: () {
+                    
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => GuestHomePage()));
+                    
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Guest',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                
+                        ),
+                      ),
+                      Icon(Icons.arrow_forward, color: Colors.white, size: 12,),
+                    ],
+                  ),
+                  ),
+              )
+            ),
+            
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child:  Container(
+                alignment: Alignment.bottomRight,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    fixedSize: MaterialStatePropertyAll(Size(100, 30)),
+                    alignment: Alignment.center,
+                    backgroundColor: MaterialStateColor.resolveWith((states) {
+                        return Colors.brown.shade300;
+                    })
+                  ),
+                  onPressed: () {
                     if (login == true) {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginOrGuest(login: login),));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(admin: true,),));
                     }else{
                     Navigator.of(context).pop();
                     Navigator.push(context, MaterialPageRoute(builder: (context) => AdminHomePage(),));
@@ -116,7 +144,7 @@ class IntroPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'next',
+                        'Login',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,

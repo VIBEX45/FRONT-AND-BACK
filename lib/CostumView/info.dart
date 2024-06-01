@@ -51,7 +51,7 @@ class _InfoState extends State<Info> {
                 height: 45,
                 decoration: BoxDecoration(
                   color: isHovering ? const Color.fromARGB(255, 215, 237, 255) : Colors.white,
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(12),
                   boxShadow: const [
                     BoxShadow(
                       color: Colors.brown,

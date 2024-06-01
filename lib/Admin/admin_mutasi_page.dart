@@ -110,6 +110,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
     );
   }
   
+  //https://github.com/fabiojansenbr/flutter_api_to_sqlite/blob/master/lib/src/pages/home_page.dart verif
   Widget daftarWidget(){
     return ListView.separated(itemBuilder: (context, index){
       return InkWell(
@@ -150,7 +151,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                     fontSize: 16,
                   ),
                 ),  mutasi[index].tolak?
-                    Text(
+                    const Text(
                       'Verifikasi Ditolak',
                       style: TextStyle(
                         fontSize: 13,
