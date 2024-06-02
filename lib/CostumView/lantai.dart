@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class Lantai extends StatefulWidget {
-    Lantai({required this.lantaikamar});
+    Lantai({super.key, required this.lantaikamar});
 
     bool lantaikamar;
 
@@ -12,8 +12,8 @@ class Lantai extends StatefulWidget {
 
 class _LantaiState extends State<Lantai> {
 
-  AssetImage lantai1 = AssetImage('lib/src/images/2.jpeg');
-  AssetImage lantai2 = AssetImage('lib/src/images/1.jpeg');
+  AssetImage lantai1 = const AssetImage('lib/src/images/2.jpeg');
+  AssetImage lantai2 = const AssetImage('lib/src/images/1.jpeg');
 
   Color warna1 = Colors.brown.shade200;
   Color warna2 = Colors.brown;

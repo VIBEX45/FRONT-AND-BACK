@@ -16,7 +16,7 @@ class Pesanlt1 {
 
 // ignore: must_be_immutable
 class Pemesanan extends StatefulWidget {
-  Pemesanan({required this.lantai, required this.admin});
+  Pemesanan({super.key, required this.lantai, required this.admin});
   bool lantai;
   bool admin;
 
@@ -34,169 +34,202 @@ class _PemesananState extends State<Pemesanan> {
   double tinggi = 25;
   double lebar = 50;
   
-  List<Pesanlt1> pesanlt1 = [
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'01',
-      nomorlantai: '1',
-      selectedindex: 0,
-      harga: "350.000 / Bulan",
-      hargabayar: 350000,
-      ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'02',
-      selectedindex: 1,
-      nomorlantai: '1',
-      harga: "400.000 / Bulan",
-      hargabayar: 400000,
-    ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'03',
-      selectedindex: 2,
-      harga: "450.000 / Bulan",
-      nomorlantai: '1',
-      hargabayar: 450000,
-    ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'04',
-      selectedindex: 3,
-      harga: "500.000 / Bulan",
-      nomorlantai: '1',
-      hargabayar: 500000,
-    ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'05',
-      selectedindex: 4,
-      harga: "550.000 / Bulan",
-      nomorlantai: '1',
-      hargabayar: 550000,
-    ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'06',
-      selectedindex: 5,
-      harga: "600.000 / Bulan",
-      nomorlantai: '1',
-      hargabayar: 600000,
-    ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'07',
-      selectedindex: 6,
-      harga: "650.000 / Bulan",
-      nomorlantai: '1',
-      hargabayar: 650000,
-    ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'08',
-      selectedindex: 7,
-      harga: "575.000 / Bulan",
-      nomorlantai: '1',
-      hargabayar: 575000,
-    ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'09',
-      selectedindex: 8,
-      harga: "630.000 / Bulan",
-      nomorlantai: '1',
-      hargabayar: 630000,
-    ),
-    Pesanlt1(
-      tombol:const Color.fromRGBO(217,217,217,1),
-      nokamar:'10',
-      selectedindex: 9,
-      harga: "300.000 / Bulan",
-      nomorlantai: '1',
-      hargabayar: 300000,
-    ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'11',
-      nomorlantai: '2',
-      selectedindex: 10,
-      harga: "350.000 / Bulan",
-      hargabayar: 350000,
-      ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'12',
-      selectedindex: 11,
-      nomorlantai: '2',
-      harga: "400.000 / Bulan",
-      hargabayar: 400000,
-    ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'13',
-      selectedindex: 12,
-      harga: "450.000 / Bulan",
-      nomorlantai: '2',
-      hargabayar: 450000,
-    ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'14',
-      selectedindex: 13,
-      harga: "500.000 / Bulan",
-      nomorlantai: '2',
-      hargabayar: 500000,
-    ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'15',
-      selectedindex: 14,
-      harga: "550.000 / Bulan",
-      nomorlantai: '2',
-      hargabayar: 550000,
-    ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'16',
-      selectedindex: 15,
-      harga: "600.000 / Bulan",
-      nomorlantai: '2',
-      hargabayar: 600000,
-    ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'17',
-      selectedindex: 16,
-      harga: "650.000 / Bulan",
-      nomorlantai: '2',
-      hargabayar: 650000,
-    ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'18',
-      selectedindex: 17,
-      harga: "575.000 / Bulan",
-      nomorlantai: '2',
-      hargabayar: 575000,
-    ),
-    Pesanlt1(
-      tombol: const Color.fromRGBO(217,217,217,1),
-      nokamar:'19',
-      selectedindex: 18,
-      harga: "630.000 / Bulan",
-      nomorlantai: '2',
-      hargabayar: 630000,
-    ),
-    Pesanlt1(
-      tombol:const Color.fromRGBO(217,217,217,1),
-      nokamar:'20',
-      selectedindex: 19,
-      harga: "300.000 / Bulan",
-      nomorlantai: '2',
-      hargabayar: 300000,
-    ),
+  static List<Pesanlt1> createFloor(int flrqty){
+    List<Pesanlt1> floors = [];
+    for(int i=0; i<flrqty; i++){
+      if(i>9){
+      floors.add(
+        Pesanlt1(
+          tombol: const Color.fromRGBO(217,217,217,1),
+          nokamar:(i+1).toString(),
+          nomorlantai: "2",
+          selectedindex: i,
+          harga: "800.000 / Bulan",
+          hargabayar: 800000,
+        ),
+      );
+      }
+      else{
+      floors.add(
+        Pesanlt1(
+          tombol: const Color.fromRGBO(217,217,217,1),
+          nokamar:'0'+(i+1).toString(),
+          nomorlantai: "1",
+          selectedindex: i,
+          harga: "800.000 / Bulan",
+          hargabayar: 800000,
+        ),
+      );
+      }
+      
+    }
+    return floors;
+  }
+  List<Pesanlt1> pesanlt1 = createFloor(20);
+
+  // List<pesanlt1> pesanlt1 = [
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'01',
+  //     nomorlantai: '1',
+  //     selectedindex: 0,
+  //     harga: "350.000 / Bulan",
+  //     hargabayar: 350000,
+  //     ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'02',
+  //     selectedindex: 1,
+  //     nomorlantai: '1',
+  //     harga: "400.000 / Bulan",
+  //     hargabayar: 400000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'03',
+  //     selectedindex: 2,
+  //     harga: "450.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 450000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'04',
+  //     selectedindex: 3,
+  //     harga: "500.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 500000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'05',
+  //     selectedindex: 4,
+  //     harga: "550.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 550000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'06',
+  //     selectedindex: 5,
+  //     harga: "600.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 600000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'07',
+  //     selectedindex: 6,
+  //     harga: "650.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 650000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'08',
+  //     selectedindex: 7,
+  //     harga: "575.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 575000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'09',
+  //     selectedindex: 8,
+  //     harga: "630.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 630000,
+  //   ),
+  //   pesanlt1(
+  //     tombol:const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'10',
+  //     selectedindex: 9,
+  //     harga: "300.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 300000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'11',
+  //     nomorlantai: '2',
+  //     selectedindex: 10,
+  //     harga: "350.000 / Bulan",
+  //     hargabayar: 350000,
+  //     ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'12',
+  //     selectedindex: 11,
+  //     nomorlantai: '2',
+  //     harga: "400.000 / Bulan",
+  //     hargabayar: 400000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'13',
+  //     selectedindex: 12,
+  //     harga: "450.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 450000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'14',
+  //     selectedindex: 13,
+  //     harga: "500.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 500000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'15',
+  //     selectedindex: 14,
+  //     harga: "550.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 550000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'16',
+  //     selectedindex: 15,
+  //     harga: "600.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 600000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'17',
+  //     selectedindex: 16,
+  //     harga: "650.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 650000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'18',
+  //     selectedindex: 17,
+  //     harga: "575.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 575000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'19',
+  //     selectedindex: 18,
+  //     harga: "630.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 630000,
+  //   ),
+  //   pesanlt1(
+  //     tombol:const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'20',
+  //     selectedindex: 19,
+  //     harga: "300.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 300000,
+  //   ),
     
-  ];
+  // ];
  
   Color warna1 = Colors.brown.shade200;
   Color warna2 = Colors.brown;
@@ -236,7 +269,7 @@ class _PemesananState extends State<Pemesanan> {
                     onTap: () {
                       
                     },
-                    child: Icon(Icons.edit, color: Colors.black, size: 14,),
+                    child: const Icon(Icons.edit, color: Colors.black, size: 14,),
                   )
                 ],
               ),
@@ -322,7 +355,7 @@ class _PemesananState extends State<Pemesanan> {
                     onTap: () {
                       
                     },
-                    child: Icon(Icons.edit, color: Colors.black, size: 14,),
+                    child: const Icon(Icons.edit, color: Colors.black, size: 14,),
                   )
                 ],
               ),

@@ -4,10 +4,15 @@ import 'package:komas_latihan/CostumView/chat.dart';
 import 'package:komas_latihan/CostumView/pembayaran.dart';
 import 'package:komas_latihan/CostumView/info.dart';
 import 'package:komas_latihan/pages/intro_page.dart';
+import 'package:komas_latihan/pages/login_page.dart';
 import 'package:komas_latihan/pages/pemesanan/pemesananlt_page.dart';
+import 'package:komas_latihan/utils/shared_pref.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class DashboardPage extends StatefulWidget {
+  const DashboardPage({super.key});
+
   
 
   @override
@@ -25,8 +30,34 @@ class _DashboardPageState extends State<DashboardPage> {
   double tinggilt1 = 40;
   double tinggilt2 = 40;
   
+  Future<bool> clearLoggedCache(String key) async{
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    return sp.remove(key);
+  }
+
+  void logout(BuildContext context){
+    String key = "";
+    clearLoggedCache(key).then((value){
+      if(value == true){
+        setState(() {
+          Navigator.of(context).pop();
+          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(admin: false)));
+        });
+      }
+      else{
+        debugPrint("Cannot Logout!");
+      }
+    });
+  }
+
+  Future<List<String>?> cacheFetch(String key) async {
+    List<String>? list = await MySharedPreferences.fetchFromShared(key);
+    return list;
+  }
+  
   @override
   Widget build(BuildContext context) {
+    Future<List<String>?> log = cacheFetch("_userLogged");
     return Scaffold(
     backgroundColor: Colors.white,
     body: ListView(
@@ -54,52 +85,84 @@ class _DashboardPageState extends State<DashboardPage> {
                           onTap: () {
         
                           },
-                        child : Text(
-                          "hi. Kids!",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                            shadows: [
-                              Shadow( // bottomLeft
-                                offset: const Offset(-0.5, -0.5),
-                                color: warna2
-                              ),
-                              Shadow( // bottomRight
-                                offset: const Offset(0.5, -0.5),
-                                color: warna2
-                              ),
-                              Shadow( // topRight
-                                offset: const Offset(0.5, 0.5),
-                                color: warna2
-                              ),
-                              Shadow( // topLeft
-                                offset: const Offset(-0.5, 0.5),
-                                color: warna2
-                              ),
-                            ]
-                         )
-                        ),
+                        child : 
+                        FutureBuilder(future: log,builder: (context, snapshot){
+                          if(snapshot.hasData){
+                            return Text(
+                              snapshot.data![0],
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow( // bottomLeft
+                                      offset: const Offset(-0.5, -0.5),
+                                      color: warna2
+                                    ),
+                                  Shadow( // bottomRight
+                                    offset: const Offset(0.5, -0.5),
+                                    color: warna2
+                                  ),
+                                  Shadow( // topRight
+                                    offset: const Offset(0.5, 0.5),
+                                    color: warna2
+                                  ),
+                                  Shadow( // topLeft
+                                    offset: const Offset(-0.5, 0.5),
+                                    color: warna2
+                                  ),
+                                  ]
+                                )
+                            );
+                          }
+                          else{
+                            return Text(
+                              "hi. Kids!",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow( // bottomLeft
+                                      offset: const Offset(-0.5, -0.5),
+                                      color: warna2
+                                    ),
+                                    Shadow( // bottomRight
+                                      offset: const Offset(0.5, -0.5),
+                                      color: warna2
+                                    ),
+                                    Shadow( // topRight
+                                      offset: const Offset(0.5, 0.5),
+                                      color: warna2
+                                    ),
+                                    Shadow( // topLeft
+                                      offset: const Offset(-0.5, 0.5),
+                                      color: warna2
+                                    ),
+                                  ]
+                              )
+                            );
+                          }
+                        })
+                        
                         ),
                         PopupMenuButton (
                           itemBuilder: (context) => [
+                            // PopupMenuItem(
+                            //   height: 40,
+                            //   child: const Text(
+                            //     "Admin Mode",
+                            //     style: TextStyle(
+                            //       fontSize: 12,
+                            //       color: Colors.white
+                            //     ),
+                            //   ),
+                            //   onTap: () {
+                            //     setState(() {
+                            //       Navigator.of(context).pop();
+                            //       Navigator.push(context, MaterialPageRoute(builder: (context) => IntroPage(login: true)));
+                            //     });
+                            //   },
+                            // ),
                             PopupMenuItem(
-                              height: 40,
-                              child: const Text(
-                                "Admin Mode",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white
-                                ),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  Navigator.of(context).pop();
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => IntroPage(login: false)));
-                                });
-                              },
-                            ),
-                            PopupMenuItem(
-                              
                               height: 40,
                               child: const Text(
                                 'Ganti Akun',
@@ -112,12 +175,11 @@ class _DashboardPageState extends State<DashboardPage> {
                               onTap: (){
                                 setState(() {
                                   Navigator.of(context).pop();
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => IntroPage(login: true,)));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => IntroPage(login: true)));
                                 });
                               },
                             ),
                             PopupMenuItem(
-                              
                               height: 40,
                               child: const Text(
                                 'keluar',
@@ -128,7 +190,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                 ),
                               ),
                               onTap: (){
-                                exit(exitCode);
+                                logout(context);
+                                // exit(exitCode);
                               },
                             )
                           ],

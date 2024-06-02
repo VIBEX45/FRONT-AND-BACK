@@ -15,6 +15,8 @@ class Notif{
 }
 
 class NotifikasiPage extends StatefulWidget {
+  const NotifikasiPage({super.key});
+
 
   @override
   State<NotifikasiPage> createState() => _NotifikasiPageState();

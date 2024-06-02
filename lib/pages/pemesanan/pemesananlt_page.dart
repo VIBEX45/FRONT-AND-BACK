@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class PemesananltPage extends StatefulWidget {
-   PemesananltPage({required this.admin, required this.lantaikamar});
+   PemesananltPage({super.key, required this.admin, required this.lantaikamar});
 
    bool admin;
    bool lantaikamar;
@@ -73,12 +73,12 @@ class _Pemesananlt1pageState extends State<PemesananltPage> {
                   style: TextStyle(color: Colors.white, fontSize: 12)
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 10),
+                    padding: EdgeInsets.only(left: 10),
                     child:
                     Row(
                       children: [
                         Text(
-                          "500.000 - 800.000",
+                          "800.000",
                         style: TextStyle(color: Colors.white,fontSize: 15, fontWeight: FontWeight.bold)
                         ),
                       ],

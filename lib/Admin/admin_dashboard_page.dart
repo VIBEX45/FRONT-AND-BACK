@@ -9,6 +9,8 @@ import 'package:komas_latihan/pages/pemesanan/pemesananlt_page.dart';
 
 // ignore: must_be_immutable
 class AdminDashboardPage extends StatefulWidget {
+  const AdminDashboardPage({super.key});
+
 
   @override
   State<AdminDashboardPage> createState() => _AdminDashboardPageState();
@@ -82,27 +84,27 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                         ),
                         PopupMenuButton (
                           itemBuilder: (context) => [
-                            PopupMenuItem(
-                              height: 40,
-                              child: const Text(
-                                "Admin Mode",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white
-                                ),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  CoolAlert.show(
-                                    context: context, 
-                                    type: CoolAlertType.info,
-                                    title: 'Telah Aktif',
-                                    text: "\nAnda Sudah Berada\nDimode Admin\n",
+                            // PopupMenuItem(
+                            //   height: 40,
+                            //   child: const Text(
+                            //     "Admin Mode",
+                            //     style: TextStyle(
+                            //       fontSize: 12,
+                            //       color: Colors.white
+                            //     ),
+                            //   ),
+                            //   onTap: () {
+                            //     setState(() {
+                            //       CoolAlert.show(
+                            //         context: context, 
+                            //         type: CoolAlertType.info,
+                            //         title: 'Telah Aktif',
+                            //         text: "\nAnda Sudah Berada\nDimode Admin\n",
 
-                                    );
-                                });
-                              },
-                            ),
+                            //         );
+                            //     });
+                            //   },
+                            // ),
                             PopupMenuItem(
                               
                               height: 40,
