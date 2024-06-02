@@ -50,15 +50,13 @@ class _TransaksiState extends State<Transaksi> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    
   }
 
   @override
   Widget build(BuildContext context) {
     UserLogged? userLogged;
-    Future<UserLogged>? loggedUser = getLoggedUser("_userLogged").then((value) {
-      userLogged = value;
-      return value;
-    });
+    
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -125,7 +123,9 @@ class _TransaksiState extends State<Transaksi> {
                               '\nsilahkan memilih kamar \nterlebih dahulu untuk dibayar\n',
                         );
                       } else {
-                        Navigator.push(
+                        Future<UserLogged>? loggedUser = getLoggedUser("_userLogged").then((value) {
+                          userLogged = value;
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => BuktiTransfer(
@@ -135,7 +135,11 @@ class _TransaksiState extends State<Transaksi> {
                                 floorNumber: widget.lantai,
                                 roomNumber: widget.kamar,
                               ),
-                            ));
+                            )
+                          );
+                          return value;
+                        });
+                          
                       }
                     });
                   },

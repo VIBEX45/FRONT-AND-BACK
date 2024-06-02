@@ -35,24 +35,27 @@ class _LoginPageState extends State<LoginPage> {
 
   bool pakai = true;
 
-  Future<SharedPreferences>? sp;
-  Future<MySharedPreferences>? msp;
-
+  void initClearCache(String key){
+    MySharedPreferences.removeFromShared(key);
+  }
   void login(String username, String password) async{
-    String url = MySettings.getUrl()+"login";
+    String url = MySettings.getUrl()+("login");
     Map<String, dynamic> postBody = {
       "userName": username,
       "password": password
     };
 
+
+    initClearCache("_userLogged");
     Future<List<String>?> fromPref;
     Map<String, dynamic> resp = await ClientRequest.postData(url, postBody).then((value){
       if(value["status"] == "OK"){
 
         debugPrint(value.toString());
-        MySharedPreferences.saveToSharedList("_userLogged", [value["user_name"], value["role"].toString(), value["token"]]);
+        MySharedPreferences.saveToSharedList("_userLogged", [value["user_name"], value["phone_number"], value["email"],value["role"].toString(), value["token"]]);
         fromPref = MySharedPreferences.fetchFromShared("_userLogged").then((value){
           debugPrint(value.toString());
+          return value;
         });
 
         switch(value["role"]){

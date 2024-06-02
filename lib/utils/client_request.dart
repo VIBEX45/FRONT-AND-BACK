@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ClientRequest {
@@ -30,7 +31,6 @@ class ClientRequest {
     return json;
   }
 
-  //TODO: Change the host IP
   static Future<dynamic> postData(
       String url, Map<String, dynamic> postBody) async {
     Uri uri = Uri.parse(url);
@@ -40,6 +40,19 @@ class ClientRequest {
         encoding: Encoding.getByName("utf-8"));
     Map<String, dynamic> json = jsonDecode(response.body);
     print(json);
+    return json;
+  }
+
+  static Future<dynamic> updateData(
+      String url, Map<String, dynamic> updateBody) async {
+    Uri uri = Uri.parse(url);
+    final response = await http.put(uri,
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: updateBody,
+        encoding: Encoding.getByName("utf-8"));
+
+    Map<String, dynamic> json = jsonDecode(response.body);
+
     return json;
   }
 
@@ -67,5 +80,22 @@ class ClientRequest {
     Map<String, dynamic> json = jsonDecode(response.body);
 
     return json;
+  }
+
+  static Widget getImageFromNetwork(
+      String url, String by, Map<String, dynamic>? style) {
+    String uri = url + by;
+    if (style == null) {
+      return Image.network(
+        uri,
+      );
+    } else {
+      return Image.network(
+        uri,
+        fit: style["fit"],
+        width: style["width"],
+        height: style["height"],
+      );
+    }
   }
 }

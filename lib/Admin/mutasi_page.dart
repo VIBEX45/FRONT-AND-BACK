@@ -30,7 +30,13 @@ class AdminMtsi {
 }
 
 class UserData {
-  String? username, roomNumber, floorNumber, days, startDate, endDate;
+  String? username,
+      roomNumber,
+      floorNumber,
+      roomPrice,
+      days,
+      startDate,
+      endDate;
   bool? isVerified, isPaid;
 
   // UserData(
@@ -44,6 +50,7 @@ class UserData {
     username = json["userName"];
     roomNumber = json["roomNumber"];
     floorNumber = json["floorNumber"];
+    roomPrice = json["roomPrice"];
     startDate = json["startDate"];
     endDate = json["endDate"];
     days = json["daysLeft"];
@@ -107,6 +114,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
         "userName": v["user"]["user_name"],
         "roomNumber": v["room"]["room_number"],
         "floorNumber": v["room"]["floorId"].toString(),
+        "roomPrice": v["room"]["room_price"],
         "startDate": v["start_date"],
         "endDate": v["end_date"],
         "daysLeft": "30",
@@ -118,10 +126,23 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
     return listOfUserRent;
   }
 
-  // Future<void> fetchAllData() async {
-  //   final resp = await ClientRequest.getAll(MySettings.getUrl() + ("rent/all"));
-  //   print("ALLDATA: $resp");
-  // }
+  Future<bool> verifyUserPayment(String url, UserData user) async {
+    if(user.isVerified!){
+      print("User is already verified!");
+      return false;
+    }
+    else{
+      Map<String, dynamic> uploadBody = {
+        "userName": user.username,
+        "roomNumber": user.roomNumber,
+        "floorNumber": user.floorNumber,
+        "verify": "1"
+      };
+      final response = await ClientRequest.updateData(url, uploadBody);
+      print(response);
+      return (response["status"] == "OK") ? true : false;
+    }
+  }
 
   @override
   void initState() {
@@ -235,9 +256,9 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                                       color: Colors.red,
                                       fontWeight: FontWeight.bold),
                                 )
-                              : mutasi[index].readiable
+                              : users[index].isPaid! == true && users[index].isVerified! == true
                                   ? const Text(
-                                      'lunas',
+                                      'Lunas',
                                       style: TextStyle(
                                           fontSize: 13,
                                           color: Colors.green,
@@ -404,12 +425,16 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                     Container(
                       height: 35,
                       width: 35,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: AssetImage('lib/src/images/3.jpeg'),
-                            fit: BoxFit.cover),
+                      child: const CircleAvatar(
+                        backgroundImage: AssetImage('lib/src/images/3.jpeg'),
+                        radius: 1,
                       ),
+                      // decoration: const BoxDecoration(
+                      //   shape: BoxShape.circle,
+                      //   image: DecorationImage(
+                      //       image: AssetImage('lib/src/images/3.jpeg'),
+                      //       fit: BoxFit.cover),
+                      // ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 18),
@@ -420,7 +445,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                             (users[index].roomNumber == null ||
                                     users[index].roomNumber!.isEmpty)
                                 ? mutasi[index].nokamar
-                                : users[index].roomNumber.toString(),
+                                : "Kamar No. ${users[index].roomNumber} Lt. ${users[index].floorNumber}",
                             style: const TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
@@ -444,7 +469,11 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                 const SizedBox(
                   height: 5,
                 ),
-                garispemabatas()
+                const Divider(
+                  thickness: 1,
+                  color: Colors.black,
+                )
+                // garispemabatas()
               ],
             ),
           ],
@@ -471,7 +500,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                   ),
                 ),
                 Text(
-                  'Rp.${mutasi[index].harga}',
+                  'Rp.${users[index].roomPrice!}',
                   style: const TextStyle(
                     fontSize: 10,
                   ),
@@ -489,23 +518,37 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                         alignment: Alignment.center,
                         height: 80,
                         width: MediaQuery.of(context).size.width,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  'lib/src/images/dashboardkos.jpeg'),
-                              fit: BoxFit.cover),
-                        ),
+                        child: ClientRequest.getImageFromNetwork(
+                            MySettings.getUrl(),
+                            "room/payment/proof/user/${users[index].username!}",
+                            <String, dynamic>{
+                              "fit": BoxFit.cover,
+                              "width": 300.0,
+                              "height": 300.0
+                            }),
+                        // decoration: const BoxDecoration(
+                        //   image: DecorationImage(
+                        //       image: AssetImage(
+                        //           'lib/src/images/dashboardkos.jpeg'),
+                        //       fit: BoxFit.cover),
+                        // ),
                       )
                     : Container(
                         alignment: Alignment.center,
-                        height: 400,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  'lib/src/images/dashboardkos.jpeg'),
-                              fit: BoxFit.fitWidth),
-                        ),
+                        child: ClientRequest.getImageFromNetwork(
+                            MySettings.getUrl(),
+                            "room/payment/proof/user/${users[index].username!}",
+                            <String, dynamic>{
+                              "fit": BoxFit.cover,
+                              "width": 300.0,
+                              "height": 300.0
+                            }),
+                        // decoration: const BoxDecoration(
+                        //   image: DecorationImage(
+                        //       image: AssetImage(
+                        //           'lib/src/images/dashboardkos.jpeg'),
+                        //       fit: BoxFit.fitWidth),
+                        // ),
                       ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
@@ -530,7 +573,8 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
             const SizedBox(
               height: 5,
             ),
-            garispemabatas(),
+            const Divider(thickness: 1, color: Colors.black),
+            // garispemabatas(),
             const SizedBox(
               height: 15,
             ),
@@ -595,12 +639,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
         const SizedBox(
           height: 50,
         ),
-        mutasi[index].readiable || mutasi[index].tolak
-            ? const SizedBox(
-                height: 0,
-                width: 0,
-              )
-            : savecancel(index),
+        users.isNotEmpty ? accORdenie(index, users): savecancel(index),
         mutasi[index].readiable || mutasi[index].tolak
             ? Padding(
                 padding: const EdgeInsets.only(top: 20),
@@ -661,6 +700,79 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
           height: 100,
         )
       ]),
+    );
+  }
+
+  //Copied from savecancel and used for FutureBuilder
+  Widget accORdenie(int index, List<UserData> users) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          OutlinedButton(
+            onPressed: () {
+              setState(() {
+                perip = true;
+                mutasi[index].tolak
+                    ? null
+                    : CoolAlert.show(
+                        context: context,
+                        type: CoolAlertType.error,
+                        title: 'Ditolak',
+                        text: "\nTransaksi Berhasil Ditolak\n",
+                      );
+
+                mutasi[index].tolak = true;
+              });
+            },
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+            ),
+            child: const Text(
+              "Tolak",
+              style: TextStyle(
+                  fontSize: 10, letterSpacing: 2, color: Colors.black),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              verifyUserPayment(
+                      MySettings.getUrl() + ("room/payment/proof/user/verify"),
+                      users[index])
+                  .then((value) {
+                if (value) {
+                  setState(() {
+                    perip = true;
+                    CoolAlert.show(
+                      context: context,
+                      type: CoolAlertType.success,
+                      title: 'Diverifikasi',
+                      text: "\nTransaksi Berhasil Diverifikasi\n",
+                    );
+                    // mutasi[index].readiable = true;
+                  });
+                }
+              });
+            },
+            style: ElevatedButton.styleFrom(
+                backgroundColor: warna2,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20))),
+            child: const Text(
+              "Terima",
+              style: TextStyle(
+                fontSize: 10,
+                letterSpacing: 2,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -731,6 +843,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
     );
   }
 
+  //INFO: Deprecated - Do not use this user Divider Widget instead
   Widget garispemabatas() {
     return Container(
       alignment: Alignment.center,

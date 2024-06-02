@@ -113,6 +113,7 @@ class _BuktiTransferState extends State<BuktiTransfer> {
       "roomNumber": int.parse(roomNumber).toString(),
       "floorNumber": int.parse(floorNumber).toString()
     };
+    print(postBody["username"]);
     final response = ClientRequest.postData(url, postBody).then((value) {
       if (value["status"] == "OK") {
         getUsernameNuploadImage(

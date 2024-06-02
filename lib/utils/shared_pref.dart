@@ -14,6 +14,11 @@ class MySharedPreferences{
     return valueList;
   }
 
+  static Future<bool> removeFromShared(String key) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    return sp.remove(key);
+  } 
+
 
 
 }
