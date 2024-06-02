@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:komas_latihan/pages/pemesanan/pemesananlt_page.dart';
 
-class Pembayaran extends StatefulWidget {
-  const Pembayaran({super.key});
+// ignore: must_be_immutable
+class guestlantai extends StatefulWidget {
+    guestlantai({required this.guestmilih,required this.namalantai});
+
+  bool guestmilih;
+  String namalantai;
 
   @override
-  State<Pembayaran> createState() => _PembayaranState();
+  State<guestlantai> createState() => _guestlantaiState();
 }
 
-class _PembayaranState extends State<Pembayaran> {
+class _guestlantaiState extends State<guestlantai> {
 
   bool isHovering = false;
 
@@ -26,10 +31,28 @@ class _PembayaranState extends State<Pembayaran> {
           },
           child: InkWell(
             onTap: () {
-              setState(() {
-
-              });
-          
+              if (widget.guestmilih == true) {
+                setState(() {
+                Navigator.push(
+                  context,
+                    MaterialPageRoute(
+                      builder: (context) => 
+                      PemesananltPage(admin: false, lantaikamar: true,),
+                    ),
+                  );
+                });
+              } else {
+                setState(() {
+                Navigator.push(
+                  context,
+                    MaterialPageRoute(
+                      builder: (context) => 
+                      PemesananltPage(admin: false, lantaikamar: false,),
+                    ),
+                  );
+                });
+              }
+              
             }, 
           child: Column(
             children: [
@@ -40,6 +63,7 @@ class _PembayaranState extends State<Pembayaran> {
                 decoration: BoxDecoration(
                   color: isHovering ? const Color.fromARGB(255, 215, 237, 255) : Colors.white,
                   borderRadius: BorderRadius.circular(12),
+                  border: Border.all(width: 1),
                   boxShadow: const [
                     BoxShadow(
                       color: Colors.brown,
@@ -48,13 +72,13 @@ class _PembayaranState extends State<Pembayaran> {
                     ),
                   ],
                 ),
-                child: const Icon(Icons.payment, size: 25,),
+                child: const Icon(Icons.house, size: 25,),
                 ),
-             const SizedBox(
+              const SizedBox(
                 height: 2,
               ),
-              const Text(
-                "Pembayaran",
+              Text(
+                widget.namalantai,
                 style: TextStyle(color: Colors.white, 
                 fontSize: 8, height: 1.5),
               ),

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class Pembayaran extends StatefulWidget {
-  const Pembayaran({super.key});
+class guestChat extends StatefulWidget {
+  const guestChat({super.key});
 
   @override
-  State<Pembayaran> createState() => _PembayaranState();
+  State<guestChat> createState() => _guestChatState();
 }
 
-class _PembayaranState extends State<Pembayaran> {
+class _guestChatState extends State<guestChat> {
 
   bool isHovering = false;
 
   @override
   Widget build(BuildContext context) {
+    final Uri whatsapp = Uri.parse('https://wa.me/6282153492615');
     return MouseRegion(
           onEnter: (f) {
             setState(() {
@@ -25,11 +27,8 @@ class _PembayaranState extends State<Pembayaran> {
             });
           },
           child: InkWell(
-            onTap: () {
-              setState(() {
-
-              });
-          
+            onTap: () async {
+                await launchUrl(whatsapp);
             }, 
           child: Column(
             children: [
@@ -40,6 +39,7 @@ class _PembayaranState extends State<Pembayaran> {
                 decoration: BoxDecoration(
                   color: isHovering ? const Color.fromARGB(255, 215, 237, 255) : Colors.white,
                   borderRadius: BorderRadius.circular(12),
+                  border: Border.all(width: 1),
                   boxShadow: const [
                     BoxShadow(
                       color: Colors.brown,
@@ -48,13 +48,13 @@ class _PembayaranState extends State<Pembayaran> {
                     ),
                   ],
                 ),
-                child: const Icon(Icons.payment, size: 25,),
+                child: const Icon(Icons.chat, size: 25,),
                 ),
-             const SizedBox(
+              const SizedBox(
                 height: 2,
               ),
               const Text(
-                "Pembayaran",
+                "Chat",
                 style: TextStyle(color: Colors.white, 
                 fontSize: 8, height: 1.5),
               ),

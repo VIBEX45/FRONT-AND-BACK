@@ -1,34 +1,31 @@
 
 import 'package:flutter/material.dart';
-import 'package:komas_latihan/User/dashboard_page.dart';
-import 'package:komas_latihan/User/mutasi_page.dart';
-import 'package:komas_latihan/User/notifikasi_page.dart';
-import 'package:komas_latihan/User/profil_page.dart';
+import 'package:komas_latihan/Admin/admin_dashboard_page.dart';
+import 'package:komas_latihan/Admin/admin_mutasi_page.dart';
+import 'package:komas_latihan/Admin/admin_notifikasi_page.dart';
+import 'package:komas_latihan/Admin/admin_profil_page.dart';
 
 // ignore: must_be_immutable
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-
+class AdminHomePage extends StatefulWidget {
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<AdminHomePage> createState() => _AdminHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _AdminHomePageState extends State<AdminHomePage> {
 
   // final initialScreen = const DashboardPage(admin: true);
 
   // Bottom navBar
   int currentab = 0;
   final List<Widget> screens = [
-    DashboardPage(),
-    MutasiPage(),
-    NotifikasiPage(),
-    const ProfilPage(),
+    AdminDashboardPage(),
+    AdminMutasiPage(),
+    AdminNotifikasiPage(),
+    const AdminProfilPage(),
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currenscreen = DashboardPage();
+  Widget anotherscreen = AdminDashboardPage();
 
   Color warna1 = Colors.brown.shade200;
   Color warna2 = Colors.brown;
@@ -41,7 +38,7 @@ class _HomePageState extends State<HomePage> {
       body: 
       PageStorage(
         bucket: bucket,
-        child: currenscreen
+        child: anotherscreen
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Visibility(
@@ -82,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                     minWidth: 0,
                     onPressed: (){
                       setState(() {
-                        currenscreen = DashboardPage();
+                        anotherscreen = AdminDashboardPage();
                         currentab = 0;
                       });
                     },
@@ -109,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                     minWidth: 0,
                     onPressed: (){
                       setState(() {
-                        currenscreen = MutasiPage();
+                        anotherscreen = AdminMutasiPage();
                         currentab = 1;
                       });
                     },
@@ -121,14 +118,13 @@ class _HomePageState extends State<HomePage> {
                           Icons.article,
                           color: currentab == 1 ? warna1 : Colors.white,
                           size: 20,
-                        ),
-                        Text(
-                          'History',
+                        ),Text(
+                          'Verifikasi',
                           style: TextStyle(
                             color: currentab == 1 ? warna1 : Colors.white,
                             fontSize: 6
                           ),
-                        ),
+                        )
                       ],
                     ),
                   )
@@ -145,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                     minWidth: 0,
                     onPressed: (){
                       setState(() {
-                        currenscreen = NotifikasiPage();
+                        anotherscreen = AdminNotifikasiPage();
                         currentab = 2;
                       });
                     },
@@ -172,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                     minWidth: 0,
                     onPressed: (){
                       setState(() {
-                        currenscreen = const ProfilPage();
+                        anotherscreen = const AdminProfilPage();
                         currentab = 3;
                       });
                     },
