@@ -64,29 +64,31 @@ class _MutasiPageState extends State<MutasiPage> {
 
   String tanggal = DateFormat("dd-MM-yyyy").format(DateTime.now());
 
-  List<Mtsi> mutasi = ([
-    Mtsi(
-      nama: 'rafli',
-      nokamar: 'Kamar No 5 Lt 1',
-      harga: '500.000 - 30 hari',
-      warna: Colors.orange,
-      waktutinggal: 30,
-    ),
-    Mtsi(
-      nama: 'afdal',
-      nokamar: 'Kamar No 2 Lt 2',
-      harga: '450.000 - 30 hari',
-      warna: Colors.orange,
-      waktutinggal: 49,
-    ),
-    Mtsi(
-      nama: 'anan',
-      nokamar: 'Kamar No 9 Lt 1',
-      harga: '600.000 - 60 hari',
-      warna: Colors.orange,
-      waktutinggal: 60,
-    ),
-  ]);
+
+  List<Mtsi> mutasi = List.empty(growable: true);
+  // List<Mtsi> mutasi = ([
+  //   Mtsi(
+  //     nama: 'rafli',
+  //     nokamar: 'Kamar No 5 Lt 1',
+  //     harga: '500.000 - 30 hari',
+  //     warna: Colors.orange,
+  //     waktutinggal: 30,
+  //   ),
+  //   Mtsi(
+  //     nama: 'afdal',
+  //     nokamar: 'Kamar No 2 Lt 2',
+  //     harga: '450.000 - 30 hari',
+  //     warna: Colors.orange,
+  //     waktutinggal: 49,
+  //   ),
+  //   Mtsi(
+  //     nama: 'anan',
+  //     nokamar: 'Kamar No 9 Lt 1',
+  //     harga: '600.000 - 60 hari',
+  //     warna: Colors.orange,
+  //     waktutinggal: 60,
+  //   ),
+  // ]);
 
   Color warna1 = Colors.brown.shade200;
   Color warna2 = Colors.brown;

@@ -5,7 +5,7 @@ import "package:flutter/widgets.dart";
 
 import "package:google_fonts/google_fonts.dart";
 
-import 'package:komas_latihan/Admin/home_page.dart';
+import 'package:komas_latihan/Admin/admin_home_page.dart';
 import "package:komas_latihan/User/home_page.dart";
 import "package:komas_latihan/pages/register_page.dart";
 import "package:komas_latihan/utils/client_request.dart";

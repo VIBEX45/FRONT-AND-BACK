@@ -26,7 +26,7 @@ class IntroPage extends StatelessWidget {
             //nameApk
             Center(
               child: Text(
-                "Alfizah Kos",
+                "Alfiza Kos",
                 style: GoogleFonts.inter(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -116,7 +116,7 @@ class IntroPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'next',
+                        'Next',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,

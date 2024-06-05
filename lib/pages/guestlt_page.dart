@@ -6,18 +6,18 @@ import 'package:flutter/material.dart';
 
 
 // ignore: must_be_immutable
-class PemesananltPage extends StatefulWidget {
-   PemesananltPage({super.key, required this.admin, required this.lantaikamar});
+class ltPage extends StatefulWidget {
+   ltPage({super.key, required this.admin, required this.lantaikamar});
 
    bool admin;
    bool lantaikamar;
 
   @override
-  State<PemesananltPage> createState() => _Pemesananlt1pageState(admin : admin, lantaikamar: lantaikamar);
+  State<ltPage> createState() => _lt1pageState(admin : admin, lantaikamar: lantaikamar);
 }
 
-class _Pemesananlt1pageState extends State<PemesananltPage> {
-  _Pemesananlt1pageState({required this.admin, required this.lantaikamar});
+class _lt1pageState extends State<ltPage> {
+  _lt1pageState({required this.admin, required this.lantaikamar});
   bool admin;
 
   bool lantaikamar;
@@ -100,7 +100,7 @@ class _Pemesananlt1pageState extends State<PemesananltPage> {
                     builder: (BuildContext context){
                       return SizedBox(
                         height: 310,
-                      child : Pemesanan(admin: admin,lantai: lantaikamar,),
+                      child : PemesananGuest(admin: admin,lantai: lantaikamar,),
 
                       );
                     }

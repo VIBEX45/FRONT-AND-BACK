@@ -77,29 +77,31 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
 
   String tanggal = DateFormat("dd-MM-yyyy").format(DateTime.now());
 
-  List<AdminMtsi> mutasi = ([
-    AdminMtsi(
-      nama: 'rafli',
-      nokamar: 'Kamar No 5 Lt 1',
-      harga: '500.000 - 30 hari',
-      warna: Colors.orange,
-      waktutinggal: 30,
-    ),
-    AdminMtsi(
-      nama: 'afdal',
-      nokamar: 'Kamar No 2 Lt 2',
-      harga: '450.000 - 30 hari',
-      warna: Colors.orange,
-      waktutinggal: 49,
-    ),
-    AdminMtsi(
-      nama: 'anan',
-      nokamar: 'Kamar No 9 Lt 1',
-      harga: '600.000 - 60 hari',
-      warna: Colors.orange,
-      waktutinggal: 60,
-    ),
-  ]);
+  
+  List<AdminMtsi> mutasi = List.empty(growable: true);
+  // List<AdminMtsi> mutasi = ([
+  //   AdminMtsi(
+  //     nama: 'rafli',
+  //     nokamar: 'Kamar No 5 Lt 1',
+  //     harga: '500.000 - 30 hari',
+  //     warna: Colors.orange,
+  //     waktutinggal: 30,
+  //   ),
+  //   AdminMtsi(
+  //     nama: 'afdal',
+  //     nokamar: 'Kamar No 2 Lt 2',
+  //     harga: '450.000 - 30 hari',
+  //     warna: Colors.orange,
+  //     waktutinggal: 49,
+  //   ),
+  //   AdminMtsi(
+  //     nama: 'anan',
+  //     nokamar: 'Kamar No 9 Lt 1',
+  //     harga: '600.000 - 60 hari',
+  //     warna: Colors.orange,
+  //     waktutinggal: 60,
+  //   ),
+  // ]);
 
   Color warna1 = Colors.brown.shade200;
   Color warna2 = Colors.brown;
@@ -118,8 +120,8 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
         "startDate": v["start_date"],
         "endDate": v["end_date"],
         "daysLeft": "30",
-        "isVerified": v["is_verified"] == 1 ? true : false,
-        "isPaid": v["paid"] == 1 ? true : false
+        "isVerified": v["is_verified"] >= 1 ? true : false,
+        "isPaid": v["paid"] >= 1 ? true : false
       }));
     });
 
@@ -193,7 +195,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
           if (snapshot.hasData &&
               snapshot.data!.isNotEmpty &&
               snapshot.data! != []) {
-            print(("Data is not Empty") + snapshot.data.toString());
+            print("DATA: isPaid: ${snapshot.data![0].isPaid} isVerified: ${snapshot.data![0].isVerified}");
             return perip
                 ? verifyList(snapshot.data)
                 : verifwidget(selectedIndex, snapshot.data!);
@@ -217,6 +219,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
             onTap: () {
               setState(() {
                 selectedIndex = index;
+                print("IS PAID: ${users[index].isPaid} || IS VERIFIED: ${users[index].isVerified}");
 
                 perip = false;
               });

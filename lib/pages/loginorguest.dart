@@ -27,7 +27,7 @@ class LoginOrGuest extends StatelessWidget {
             //nameApk
             Center(
               child: Text(
-                "Alfizah Kos",
+                "Alfiza Kos",
                 style: GoogleFonts.inter(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -40,9 +40,9 @@ class LoginOrGuest extends StatelessWidget {
             ),
 
             
-            const SizedBox(
-              height: 25,
-            ),
+            // const SizedBox(
+            //   height: 25,
+            // ),
 
             //icon
             Padding(
@@ -65,7 +65,7 @@ class LoginOrGuest extends StatelessWidget {
               ),
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
 
@@ -77,11 +77,7 @@ class LoginOrGuest extends StatelessWidget {
             const SizedBox(
               height: 40,
             ),
-
-            const SizedBox(
-              height: 40,
-            ),
-            
+           
             //getStart
             // Padding(padding: 
 

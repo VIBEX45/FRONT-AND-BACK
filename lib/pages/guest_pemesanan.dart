@@ -1,4 +1,4 @@
-
+import 'package:komas_latihan/pages/login_page.dart';
 import 'package:komas_latihan/pages/transaksi.dart';
 import 'package:flutter/material.dart';
 import 'package:komas_latihan/utils/client_request.dart';
@@ -22,41 +22,41 @@ class Pesanlt1 {
       required this.hargabayar});
 }
 
-class Floors {
-  Color? tombol;
-  String? nokamar;
-  String? nomorlantai;
-  int? selectedindex;
-  String? harga;
-  int? hargabayar;
-  // bool kondisi = true;
-  bool? tersedia;
+// class Floors {
+//   Color? tombol;
+//   String? nokamar;
+//   String? nomorlantai;
+//   int? selectedindex;
+//   String? harga;
+//   int? hargabayar;
+//   // bool kondisi = true;
+//   bool? tersedia;
 
-  // Floors({required this.nomorlantai, required this.tombol, required this.nokamar,
-  // required this.selectedindex, required this.harga, required this.hargabayar});
+//   // Floors({required this.nomorlantai, required this.tombol, required this.nokamar,
+//   // required this.selectedindex, required this.harga, required this.hargabayar});
 
-  Floors.fromJson(Map<String, dynamic> json) {
-    nokamar = json["roomNumber"];
-    nomorlantai = json["floorNumber"].toString();
-    hargabayar = int.parse(json["roomPrice"]);
-    harga = json["roomPrice"];
-    tersedia = json["available"] == "Yes" ? true : false;
-    tombol = json["available"] == "Yes" ?const Color.fromRGBO(217, 217, 217, 1) : const Color.fromRGBO(100, 100, 100, 10);
-    selectedindex = int.parse(json["index"]);
-  }
-}
+//   Floors.fromJson(Map<String, dynamic> json) {
+//     nokamar = json["roomNumber"];
+//     nomorlantai = json["floorNumber"].toString();
+//     hargabayar = int.parse(json["roomPrice"]);
+//     harga = json["roomPrice"];
+//     tersedia = json["available"] == "Yes" ? true : false;
+//     tombol = json["available"] == "Yes" ?const Color.fromRGBO(217, 217, 217, 1) : const Color.fromRGBO(100, 100, 100, 10);
+//     selectedindex = int.parse(json["index"]);
+//   }
+// }
 
 // ignore: must_be_immutable
-class Pemesanan extends StatefulWidget {
-  Pemesanan({super.key, required this.lantai, required this.admin});
+class PemesananGuest extends StatefulWidget {
+  PemesananGuest({super.key, required this.lantai, required this.admin});
   bool lantai;
   bool admin;
 
   @override
-  State<Pemesanan> createState() => _PemesananState();
+  State<PemesananGuest> createState() => _PemesananGuestState();
 }
 
-class _PemesananState extends State<Pemesanan> {
+class _PemesananGuestState extends State<PemesananGuest> {
   int outindex = 0;
   bool outbool = true;
 
@@ -65,25 +65,25 @@ class _PemesananState extends State<Pemesanan> {
   double tinggi = 25;
   double lebar = 50;
 
-  Future<List<Floors>>? futureFloors;
-  Future<List<Floors>> getFutureFloors(String url) async {
-    List<Floors> floors = [];
-    final response = await ClientRequest.getAll(url);
+  // Future<List<Floors>>? futureFloors;
+  // Future<List<Floors>> getFutureFloors(String url) async {
+  //   List<Floors> floors = [];
+  //   final response = await ClientRequest.getAll(url);
 
-    int index = 0;
-    response.forEach((value) {
-      floors.add(Floors.fromJson(<String, dynamic>{
-        "roomNumber": value["roomNumber"],
-        "floorNumber": value["floorNumber"],
-        "roomPrice": value["roomPrice"],
-        "available": value["available"],
-        "index": index
-      }));
-      index += 1;
-    });
+  //   int index = 0;
+  //   response.forEach((value) {
+  //     floors.add(Floors.fromJson(<String, dynamic>{
+  //       "roomNumber": value["roomNumber"],
+  //       "floorNumber": value["floorNumber"],
+  //       "roomPrice": value["roomPrice"],
+  //       "available": value["available"],
+  //       "index": index
+  //     }));
+  //     index += 1;
+  //   });
 
-    return floors;
-  }
+  //   return floors;
+  // }
 
   
 
@@ -125,12 +125,12 @@ class _PemesananState extends State<Pemesanan> {
     // futureFloors = getFutureFloors(MySettings.getUrl() + ("/rooms"));
     // futureUsers = fetchAllRentData(MySettings.getUrl() + ("rents"));
     // fetchAllData();
-    getFutureFloors(MySettings.getUrl() + ("rooms")).then((value){
-      int index =0;
-      value.forEach((v){
-        floors[index].tombol = v.tombol!;
-      });
-    });
+    // getFutureFloors(MySettings.getUrl() + ("rooms")).then((value){
+    //   int index =0;
+    //   value.forEach((v){
+    //     floors[index].tombol = v.tombol!;
+    //   });
+    // });
   }
 
   // List<pesanlt1> pesanlt1 = [
@@ -487,7 +487,7 @@ class _PemesananState extends State<Pemesanan> {
       onTap: () {
         pesanlt1[index].kondisi
             ? setState(() {
-                pesanlt1[index].tombol = const Color.fromRGBO(101, 101, 101, 1);
+                // pesanlt1[index].tombol = const Color.fromRGBO(101, 101, 101, 1);
                 outindex = pesanlt1[index].selectedindex;
                 pesanlt1[index].kondisi = false;
                 outbool = pesanlt1[index].kondisi;
@@ -594,22 +594,31 @@ class _PemesananState extends State<Pemesanan> {
               ),
         InkWell(
           onTap: () {
-            widget.admin
-                ? setState(() {
-                    Navigator.of(context).pop();
+              setState(() {
+               Navigator.of(context).pop();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Transaksi(
-                            harga: pesanlt1[index].hargabayar,
-                            kamar: pesanlt1[index].nokamar,
-                            lantai: pesanlt1[index].nomorlantai,
+                          builder: (context) => LoginPage(admin: true, 
                           ),
                         ));
-                  })
-                : setState(() {
-                    Navigator.of(context).pop();
-                  });
+              });
+                          // widget.admin
+            //     ? setState(() {
+            //         Navigator.of(context).pop();
+            //         Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //               builder: (context) => Transaksi(
+            //                 harga: pesanlt1[index].hargabayar,
+            //                 kamar: pesanlt1[index].nokamar,
+            //                 lantai: pesanlt1[index].nomorlantai,
+            //               ),
+            //             ));
+            //       })
+            //     : setState(() {
+            //         Navigator.of(context).pop();
+            //       });
           },
           borderRadius: BorderRadius.circular(15),
           child: Container(
