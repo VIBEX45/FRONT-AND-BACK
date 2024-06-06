@@ -1,4 +1,3 @@
-
 import 'package:komas_latihan/pages/transaksi.dart';
 import 'package:flutter/material.dart';
 import 'package:komas_latihan/utils/client_request.dart';
@@ -12,6 +11,7 @@ class Pesanlt1 {
   String harga;
   int hargabayar;
   bool kondisi = true;
+  bool tersedia= true;
 
   Pesanlt1(
       {required this.nomorlantai,
@@ -19,7 +19,8 @@ class Pesanlt1 {
       required this.nokamar,
       required this.selectedindex,
       required this.harga,
-      required this.hargabayar});
+      required this.hargabayar,
+      required this.tersedia});
 }
 
 class Floors {
@@ -41,8 +42,10 @@ class Floors {
     hargabayar = int.parse(json["roomPrice"]);
     harga = json["roomPrice"];
     tersedia = json["available"] == "Yes" ? true : false;
-    tombol = json["available"] == "Yes" ?const Color.fromRGBO(217, 217, 217, 1) : const Color.fromRGBO(100, 100, 100, 10);
-    selectedindex = int.parse(json["index"]);
+    tombol = json["available"] == "Yes"
+        ? const Color.fromRGBO(217, 217, 217, 1)
+        : const Color.fromRGBO(100, 100, 100, 10);
+    selectedindex = json["index"];
   }
 }
 
@@ -85,8 +88,6 @@ class _PemesananState extends State<Pemesanan> {
     return floors;
   }
 
-  
-
   static List<Pesanlt1> floors = [];
   List<Pesanlt1> pesanlt1 = createFloor(20);
   static List<Pesanlt1> createFloor(int flrqty) {
@@ -100,6 +101,7 @@ class _PemesananState extends State<Pemesanan> {
             selectedindex: i,
             harga: "800.000 / Bulan",
             hargabayar: 800000,
+            tersedia: true 
           ),
         );
       } else {
@@ -111,6 +113,7 @@ class _PemesananState extends State<Pemesanan> {
             selectedindex: i,
             harga: "800.000 / Bulan",
             hargabayar: 800000,
+            tersedia: true
           ),
         );
       }
@@ -125,11 +128,21 @@ class _PemesananState extends State<Pemesanan> {
     // futureFloors = getFutureFloors(MySettings.getUrl() + ("/rooms"));
     // futureUsers = fetchAllRentData(MySettings.getUrl() + ("rents"));
     // fetchAllData();
-    getFutureFloors(MySettings.getUrl() + ("rooms")).then((value){
-      int index =0;
-      value.forEach((v){
-        floors[index].tombol = v.tombol!;
-      });
+    getFutureFloors(MySettings.getUrl() + ("rooms")).then((value) {
+      int index = 0;
+      if (value.length <= pesanlt1.length) {
+        value.forEach((v) {
+          pesanlt1[index].tombol = v.tombol!;
+          pesanlt1[index].tersedia = v.tersedia!;
+
+          floors[index].tombol = v.tombol!;
+        });
+      } else {
+        value.forEach((v) {
+          // pesanlt1[index]
+          floors[index].tombol = v.tombol!;
+        });
+      }
     });
   }
 
@@ -479,13 +492,13 @@ class _PemesananState extends State<Pemesanan> {
 
   Widget kamar(int index) {
     // List<Floors> floors = [];
-    // futureFloors!.then((value){
+    // futureFloors!.then((value) {
     //   floors = value;
     //   return value;
     // });
     return InkWell(
       onTap: () {
-        pesanlt1[index].kondisi
+        pesanlt1[index].kondisi && pesanlt1[index].tersedia
             ? setState(() {
                 pesanlt1[index].tombol = const Color.fromRGBO(101, 101, 101, 1);
                 outindex = pesanlt1[index].selectedindex;
