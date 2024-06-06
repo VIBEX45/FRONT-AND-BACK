@@ -98,9 +98,9 @@ class IntroPage extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    fixedSize: WidgetStatePropertyAll(const Size(90, 30)),
+                    fixedSize: MaterialStatePropertyAll(const Size(90, 30)),
                     alignment: Alignment.center,
-                    backgroundColor: WidgetStateColor.resolveWith((states) {
+                    backgroundColor: MaterialStateColor.resolveWith((states) {
                         return Colors.brown;
                     })
                   ),

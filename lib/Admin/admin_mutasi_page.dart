@@ -759,6 +759,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                   .then((value) {
                 if (value) {
                   setState(() {
+                    
                     perip = true;
                     users[index].isPaid = true;
                     users[index].isVerified = true;

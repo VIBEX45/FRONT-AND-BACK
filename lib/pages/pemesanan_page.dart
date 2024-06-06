@@ -498,6 +498,11 @@ class _PemesananState extends State<Pemesanan> {
     // });
     return InkWell(
       onTap: () {
+        if(pesanlt1[index].tersedia){
+          setState(() {
+            pesanlt1[index].tombol = const Color.fromRGBO(50, 50, 50, 10);
+          });
+        }
         pesanlt1[index].kondisi && pesanlt1[index].tersedia
             ? setState(() {
                 pesanlt1[index].tombol = const Color.fromRGBO(101, 101, 101, 1);
