@@ -57,7 +57,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         
                           },
                         child : Text(
-                          "hi. Kids!",
+                          "Hi, Admin",
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

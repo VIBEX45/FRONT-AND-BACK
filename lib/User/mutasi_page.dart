@@ -64,29 +64,30 @@ class _MutasiPageState extends State<MutasiPage> {
 
   String tanggal = DateFormat("dd-MM-yyyy").format(DateTime.now());
 
-  List<Mtsi> mutasi = ([
-    Mtsi(
-      nama: 'rafli',
-      nokamar: 'Kamar No 5 Lt 1',
-      harga: '500.000 - 30 hari',
-      warna: Colors.orange,
-      waktutinggal: 30,
-    ),
-    Mtsi(
-      nama: 'afdal',
-      nokamar: 'Kamar No 2 Lt 2',
-      harga: '450.000 - 30 hari',
-      warna: Colors.orange,
-      waktutinggal: 49,
-    ),
-    Mtsi(
-      nama: 'anan',
-      nokamar: 'Kamar No 9 Lt 1',
-      harga: '600.000 - 60 hari',
-      warna: Colors.orange,
-      waktutinggal: 60,
-    ),
-  ]);
+  List<Mtsi> mutasi = List.empty(growable: true);
+  // List<Mtsi> mutasi = ([
+  //   Mtsi(
+  //     nama: 'rafli',
+  //     nokamar: 'Kamar No 5 Lt 1',
+  //     harga: '500.000 - 30 hari',
+  //     warna: Colors.orange,
+  //     waktutinggal: 30,
+  //   ),
+  //   Mtsi(
+  //     nama: 'afdal',
+  //     nokamar: 'Kamar No 2 Lt 2',
+  //     harga: '450.000 - 30 hari',
+  //     warna: Colors.orange,
+  //     waktutinggal: 49,
+  //   ),
+  //   Mtsi(
+  //     nama: 'anan',
+  //     nokamar: 'Kamar No 9 Lt 1',
+  //     harga: '600.000 - 60 hari',
+  //     warna: Colors.orange,
+  //     waktutinggal: 60,
+  //   ),
+  // ]);
 
   Color warna1 = Colors.brown.shade200;
   Color warna2 = Colors.brown;
@@ -160,14 +161,24 @@ class _MutasiPageState extends State<MutasiPage> {
             if (snapshot.hasData && snapshot.data != []) {
               return historyWidget(selectedIndex, snapshot.data!);
             } else {
-              return mutasiWidget(selectedIndex,mutasi);
+              return emptyHistory();
+              // return mutasiWidget(selectedIndex,mutasi);
             }
           },
         ));
   }
 
+  Widget emptyHistory() {
+    return const Center(child: Text("Belum ada mutasi",style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),));
+  }
+
   Widget historyWidget(int index, List<UserHistory> history) {
-    return ListView.builder(
+    return ListView.separated(
+        separatorBuilder: (context, index) {
+          return const Divider(
+            height: 0,
+          );
+        },
         itemCount: history.length,
         itemBuilder: (context, index) {
           return Card(
@@ -180,9 +191,10 @@ class _MutasiPageState extends State<MutasiPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        (DateTime.fromMillisecondsSinceEpoch(
-                                int.parse(history[index].startDate!))
-                            .toIso8601String()),
+                        "${history[index].startDate}",
+                        // (DateTime.fromMillisecondsSinceEpoch(
+                        //         int.parse(history[index].startDate!))
+                        //     .toIso8601String()),
                         style: const TextStyle(
                           fontSize: 10,
                         ),
@@ -225,7 +237,7 @@ class _MutasiPageState extends State<MutasiPage> {
                           fontSize: 12,
                         ),
                       ),
-                      (!(history[index].isPaid! ^ history[index].isVerified!)) 
+                      ((history[index].isPaid! && history[index].isVerified!))
                           ? const Text(
                               'Lunas',
                               style: TextStyle(
@@ -233,11 +245,11 @@ class _MutasiPageState extends State<MutasiPage> {
                                   color: Colors.green,
                                   fontWeight: FontWeight.bold),
                             )
-                          : Text(
+                          : const Text(
                               'Sedang Diverifikasi',
                               style: TextStyle(
                                   fontSize: 13,
-                                  color: mutasi[index].warna,
+                                  color: Colors.orange,
                                   fontWeight: FontWeight.bold),
                             ),
                     ],

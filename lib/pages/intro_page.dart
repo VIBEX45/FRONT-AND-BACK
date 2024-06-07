@@ -26,7 +26,7 @@ class IntroPage extends StatelessWidget {
             //nameApk
             Center(
               child: Text(
-                "Alfizah Kos",
+                "Alfiza Kos",
                 style: GoogleFonts.inter(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -98,9 +98,9 @@ class IntroPage extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    fixedSize: WidgetStatePropertyAll(const Size(90, 30)),
+                    fixedSize: MaterialStatePropertyAll(const Size(90, 30)),
                     alignment: Alignment.center,
-                    backgroundColor: WidgetStateColor.resolveWith((states) {
+                    backgroundColor: MaterialStateColor.resolveWith((states) {
                         return Colors.brown;
                     })
                   ),
@@ -116,7 +116,7 @@ class IntroPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'next',
+                        'Next',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,

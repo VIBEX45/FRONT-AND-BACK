@@ -136,7 +136,7 @@ class _GuestHomePageState extends State<GuestHomePage> {
                           color: Colors.white,
                           size: 20,
                         ),Text(
-                          'Verifikasi',
+                          'History',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 6

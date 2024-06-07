@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:komas_latihan/Guest/guestlt_page.dart';
 import 'package:komas_latihan/pages/pemesanan/pemesananlt_page.dart';
+import 'package:komas_latihan/pages/pemesanan_page.dart';
 
 // ignore: must_be_immutable
 class guestlantai extends StatefulWidget {
@@ -37,7 +39,7 @@ class _guestlantaiState extends State<guestlantai> {
                   context,
                     MaterialPageRoute(
                       builder: (context) => 
-                      PemesananltPage(admin: false, lantaikamar: true,),
+                      ltPage(admin: true, lantaikamar: true,),
                     ),
                   );
                 });
@@ -47,7 +49,7 @@ class _guestlantaiState extends State<guestlantai> {
                   context,
                     MaterialPageRoute(
                       builder: (context) => 
-                      PemesananltPage(admin: false, lantaikamar: false,),
+                      ltPage(admin: true, lantaikamar: false,),
                     ),
                   );
                 });

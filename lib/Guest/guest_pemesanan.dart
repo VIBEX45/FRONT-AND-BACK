@@ -1,8 +1,5 @@
-import 'package:komas_latihan/pages/pemesanan/button.dart';
-import 'package:komas_latihan/pages/transaksi.dart';
+import 'package:komas_latihan/pages/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:komas_latihan/utils/client_request.dart';
-import 'package:komas_latihan/utils/settings.dart';
 
 class Pesanlt1 {
   Color tombol;
@@ -12,7 +9,6 @@ class Pesanlt1 {
   String harga;
   int hargabayar;
   bool kondisi = true;
-  bool tersedia= true;
 
   Pesanlt1(
       {required this.nomorlantai,
@@ -20,47 +16,44 @@ class Pesanlt1 {
       required this.nokamar,
       required this.selectedindex,
       required this.harga,
-      required this.hargabayar,
-      required this.tersedia});
+      required this.hargabayar});
 }
 
-class Floors {
-  Color? tombol;
-  String? nokamar;
-  String? nomorlantai;
-  int? selectedindex;
-  String? harga;
-  int? hargabayar;
-  // bool kondisi = true;
-  bool? tersedia;
+// class Floors {
+//   Color? tombol;
+//   String? nokamar;
+//   String? nomorlantai;
+//   int? selectedindex;
+//   String? harga;
+//   int? hargabayar;
+//   // bool kondisi = true;
+//   bool? tersedia;
 
-  // Floors({required this.nomorlantai, required this.tombol, required this.nokamar,
-  // required this.selectedindex, required this.harga, required this.hargabayar});
+//   // Floors({required this.nomorlantai, required this.tombol, required this.nokamar,
+//   // required this.selectedindex, required this.harga, required this.hargabayar});
 
-  Floors.fromJson(Map<String, dynamic> json) {
-    nokamar = json["roomNumber"];
-    nomorlantai = json["floorNumber"].toString();
-    hargabayar = int.parse(json["roomPrice"]);
-    harga = json["roomPrice"];
-    tersedia = json["available"] == "Yes" ? true : false;
-    tombol = json["available"] == "Yes"
-        ? const Color.fromRGBO(217, 217, 217, 1)
-        : const Color.fromRGBO(100, 100, 100, 10);
-    selectedindex = json["index"];
-  }
-}
+//   Floors.fromJson(Map<String, dynamic> json) {
+//     nokamar = json["roomNumber"];
+//     nomorlantai = json["floorNumber"].toString();
+//     hargabayar = int.parse(json["roomPrice"]);
+//     harga = json["roomPrice"];
+//     tersedia = json["available"] == "Yes" ? true : false;
+//     tombol = json["available"] == "Yes" ?const Color.fromRGBO(217, 217, 217, 1) : const Color.fromRGBO(100, 100, 100, 10);
+//     selectedindex = int.parse(json["index"]);
+//   }
+// }
 
 // ignore: must_be_immutable
-class Pemesanan extends StatefulWidget {
-  Pemesanan({super.key, required this.lantai, required this.admin});
+class PemesananGuest extends StatefulWidget {
+  PemesananGuest({super.key, required this.lantai, required this.admin});
   bool lantai;
   bool admin;
 
   @override
-  State<Pemesanan> createState() => _PemesananState();
+  State<PemesananGuest> createState() => _PemesananGuestState();
 }
 
-class _PemesananState extends State<Pemesanan> {
+class _PemesananGuestState extends State<PemesananGuest> {
   int outindex = 0;
   bool outbool = true;
 
@@ -69,25 +62,27 @@ class _PemesananState extends State<Pemesanan> {
   double tinggi = 25;
   double lebar = 50;
 
-  Future<List<Floors>>? futureFloors;
-  Future<List<Floors>> getFutureFloors(String url) async {
-    List<Floors> floors = [];
-    final response = await ClientRequest.getAll(url);
+  // Future<List<Floors>>? futureFloors;
+  // Future<List<Floors>> getFutureFloors(String url) async {
+  //   List<Floors> floors = [];
+  //   final response = await ClientRequest.getAll(url);
 
-    int index = 0;
-    response.forEach((value) {
-      floors.add(Floors.fromJson(<String, dynamic>{
-        "roomNumber": value["roomNumber"],
-        "floorNumber": value["floorNumber"],
-        "roomPrice": value["roomPrice"],
-        "available": value["available"],
-        "index": index
-      }));
-      index += 1;
-    });
+  //   int index = 0;
+  //   response.forEach((value) {
+  //     floors.add(Floors.fromJson(<String, dynamic>{
+  //       "roomNumber": value["roomNumber"],
+  //       "floorNumber": value["floorNumber"],
+  //       "roomPrice": value["roomPrice"],
+  //       "available": value["available"],
+  //       "index": index
+  //     }));
+  //     index += 1;
+  //   });
 
-    return floors;
-  }
+  //   return floors;
+  // }
+
+  
 
   static List<Pesanlt1> floors = [];
   List<Pesanlt1> pesanlt1 = createFloor(20);
@@ -102,7 +97,6 @@ class _PemesananState extends State<Pemesanan> {
             selectedindex: i,
             harga: "800.000 / Bulan",
             hargabayar: 800000,
-            tersedia: true 
           ),
         );
       } else {
@@ -114,7 +108,6 @@ class _PemesananState extends State<Pemesanan> {
             selectedindex: i,
             harga: "800.000 / Bulan",
             hargabayar: 800000,
-            tersedia: true
           ),
         );
       }
@@ -129,22 +122,12 @@ class _PemesananState extends State<Pemesanan> {
     // futureFloors = getFutureFloors(MySettings.getUrl() + ("/rooms"));
     // futureUsers = fetchAllRentData(MySettings.getUrl() + ("rents"));
     // fetchAllData();
-    getFutureFloors(MySettings.getUrl() + ("rooms")).then((value) {
-      int index = 0;
-      if (value.length <= pesanlt1.length) {
-        value.forEach((v) {
-          pesanlt1[index].tombol = v.tombol!;
-          pesanlt1[index].tersedia = v.tersedia!;
-
-          floors[index].tombol = v.tombol!;
-        });
-      } else {
-        value.forEach((v) {
-          // pesanlt1[index]
-          floors[index].tombol = v.tombol!;
-        });
-      }
-    });
+    // getFutureFloors(MySettings.getUrl() + ("rooms")).then((value){
+    //   int index =0;
+    //   value.forEach((v){
+    //     floors[index].tombol = v.tombol!;
+    //   });
+    // });
   }
 
   // List<pesanlt1> pesanlt1 = [
@@ -371,27 +354,27 @@ class _PemesananState extends State<Pemesanan> {
                     const SizedBox(
                       height: 15,
                     ),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        button1(),
-                        button2(),
-                        button3(),
-                        button4(),
-                        button5(),
+                        kamar(pesanlt1[0].selectedindex),
+                        kamar(pesanlt1[1].selectedindex),
+                        kamar(pesanlt1[2].selectedindex),
+                        kamar(pesanlt1[3].selectedindex),
+                        kamar(pesanlt1[4].selectedindex),
                       ],
                     ),
                     const SizedBox(
                       height: 15,
                     ),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        button6(),
-                        button7(),
-                        button8(),
-                        button9(),
-                        button10(),
+                        kamar(pesanlt1[5].selectedindex),
+                        kamar(pesanlt1[6].selectedindex),
+                        kamar(pesanlt1[7].selectedindex),
+                        kamar(pesanlt1[8].selectedindex),
+                        kamar(pesanlt1[9].selectedindex),
                       ],
                     ),
                     // HARGA DAN TAB PEMBAYARAN
@@ -457,28 +440,27 @@ class _PemesananState extends State<Pemesanan> {
                     const SizedBox(
                       height: 15,
                     ),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        button11(),
-                        button12(),
-                        button13(),
-                        
-                        button14(),
-                        button15(),
+                        kamar(pesanlt1[10].selectedindex),
+                        kamar(pesanlt1[11].selectedindex),
+                        kamar(pesanlt1[12].selectedindex),
+                        kamar(pesanlt1[13].selectedindex),
+                        kamar(pesanlt1[14].selectedindex),
                       ],
                     ),
                     const SizedBox(
                       height: 15,
                     ),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        button16(),
-                        button17(),
-                        button18(),
-                        button19(),
-                        button20()
+                        kamar(pesanlt1[15].selectedindex),
+                        kamar(pesanlt1[16].selectedindex),
+                        kamar(pesanlt1[17].selectedindex),
+                        kamar(pesanlt1[18].selectedindex),
+                        kamar(pesanlt1[19].selectedindex),
                       ],
                     ),
                     // HARGA DAN TAB PEMBAYARAN
@@ -492,66 +474,61 @@ class _PemesananState extends State<Pemesanan> {
           );
   }
 
-  // Widget kamar(int index) {
-  //   // List<Floors> floors = [];
-  //   // futureFloors!.then((value) {
-  //   //   floors = value;
-  //   //   return value;
-  //   // });
-  //   return InkWell(
-  //     onTap: () {
-  //       if(pesanlt1[index].tersedia){
-  //         setState(() {
-  //           pesanlt1[index].tombol = const Color.fromRGBO(50, 50, 50, 10);
-  //         });
-  //       }
-  //       pesanlt1[index].kondisi && pesanlt1[index].tersedia
-  //           ? setState(() {
-  //               pesanlt1[index].tombol = const Color.fromRGBO(101, 101, 101, 1);
-  //               outindex = pesanlt1[index].selectedindex;
-  //               pesanlt1[index].kondisi = false;
-  //               outbool = pesanlt1[index].kondisi;
-  //             })
-  //           : setState(() {
-  //               pesanlt1[index].tombol = const Color.fromRGBO(217, 217, 217, 1);
-  //               pesanlt1[index].kondisi = true;
-  //               outindex = pesanlt1[index].selectedindex;
-  //               outbool = pesanlt1[index].kondisi;
-  //             });
-  //     },
-  //     onFocusChange: (val) {
-  //       setState(() {
-  //         pesanlt1[index].kondisi = val;
-  //       });
-  //     },
-  //     child: AnimatedContainer(
-  //       duration: const Duration(milliseconds: 170),
-  //       height: tinggi,
-  //       width: lebar,
-  //       alignment: Alignment.center,
-  //       decoration: BoxDecoration(
-  //           color: pesanlt1[index].tombol,
-  //           borderRadius: BorderRadius.circular(3),
-  //           boxShadow: const [
-  //             BoxShadow(
-  //                 color: Color.fromRGBO(198, 198, 198, 1),
-  //                 spreadRadius: 1,
-  //                 blurRadius: 2,
-  //                 offset: Offset(
-  //                   0,
-  //                   2,
-  //                 )),
-  //           ]),
-  //       child: Text(
-  //         textAlign: TextAlign.center,
-  //         pesanlt1[index].nokamar,
-  //         style: const TextStyle(
-  //           fontSize: 10,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget kamar(int index) {
+    // List<Floors> floors = [];
+    // futureFloors!.then((value){
+    //   floors = value;
+    //   return value;
+    // });
+    return InkWell(
+      onTap: () {
+        pesanlt1[index].kondisi
+            ? setState(() {
+                // pesanlt1[index].tombol = const Color.fromRGBO(101, 101, 101, 1);
+                outindex = pesanlt1[index].selectedindex;
+                pesanlt1[index].kondisi = false;
+                outbool = pesanlt1[index].kondisi;
+              })
+            : setState(() {
+                pesanlt1[index].tombol = const Color.fromRGBO(217, 217, 217, 1);
+                pesanlt1[index].kondisi = true;
+                outindex = pesanlt1[index].selectedindex;
+                outbool = pesanlt1[index].kondisi;
+              });
+      },
+      onFocusChange: (val) {
+        setState(() {
+          pesanlt1[index].kondisi = val;
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 170),
+        height: tinggi,
+        width: lebar,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: pesanlt1[index].tombol,
+            borderRadius: BorderRadius.circular(3),
+            boxShadow: const [
+              BoxShadow(
+                  color: Color.fromRGBO(198, 198, 198, 1),
+                  spreadRadius: 1,
+                  blurRadius: 2,
+                  offset: Offset(
+                    0,
+                    2,
+                  )),
+            ]),
+        child: Text(
+          textAlign: TextAlign.center,
+          pesanlt1[index].nokamar,
+          style: const TextStyle(
+            fontSize: 10,
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget fasilitas(String ket) {
     return Row(
@@ -614,22 +591,31 @@ class _PemesananState extends State<Pemesanan> {
               ),
         InkWell(
           onTap: () {
-            widget.admin
-                ? setState(() {
-                    Navigator.of(context).pop();
+              setState(() {
+               Navigator.of(context).pop();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Transaksi(
-                            harga: pesanlt1[index].hargabayar,
-                            kamar: pesanlt1[index].nokamar,
-                            lantai: pesanlt1[index].nomorlantai,
+                          builder: (context) => LoginPage(admin: true, 
                           ),
                         ));
-                  })
-                : setState(() {
-                    Navigator.of(context).pop();
-                  });
+              });
+                          // widget.admin
+            //     ? setState(() {
+            //         Navigator.of(context).pop();
+            //         Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //               builder: (context) => Transaksi(
+            //                 harga: pesanlt1[index].hargabayar,
+            //                 kamar: pesanlt1[index].nokamar,
+            //                 lantai: pesanlt1[index].nomorlantai,
+            //               ),
+            //             ));
+            //       })
+            //     : setState(() {
+            //         Navigator.of(context).pop();
+            //       });
           },
           borderRadius: BorderRadius.circular(15),
           child: Container(

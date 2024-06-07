@@ -5,7 +5,7 @@ import "package:flutter/widgets.dart";
 
 import "package:google_fonts/google_fonts.dart";
 
-import 'package:komas_latihan/Admin/home_page.dart';
+import 'package:komas_latihan/Admin/admin_home_page.dart';
 import "package:komas_latihan/User/home_page.dart";
 import "package:komas_latihan/pages/register_page.dart";
 import "package:komas_latihan/utils/client_request.dart";
@@ -171,9 +171,9 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    fixedSize: WidgetStatePropertyAll(const Size(90, 40)),
+                    fixedSize: MaterialStatePropertyAll(const Size(90, 40)),
                     alignment: Alignment.center,
-                    backgroundColor: WidgetStateColor.resolveWith((states) {
+                    backgroundColor: MaterialStateColor.resolveWith((states) {
                         return Colors.brown;
                     })
                   ),
