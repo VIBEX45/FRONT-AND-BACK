@@ -661,8 +661,8 @@ class _PemesananState extends State<Pemesanan> {
                 CoolAlert.show(
                   context: context, 
                   type: CoolAlertType.warning,
-                  title: "Kamar Belum Dipilih",
-                  text: '',
+                  title: "",
+                  text: 'Kamar Belum Dipilih',
                   
                 ):
                 setState(() {
