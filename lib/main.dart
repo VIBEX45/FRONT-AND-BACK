@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:komas_latihan/User/dashboard_page.dart';
+import 'package:komas_latihan/User/home_page.dart';
 import 'package:komas_latihan/pages/login_page.dart';
 import 'package:komas_latihan/utils/shared_pref.dart';
 import 'pages/intro_page.dart';
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: IntroPage(login: true),
+      home: HomePage(),
       
     );
   }
