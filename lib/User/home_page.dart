@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:komas_latihan/Langganan/langganan.dart';
 import 'package:komas_latihan/User/dashboard_page.dart';
 import 'package:komas_latihan/User/mutasi_page.dart';
 import 'package:komas_latihan/User/notifikasi_page.dart';
@@ -25,6 +26,7 @@ class _HomePageState extends State<HomePage> {
     MutasiPage(),
     NotifikasiPage(),
     const ProfilPage(),
+    langganan(),
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -48,6 +50,10 @@ class _HomePageState extends State<HomePage> {
         visible: MediaQuery.of(context).viewInsets.bottom == 0,
         child: FloatingActionButton(
           onPressed: (){
+            setState(() {
+            currenscreen = langganan();
+            currentab = 4;
+            });
           },
           backgroundColor: warna2,
           foregroundColor: Colors.white,
@@ -57,6 +63,7 @@ class _HomePageState extends State<HomePage> {
             width: 35,
             height: 35,
             child: Image.asset('lib/src/images/LOGO.png', 
+            color: currentab == 4? warna1: Colors.white,
             )
           ),
         ),
