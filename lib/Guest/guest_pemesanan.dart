@@ -1,8 +1,5 @@
 import 'package:komas_latihan/pages/login_page.dart';
-import 'package:komas_latihan/pages/transaksi.dart';
 import 'package:flutter/material.dart';
-import 'package:komas_latihan/utils/client_request.dart';
-import 'package:komas_latihan/utils/settings.dart';
 
 class Pesanlt1 {
   Color tombol;
