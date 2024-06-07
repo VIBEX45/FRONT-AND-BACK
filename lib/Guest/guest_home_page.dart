@@ -1,53 +1,59 @@
 
+
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:komas_latihan/User/dashboard_page.dart';
-import 'package:komas_latihan/User/mutasi_page.dart';
-import 'package:komas_latihan/User/notifikasi_page.dart';
-import 'package:komas_latihan/User/profil_page.dart';
+import 'package:komas_latihan/Guest/guest_dashboard_page.dart';
+import 'package:komas_latihan/pages/login_page.dart';
 
-// ignore: must_be_immutable
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
 
+class GuestHomePage extends StatefulWidget {
+  const GuestHomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<GuestHomePage> createState() => _GuestHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _GuestHomePageState extends State<GuestHomePage> {
 
   // final initialScreen = const DashboardPage(admin: true);
 
   // Bottom navBar
-  int currentab = 0;
-  final List<Widget> screens = [
-    DashboardPage(),
-    MutasiPage(),
-    NotifikasiPage(),
-    const ProfilPage(),
-  ];
-
-  final PageStorageBucket bucket = PageStorageBucket();
-  Widget currenscreen = DashboardPage();
-
   Color warna1 = Colors.brown.shade200;
   Color warna2 = Colors.brown;
 
-
+  final PageStorageBucket bucket = PageStorageBucket();
+  Widget guestscreen = GuestDashboardPage();
+  
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
-      backgroundColor: Colors.white,
       body: 
       PageStorage(
         bucket: bucket,
-        child: currenscreen
+        child: guestscreen,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Visibility(
         visible: MediaQuery.of(context).viewInsets.bottom == 0,
         child: FloatingActionButton(
           onPressed: (){
+            
+              CoolAlert.show(
+                context: context, 
+                type: CoolAlertType.info,
+                title: 'Yakin?',
+                text: '\nApakah Anda yakin ingin keluar dari Guest mode?\n',
+                confirmBtnText: 'login',
+                closeOnConfirmBtnTap: bool.hasEnvironment('keluar'),
+                onConfirmBtnTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(admin: true),));
+                },
+                cancelBtnText: 'tidak',
+                showCancelBtn: true,
+              );
           },
           backgroundColor: warna2,
           foregroundColor: Colors.white,
@@ -82,23 +88,27 @@ class _HomePageState extends State<HomePage> {
                     minWidth: 0,
                     onPressed: (){
                       setState(() {
-                        currenscreen = DashboardPage();
-                        currentab = 0;
+                        CoolAlert.show(
+                          context: context, 
+                          type: CoolAlertType.warning,
+                          title: 'Belum Login',
+                          text: '\nbuat akun terlebih dahulu untuk mengakses menu ini!\n',
+                          );
                       });
                     },
                     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(25.0) ),
-                    child: Column(
+                    child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.home,
-                          color: currentab == 0 ? warna1 : Colors.white,
+                          color: Colors.white,
                           size: 20,
                         ),
                         Text(
                           'Home',
                           style: TextStyle(
-                            color: currentab == 0 ? warna1 : Colors.white, 
+                            color: Colors.white, 
                             fontSize: 6
                           ),
                         )
@@ -109,26 +119,29 @@ class _HomePageState extends State<HomePage> {
                     minWidth: 0,
                     onPressed: (){
                       setState(() {
-                        currenscreen = MutasiPage();
-                        currentab = 1;
+                        CoolAlert.show(
+                          context: context, 
+                          type: CoolAlertType.warning,
+                          title: 'Belum Login',
+                          text: '\nbuat akun terlebih dahulu untuk mengakses menu ini!\n'
+                          );
                       });
                     },
                     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(25.0) ),
-                    child: Column(
+                    child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.article,
-                          color: currentab == 1 ? warna1 : Colors.white,
+                          color: Colors.white,
                           size: 20,
-                        ),
-                        Text(
+                        ),Text(
                           'History',
                           style: TextStyle(
-                            color: currentab == 1 ? warna1 : Colors.white,
+                            color: Colors.white,
                             fontSize: 6
                           ),
-                        ),
+                        )
                       ],
                     ),
                   )
@@ -145,23 +158,27 @@ class _HomePageState extends State<HomePage> {
                     minWidth: 0,
                     onPressed: (){
                       setState(() {
-                        currenscreen = NotifikasiPage();
-                        currentab = 2;
+                        CoolAlert.show(
+                          context: context, 
+                          type: CoolAlertType.warning,
+                          title: 'Belum Login',
+                          text: '\nbuat akun terlebih dahulu untuk mengakses menu ini!\n'
+                          );
                       });
                     },
                     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(25.0) ),
-                    child: Column(
+                    child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.notifications,
-                          color: currentab == 2 ? warna1 : Colors.white,
+                          color: Colors.white,
                           size: 20,
                         ),
                         Text(
                           'Notifikasi',
                           style: TextStyle(
-                            color: currentab == 2 ? warna1: Colors.white, 
+                            color: Colors.white, 
                             fontSize: 6
                           ),
                         )
@@ -172,23 +189,27 @@ class _HomePageState extends State<HomePage> {
                     minWidth: 0,
                     onPressed: (){
                       setState(() {
-                        currenscreen = const ProfilPage();
-                        currentab = 3;
+                        CoolAlert.show(
+                          context: context, 
+                          type: CoolAlertType.warning,
+                          title: 'Belum Login',
+                          text: '\nbuat akun terlebih dahulu untuk mengakses menu ini!\n'
+                          );
                       });
                     },
                     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(25.0) ),
-                    child: Column(
+                    child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.person,
-                          color: currentab == 3 ? warna1 : Colors.white,
+                          color: Colors.white,
                           size: 20,
                         ),
                         Text(
                           'Profil',
                           style: TextStyle(
-                            color: currentab == 3 ? warna1: Colors.white, 
+                            color:Colors.white, 
                             fontSize: 6
                           ),
                         )

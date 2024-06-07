@@ -38,6 +38,7 @@ class UserData {
       startDate,
       endDate;
   bool? isVerified, isPaid;
+  bool isDenied = false;
 
   // UserData(
   //     {this.username,
@@ -77,29 +78,30 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
 
   String tanggal = DateFormat("dd-MM-yyyy").format(DateTime.now());
 
-  List<AdminMtsi> mutasi = ([
-    AdminMtsi(
-      nama: 'rafli',
-      nokamar: 'Kamar No 5 Lt 1',
-      harga: '500.000 - 30 hari',
-      warna: Colors.orange,
-      waktutinggal: 30,
-    ),
-    AdminMtsi(
-      nama: 'afdal',
-      nokamar: 'Kamar No 2 Lt 2',
-      harga: '450.000 - 30 hari',
-      warna: Colors.orange,
-      waktutinggal: 49,
-    ),
-    AdminMtsi(
-      nama: 'anan',
-      nokamar: 'Kamar No 9 Lt 1',
-      harga: '600.000 - 60 hari',
-      warna: Colors.orange,
-      waktutinggal: 60,
-    ),
-  ]);
+  List<AdminMtsi> mutasi = List.empty(growable: true);
+  // List<AdminMtsi> mutasi = ([
+  //   AdminMtsi(
+  //     nama: 'rafli',
+  //     nokamar: 'Kamar No 5 Lt 1',
+  //     harga: '500.000 - 30 hari',
+  //     warna: Colors.orange,
+  //     waktutinggal: 30,
+  //   ),
+  //   AdminMtsi(
+  //     nama: 'afdal',
+  //     nokamar: 'Kamar No 2 Lt 2',
+  //     harga: '450.000 - 30 hari',
+  //     warna: Colors.orange,
+  //     waktutinggal: 49,
+  //   ),
+  //   AdminMtsi(
+  //     nama: 'anan',
+  //     nokamar: 'Kamar No 9 Lt 1',
+  //     harga: '600.000 - 60 hari',
+  //     warna: Colors.orange,
+  //     waktutinggal: 60,
+  //   ),
+  // ]);
 
   Color warna1 = Colors.brown.shade200;
   Color warna2 = Colors.brown;
@@ -118,8 +120,8 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
         "startDate": v["start_date"],
         "endDate": v["end_date"],
         "daysLeft": "30",
-        "isVerified": v["is_verified"] == 1 ? true : false,
-        "isPaid": v["paid"] == 1 ? true : false
+        "isVerified": v["is_verified"] >= 1 ? true : false,
+        "isPaid": v["paid"] >= 1 ? true : false
       }));
     });
 
@@ -127,11 +129,10 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
   }
 
   Future<bool> verifyUserPayment(String url, UserData user) async {
-    if(user.isVerified!){
+    if (user.isVerified!) {
       print("User is already verified!");
       return false;
-    }
-    else{
+    } else {
       Map<String, dynamic> uploadBody = {
         "userName": user.username,
         "roomNumber": user.roomNumber,
@@ -193,20 +194,30 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
           if (snapshot.hasData &&
               snapshot.data!.isNotEmpty &&
               snapshot.data! != []) {
-            print(("Data is not Empty") + snapshot.data.toString());
+            print(
+                "DATA: isPaid: ${snapshot.data![0].isPaid} isVerified: ${snapshot.data![0].isVerified}");
             return perip
                 ? verifyList(snapshot.data)
                 : verifwidget(selectedIndex, snapshot.data!);
           } else {
             print("Data is Empty");
-            return perip
-                ? daftarWidget()
-                : verifwidget(selectedIndex, snapshot.data!);
+            return emptyHistory();
+            // return perip
+            //     ? daftarWidget()
+            //     : verifwidget(selectedIndex, snapshot.data!);
           }
         },
       ),
       // body: perip? daftarWidget(): verifwidget(selectedIndex)
     );
+  }
+
+  Widget emptyHistory() {
+    return const Center(
+        child: Text(
+      "Belum ada mutasi",
+      style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+    ));
   }
 
   Widget verifyList(List<UserData>? users) {
@@ -217,6 +228,8 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
             onTap: () {
               setState(() {
                 selectedIndex = index;
+                print(
+                    "IS PAID: ${users[index].isPaid} || IS VERIFIED: ${users[index].isVerified}");
 
                 perip = false;
               });
@@ -248,7 +261,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                               fontSize: 16,
                             ),
                           ),
-                          mutasi[index].tolak
+                          users[index].isDenied
                               ? const Text(
                                   'Verifikasi Ditolak',
                                   style: TextStyle(
@@ -256,7 +269,8 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                                       color: Colors.red,
                                       fontWeight: FontWeight.bold),
                                 )
-                              : users[index].isPaid! == true && users[index].isVerified! == true
+                              : users[index].isPaid! == true &&
+                                      users[index].isVerified! == true
                                   ? const Text(
                                       'Lunas',
                                       style: TextStyle(
@@ -264,11 +278,11 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                                           color: Colors.green,
                                           fontWeight: FontWeight.bold),
                                     )
-                                  : Text(
+                                  : const Text(
                                       'Verifikasi',
                                       style: TextStyle(
                                           fontSize: 13,
-                                          color: mutasi[index].warna,
+                                          color: Colors.orange,
                                           fontWeight: FontWeight.bold),
                                     ),
                         ],
@@ -587,7 +601,10 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${mutasi[index].bulanini} s/d ${mutasi[index].bulandepan}',
+                  // "${DateFormat('MM/dd/yyyy').format(DateTime.fromMicrosecondsSinceEpoch(int.parse(users[index].startDate!)))} s/d ${DateFormat('MM/dd/yyyy').format(DateTime.fromMicrosecondsSinceEpoch(int.parse(users[index].endDate!)))}",
+                  // '${mutasi[index].bulanini} s/d ${mutasi[index].bulandepan}',
+                  // '${DateTime.fromMicrosecondsSinceEpoch(int.parse(users[index].startDate!))} s/d ${DateTime.fromMillisecondsSinceEpoch(int.parse(users[index].endDate!))}',
+                  "${users[index].startDate} s/d ${users[index].endDate}",
                   style: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
@@ -639,16 +656,17 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
         const SizedBox(
           height: 50,
         ),
-        users.isNotEmpty ? accORdenie(index, users): savecancel(index),
-        mutasi[index].readiable || mutasi[index].tolak
+        users.isNotEmpty ? accORdenie(index, users) : savecancel(index),
+      users[index].isDenied || users[index].isPaid! && users[index].isVerified!
             ? Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: InkWell(
                     onTap: () {
                       setState(() {
+                        
                         perip = true;
-                        mutasi[index].tolak = false;
-                        mutasi[index].readiable = false;
+                        users[index].isDenied = false;
+                        // mutasi[index].readiable = false;
                       });
                     },
                     borderRadius: BorderRadius.circular(15),
@@ -713,17 +731,14 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
           OutlinedButton(
             onPressed: () {
               setState(() {
+                users[index].isDenied = true;
+                CoolAlert.show(
+                  context: context,
+                  type: CoolAlertType.error,
+                  title: 'Ditolak',
+                  text: "\nTransaksi Berhasil Ditolak\n",
+                );
                 perip = true;
-                mutasi[index].tolak
-                    ? null
-                    : CoolAlert.show(
-                        context: context,
-                        type: CoolAlertType.error,
-                        title: 'Ditolak',
-                        text: "\nTransaksi Berhasil Ditolak\n",
-                      );
-
-                mutasi[index].tolak = true;
               });
             },
             style: OutlinedButton.styleFrom(
@@ -745,7 +760,10 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                   .then((value) {
                 if (value) {
                   setState(() {
+                    
                     perip = true;
+                    users[index].isPaid = true;
+                    users[index].isVerified = true;
                     CoolAlert.show(
                       context: context,
                       type: CoolAlertType.success,

@@ -112,9 +112,9 @@ class _otpState extends State<otp> {
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    fixedSize: const WidgetStatePropertyAll(Size(110, 40)),
+                    fixedSize: const MaterialStatePropertyAll(Size(110, 40)),
                     alignment: Alignment.center,
-                    backgroundColor: WidgetStateColor.resolveWith((states) {
+                    backgroundColor: MaterialStateColor.resolveWith((states) {
                         return Colors.brown;
                     })
                   ),

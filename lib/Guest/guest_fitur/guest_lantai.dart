@@ -1,24 +1,26 @@
-import 'package:komas_latihan/pages/infopage.dart';
 import 'package:flutter/material.dart';
+import 'package:komas_latihan/pages/guestlt_page.dart';
+import 'package:komas_latihan/pages/pemesanan/pemesananlt_page.dart';
+import 'package:komas_latihan/pages/pemesanan_page.dart';
 
-class Info extends StatefulWidget {
-  const Info({super.key});
+// ignore: must_be_immutable
+class guestlantai extends StatefulWidget {
+    guestlantai({required this.guestmilih,required this.namalantai});
+
+  bool guestmilih;
+  String namalantai;
 
   @override
-  State<Info> createState() => _InfoState();
+  State<guestlantai> createState() => _guestlantaiState();
 }
 
-class _InfoState extends State<Info> {
+class _guestlantaiState extends State<guestlantai> {
 
   bool isHovering = false;
-
-  Color warna1 = Colors.brown.shade200;
-  Color warna2 = Colors.brown;
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      
           onEnter: (f) {
             setState(() {
               isHovering = true;
@@ -30,28 +32,40 @@ class _InfoState extends State<Info> {
             });
           },
           child: InkWell(
-
             onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => 
-                const InfoPage(),
-                ),
-              );
+              if (widget.guestmilih == true) {
+                setState(() {
+                Navigator.push(
+                  context,
+                    MaterialPageRoute(
+                      builder: (context) => 
+                      ltPage(admin: true, lantaikamar: true,),
+                    ),
+                  );
+                });
+              } else {
+                setState(() {
+                Navigator.push(
+                  context,
+                    MaterialPageRoute(
+                      builder: (context) => 
+                      ltPage(admin: true, lantaikamar: false,),
+                    ),
+                  );
+                });
+              }
+              
             }, 
           child: Column(
-            
             children: [
-              
               AnimatedContainer(
-                
                 duration: const Duration(milliseconds: 250),
                 width: 45,
                 height: 45,
                 decoration: BoxDecoration(
                   color: isHovering ? const Color.fromARGB(255, 215, 237, 255) : Colors.white,
                   borderRadius: BorderRadius.circular(12),
+                  border: Border.all(width: 1),
                   boxShadow: const [
                     BoxShadow(
                       color: Colors.brown,
@@ -60,13 +74,13 @@ class _InfoState extends State<Info> {
                     ),
                   ],
                 ),
-                child: const Icon(Icons.info, size: 25,),
+                child: const Icon(Icons.house, size: 25,),
                 ),
               const SizedBox(
                 height: 2,
               ),
-              const Text(
-                "Info",
+              Text(
+                widget.namalantai,
                 style: TextStyle(color: Colors.white, 
                 fontSize: 8, height: 1.5),
               ),

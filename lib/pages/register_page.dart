@@ -215,9 +215,9 @@ final TextEditingController _confirmController = TextEditingController();
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    fixedSize: WidgetStatePropertyAll(const Size(110, 40)),
+                    fixedSize: MaterialStatePropertyAll(const Size(110, 40)),
                     alignment: Alignment.center,
-                    backgroundColor: WidgetStateColor.resolveWith((states) {
+                    backgroundColor: MaterialStateColor.resolveWith((states) {
                         return Colors.brown;
                     })
                   ),

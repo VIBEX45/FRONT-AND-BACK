@@ -1,15 +1,12 @@
 
 import 'package:flutter/material.dart';
-import 'package:komas_latihan/Admin/dashboard_page.dart';
-import 'package:komas_latihan/Admin/mutasi_page.dart';
-import 'package:komas_latihan/Admin/notifikasi_page.dart';
-import 'package:komas_latihan/Admin/profil_page.dart';
-import 'package:komas_latihan/CostumView/tf_verify.dart';
+import 'package:komas_latihan/Admin/admin_dashboard_page.dart';
+import 'package:komas_latihan/Admin/admin_mutasi_page.dart';
+import 'package:komas_latihan/Admin/admin_notifikasi_page.dart';
+import 'package:komas_latihan/Admin/admin_profil_page.dart';
 
 // ignore: must_be_immutable
 class AdminHomePage extends StatefulWidget {
-  const AdminHomePage({super.key});
-
   @override
   State<AdminHomePage> createState() => _AdminHomePageState();
 }
@@ -21,9 +18,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
   // Bottom navBar
   int currentab = 0;
   final List<Widget> screens = [
-    const AdminDashboardPage(),
-    const AdminMutasiPage(),
-    const AdminNotifikasiPage(),
+    AdminDashboardPage(),
+    AdminMutasiPage(),
+    AdminNotifikasiPage(),
     const AdminProfilPage(),
   ];
 
@@ -53,7 +50,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
           foregroundColor: Colors.white,
           shape: const CircleBorder(),
           disabledElevation: 0,
-          child: const Icon(Icons.air),
+          child: Container(
+            width: 35,
+            height: 35,
+            child: Image.asset('lib/src/images/LOGO.png', 
+            )
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(

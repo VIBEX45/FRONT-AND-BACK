@@ -1,105 +1,91 @@
-import 'package:flutter/widgets.dart';
+import 'package:komas_latihan/pages/login_page.dart';
 import 'package:komas_latihan/pages/transaksi.dart';
 import 'package:flutter/material.dart';
 import 'package:komas_latihan/utils/client_request.dart';
 import 'package:komas_latihan/utils/settings.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class Pesanlt1 {
-  Color? tombol;
+  Color tombol;
   String nokamar;
   String nomorlantai;
   int selectedindex;
   String harga;
   int hargabayar;
   bool kondisi = true;
-  bool tersedia = true;
 
   Pesanlt1(
       {required this.nomorlantai,
-      this.tombol,
+      required this.tombol,
       required this.nokamar,
       required this.selectedindex,
       required this.harga,
-      required this.hargabayar,
-      required this.tersedia});
+      required this.hargabayar});
 }
 
-class Floors {
-  Color? tombol;
-  String? nokamar;
-  String? nomorlantai;
-  int? selectedindex;
-  String? harga;
-  int? hargabayar;
-  // bool kondisi = true;
-  bool? tersedia;
+// class Floors {
+//   Color? tombol;
+//   String? nokamar;
+//   String? nomorlantai;
+//   int? selectedindex;
+//   String? harga;
+//   int? hargabayar;
+//   // bool kondisi = true;
+//   bool? tersedia;
 
-  // Floors({required this.nomorlantai, required this.tombol, required this.nokamar,
-  // required this.selectedindex, required this.harga, required this.hargabayar});
+//   // Floors({required this.nomorlantai, required this.tombol, required this.nokamar,
+//   // required this.selectedindex, required this.harga, required this.hargabayar});
 
-  Floors.fromJson(Map<String, dynamic> json) {
-    nokamar = json["roomNumber"];
-    nomorlantai = json["floorNumber"].toString();
-    hargabayar = int.parse(json["roomPrice"]);
-    harga = json["roomPrice"];
-    tersedia = json["available"] == "Yes" ? true : false;
-    tombol = json["available"] == "Yes"
-        ? const Color.fromRGBO(217, 217, 217, 1)
-        : const Color.fromRGBO(50, 50, 50, 10);
-    selectedindex = json["index"];
-  }
-}
+//   Floors.fromJson(Map<String, dynamic> json) {
+//     nokamar = json["roomNumber"];
+//     nomorlantai = json["floorNumber"].toString();
+//     hargabayar = int.parse(json["roomPrice"]);
+//     harga = json["roomPrice"];
+//     tersedia = json["available"] == "Yes" ? true : false;
+//     tombol = json["available"] == "Yes" ?const Color.fromRGBO(217, 217, 217, 1) : const Color.fromRGBO(100, 100, 100, 10);
+//     selectedindex = int.parse(json["index"]);
+//   }
+// }
 
 // ignore: must_be_immutable
-class Pemesanan extends StatefulWidget {
-  Pemesanan({super.key, required this.lantai, required this.admin});
+class PemesananGuest extends StatefulWidget {
+  PemesananGuest({super.key, required this.lantai, required this.admin});
   bool lantai;
   bool admin;
 
   @override
-  State<Pemesanan> createState() => _PemesananState();
+  State<PemesananGuest> createState() => _PemesananGuestState();
 }
 
-class _PemesananState extends State<Pemesanan> {
+class _PemesananGuestState extends State<PemesananGuest> {
   int outindex = 0;
-
-  bool outbool = false;
+  bool outbool = true;
 
   bool keranjang = true;
-
-  bool isSelected = false;
 
   double tinggi = 25;
   double lebar = 50;
 
-  Color warna1 = Colors.brown.shade200;
-  Color warna2 = Colors.brown;
+  // Future<List<Floors>>? futureFloors;
+  // Future<List<Floors>> getFutureFloors(String url) async {
+  //   List<Floors> floors = [];
+  //   final response = await ClientRequest.getAll(url);
 
-  Color notap = const Color.fromRGBO(217, 217, 217, 1);
-  Color tap = const Color.fromRGBO(101, 101, 101, 1);
+  //   int index = 0;
+  //   response.forEach((value) {
+  //     floors.add(Floors.fromJson(<String, dynamic>{
+  //       "roomNumber": value["roomNumber"],
+  //       "floorNumber": value["floorNumber"],
+  //       "roomPrice": value["roomPrice"],
+  //       "available": value["available"],
+  //       "index": index
+  //     }));
+  //     index += 1;
+  //   });
 
-  int prevIndex = 0;
+  //   return floors;
+  // }
 
-  Future<List<Floors>>? futureFloors;
-  Future<List<Floors>> getFutureFloors(String url) async {
-    List<Floors> floors = [];
-    final response = await ClientRequest.getAll(url);
-
-    int index = 0;
-    response.forEach((value) {
-      floors.add(Floors.fromJson(<String, dynamic>{
-        "roomNumber": value["roomNumber"],
-        "floorNumber": value["floorNumber"],
-        "roomPrice": value["roomPrice"],
-        "available": value["available"],
-        "index": index
-      }));
-      index += 1;
-    });
-
-    return floors;
-  }
+  
 
   static List<Pesanlt1> floors = [];
   List<Pesanlt1> pesanlt1 = createFloor(20);
@@ -108,23 +94,24 @@ class _PemesananState extends State<Pemesanan> {
       if (i > 9) {
         floors.add(
           Pesanlt1(
-              nokamar: (i + 1).toString(),
-              nomorlantai: "2",
-              selectedindex: i,
-              harga: "800.000 / Bulan",
-              hargabayar: 800000,
-              tersedia: true),
+            tombol: const Color.fromRGBO(217, 217, 217, 1),
+            nokamar: (i + 1).toString(),
+            nomorlantai: "2",
+            selectedindex: i,
+            harga: "800.000 / Bulan",
+            hargabayar: 800000,
+          ),
         );
       } else {
         floors.add(
           Pesanlt1(
-              // tombol: const Color.fromRGBO(217, 217, 217, 1),
-              nokamar: '0' + (i + 1).toString(),
-              nomorlantai: "1",
-              selectedindex: i,
-              harga: "800.000 / Bulan",
-              hargabayar: 800000,
-              tersedia: true),
+            tombol: const Color.fromRGBO(217, 217, 217, 1),
+            nokamar: '0' + (i + 1).toString(),
+            nomorlantai: "1",
+            selectedindex: i,
+            harga: "800.000 / Bulan",
+            hargabayar: 800000,
+          ),
         );
       }
     }
@@ -138,30 +125,180 @@ class _PemesananState extends State<Pemesanan> {
     // futureFloors = getFutureFloors(MySettings.getUrl() + ("/rooms"));
     // futureUsers = fetchAllRentData(MySettings.getUrl() + ("rents"));
     // fetchAllData();
-    getFutureFloors(MySettings.getUrl() + ("rooms")).then((value) {
-      int index = 0;
-      if (value.length <= pesanlt1.length) {
-        value.forEach((v) {
-          setState(() {
-            if (v.tersedia == true) {
-              pesanlt1[index].tombol = notap;
-              pesanlt1[index].tersedia = v.tersedia!;
-            } else {
-              pesanlt1[index].tombol = tap;
-              pesanlt1[index].tersedia = v.tersedia!;
-            }
-          });
-          index += 1;
-        });
-      } else {
-        value.forEach((v) {
-          // pesanlt1[index]
-          floors[index].tombol = v.tombol!;
-          index += 1;
-        });
-      }
-    });
+    // getFutureFloors(MySettings.getUrl() + ("rooms")).then((value){
+    //   int index =0;
+    //   value.forEach((v){
+    //     floors[index].tombol = v.tombol!;
+    //   });
+    // });
   }
+
+  // List<pesanlt1> pesanlt1 = [
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'01',
+  //     nomorlantai: '1',
+  //     selectedindex: 0,
+  //     harga: "350.000 / Bulan",
+  //     hargabayar: 350000,
+  //     ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'02',
+  //     selectedindex: 1,
+  //     nomorlantai: '1',
+  //     harga: "400.000 / Bulan",
+  //     hargabayar: 400000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'03',
+  //     selectedindex: 2,
+  //     harga: "450.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 450000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'04',
+  //     selectedindex: 3,
+  //     harga: "500.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 500000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'05',
+  //     selectedindex: 4,
+  //     harga: "550.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 550000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'06',
+  //     selectedindex: 5,
+  //     harga: "600.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 600000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'07',
+  //     selectedindex: 6,
+  //     harga: "650.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 650000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'08',
+  //     selectedindex: 7,
+  //     harga: "575.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 575000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'09',
+  //     selectedindex: 8,
+  //     harga: "630.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 630000,
+  //   ),
+  //   pesanlt1(
+  //     tombol:const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'10',
+  //     selectedindex: 9,
+  //     harga: "300.000 / Bulan",
+  //     nomorlantai: '1',
+  //     hargabayar: 300000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'11',
+  //     nomorlantai: '2',
+  //     selectedindex: 10,
+  //     harga: "350.000 / Bulan",
+  //     hargabayar: 350000,
+  //     ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'12',
+  //     selectedindex: 11,
+  //     nomorlantai: '2',
+  //     harga: "400.000 / Bulan",
+  //     hargabayar: 400000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'13',
+  //     selectedindex: 12,
+  //     harga: "450.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 450000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'14',
+  //     selectedindex: 13,
+  //     harga: "500.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 500000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'15',
+  //     selectedindex: 14,
+  //     harga: "550.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 550000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'16',
+  //     selectedindex: 15,
+  //     harga: "600.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 600000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'17',
+  //     selectedindex: 16,
+  //     harga: "650.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 650000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'18',
+  //     selectedindex: 17,
+  //     harga: "575.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 575000,
+  //   ),
+  //   pesanlt1(
+  //     tombol: const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'19',
+  //     selectedindex: 18,
+  //     harga: "630.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 630000,
+  //   ),
+  //   pesanlt1(
+  //     tombol:const Color.fromRGBO(217,217,217,1),
+  //     nokamar:'20',
+  //     selectedindex: 19,
+  //     harga: "300.000 / Bulan",
+  //     nomorlantai: '2',
+  //     hargabayar: 300000,
+  //   ),
+
+  // ];
+
+  Color warna1 = Colors.brown.shade200;
+  Color warna2 = Colors.brown;
 
   @override
   Widget build(BuildContext context) {
@@ -340,69 +477,27 @@ class _PemesananState extends State<Pemesanan> {
           );
   }
 
-  void showRoomChooseDialog(
-      BuildContext context, Text title, Text dialogText, int index) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: title,
-            content: dialogText,
-            actions: [
-              TextButton(
-                  child: const Text("Batal"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  }),
-              TextButton(
-                  child: const Text("Pilih"),
-                  onPressed: () {
-                    setState(() {
-                      if (!isSelected) {
-                        pesanlt1[index].tombol = tap;
-                        isSelected = true;
-                        outindex = pesanlt1[index].selectedindex;
-                        outbool = isSelected;
-                        prevIndex = index;
-                      } else if (isSelected && prevIndex == index) {
-                        pesanlt1[index].tombol = notap;
-                        isSelected = false;
-                        outindex = pesanlt1[index].selectedindex;
-                        outbool = isSelected;
-                        prevIndex = -1;
-                      } else {
-                        Fluttertoast.showToast(
-                            msg: "Hanya dapat memilih satu kamar",
-                            backgroundColor: Colors.red);
-                      }
-                      Navigator.of(context).pop();
-                      // pesanlt1[index].tombol = tap;
-                      // isSelected = true;
-                      // outindex = pesanlt1[index].selectedindex;
-                      // outbool = isSelected;
-                      // Navigator.of(context).pop();
-                    });
-                  })
-            ],
-          );
-        });
-  }
-
   Widget kamar(int index) {
+    // List<Floors> floors = [];
+    // futureFloors!.then((value){
+    //   floors = value;
+    //   return value;
+    // });
     return InkWell(
       onTap: () {
-        if (pesanlt1[index].tersedia) {
-          setState(() {
-            showRoomChooseDialog(
-                context,
-                const Text("Pilih Kamar",
-                    style: TextStyle(fontWeight: FontWeight.w400)),
-                !isSelected
-                    ? Text("Pilih Kamar No.${pesanlt1[index].nokamar}?")
-                    : Text("Batal Pilih Kamar No.${pesanlt1[index].nokamar}?"),
-                index);
-          });
-        }
+        pesanlt1[index].kondisi
+            ? setState(() {
+                // pesanlt1[index].tombol = const Color.fromRGBO(101, 101, 101, 1);
+                outindex = pesanlt1[index].selectedindex;
+                pesanlt1[index].kondisi = false;
+                outbool = pesanlt1[index].kondisi;
+              })
+            : setState(() {
+                pesanlt1[index].tombol = const Color.fromRGBO(217, 217, 217, 1);
+                pesanlt1[index].kondisi = true;
+                outindex = pesanlt1[index].selectedindex;
+                outbool = pesanlt1[index].kondisi;
+              });
       },
       onFocusChange: (val) {
         setState(() {
@@ -475,7 +570,7 @@ class _PemesananState extends State<Pemesanan> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         //tab
-        !outbool
+        outbool
             ? const Text('Kamar Belum Dipilih',
                 style: TextStyle(
                     color: Colors.black,
@@ -499,22 +594,31 @@ class _PemesananState extends State<Pemesanan> {
               ),
         InkWell(
           onTap: () {
-            widget.admin
-                ? setState(() {
-                    Navigator.of(context).pop();
+              setState(() {
+               Navigator.of(context).pop();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Transaksi(
-                            harga: pesanlt1[index].hargabayar,
-                            kamar: pesanlt1[index].nokamar,
-                            lantai: pesanlt1[index].nomorlantai,
+                          builder: (context) => LoginPage(admin: true, 
                           ),
                         ));
-                  })
-                : setState(() {
-                    Navigator.of(context).pop();
-                  });
+              });
+                          // widget.admin
+            //     ? setState(() {
+            //         Navigator.of(context).pop();
+            //         Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //               builder: (context) => Transaksi(
+            //                 harga: pesanlt1[index].hargabayar,
+            //                 kamar: pesanlt1[index].nokamar,
+            //                 lantai: pesanlt1[index].nomorlantai,
+            //               ),
+            //             ));
+            //       })
+            //     : setState(() {
+            //         Navigator.of(context).pop();
+            //       });
           },
           borderRadius: BorderRadius.circular(15),
           child: Container(
