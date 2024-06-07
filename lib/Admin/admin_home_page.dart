@@ -4,6 +4,7 @@ import 'package:komas_latihan/Admin/admin_dashboard_page.dart';
 import 'package:komas_latihan/Admin/admin_mutasi_page.dart';
 import 'package:komas_latihan/Admin/admin_notifikasi_page.dart';
 import 'package:komas_latihan/Admin/admin_profil_page.dart';
+import 'package:komas_latihan/Langganan/AdminLangganan.dart';
 
 // ignore: must_be_immutable
 class AdminHomePage extends StatefulWidget {
@@ -22,6 +23,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
     AdminMutasiPage(),
     AdminNotifikasiPage(),
     const AdminProfilPage(),
+    adminLanggananApp(),
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -45,6 +47,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
         visible: MediaQuery.of(context).viewInsets.bottom == 0,
         child: FloatingActionButton(
           onPressed: (){
+            setState(() {
+            anotherscreen = adminLanggananApp();
+            currentab = 4;
+            });
           },
           backgroundColor: warna2,
           foregroundColor: Colors.white,
@@ -54,6 +60,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             width: 35,
             height: 35,
             child: Image.asset('lib/src/images/LOGO.png', 
+            color: currentab == 4? warna1: Colors.white,
             )
           ),
         ),

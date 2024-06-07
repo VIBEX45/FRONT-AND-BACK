@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class Langganan {
-  final String date;
+class adminLangganan {
+  String date;
   final String username;
   final String roomDetails;
   final String pricePer30Days;
 
-  Langganan({
+  adminLangganan({
     required this.date,
     required this.username,
     required this.roomDetails,
@@ -15,26 +15,26 @@ class Langganan {
   });
 }
 
-class LanggananApp extends StatefulWidget {
-  const LanggananApp({super.key});
+class adminLanggananApp extends StatefulWidget {
+  const adminLanggananApp({super.key});
 
   @override
-  State<LanggananApp> createState() => _LanggananAppState();
+  State<adminLanggananApp> createState() => _adminLanggananAppState();
 }
 
-class _LanggananAppState extends State<LanggananApp> {
+class _adminLanggananAppState extends State<adminLanggananApp> {
   Color warna1 = Colors.brown.shade200;
   Color warna2 = Colors.brown;
 
   // Data contoh
-  final List<Langganan> subscriptions = [
-    Langganan(
+  final List<adminLangganan> subscriptions = [
+    adminLangganan(
       date: "2024-06-07",
       username: "andy",
       roomDetails: "kamar 05, Lt. 1",
       pricePer30Days: "Rp. 800.000 - 30 Hari",
     ),
-    Langganan(
+    adminLangganan(
       date: "2024-06-01",
       username: "vibex",
       roomDetails: "kamar 01, Lt. 1",
@@ -66,13 +66,9 @@ class _LanggananAppState extends State<LanggananApp> {
     if (remainingDays > 0) {
       return remainingDays;
     } else if (remainingDays >= -10) {
-
       return remainingDays;
-
     } else {
-
       return -11;
-
     }
   }
 
@@ -96,7 +92,8 @@ class _LanggananAppState extends State<LanggananApp> {
     );
   }
 
-  void _showDetailDialog(Langganan subscription, int remainingDays) {
+  void _showDetailDialog(adminLangganan subscription, int remainingDays) {
+    final TextEditingController daysController = TextEditingController();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -110,14 +107,26 @@ class _LanggananAppState extends State<LanggananApp> {
               Text('Nomor Kamar dan Lantai: ${subscription.roomDetails}'),
               Text('Harga per 30 Hari: ${subscription.pricePer30Days}'),
               Text('Sisa Waktu: $remainingDays Hari'),
+              TextField(
+                controller: daysController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Masukkan jumlah hari untuk memperbarui countdown',
+                ),
+              ),
             ],
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Lanjut Langganan'),
+              child: const Text('Perbarui Countdown'),
               onPressed: () {
+                final int? newRemainingDays = int.tryParse(daysController.text);
+                if (newRemainingDays != null && newRemainingDays >= 0) {
+                  setState(() {
+                    subscription.date = DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(Duration(days: 30 - newRemainingDays)));
+                  });
+                }
                 Navigator.of(context).pop();
-                
               },
             ),
             TextButton(
@@ -161,9 +170,7 @@ class _LanggananAppState extends State<LanggananApp> {
           final subscription = subscriptions[index];
           int remainingDays = calculateRemainingDays(subscription.date);
 
-
           if (remainingDays == -11) {
-            
             return ListTile(
               title: Text(
                 "Data untuk ${subscription.username} telah dihapus",
