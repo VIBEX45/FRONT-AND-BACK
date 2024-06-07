@@ -503,7 +503,7 @@ class _PemesananState extends State<Pemesanan> {
         InkWell(
           onTap: () {
             widget.admin ? 
-                outbool?
+                !outbool?
                 CoolAlert.show(
                   context: context, 
                   type: CoolAlertType.warning,
