@@ -1,7 +1,6 @@
 import 'package:komas_latihan/CostumView/lantai.dart';
-import 'package:komas_latihan/pages/guest_pemesanan.dart';
-import 'package:komas_latihan/pages/pemesanan_page.dart';
 import 'package:flutter/material.dart';
+import 'package:komas_latihan/Guest/guest_pemesanan.dart';
 
 
 
@@ -100,7 +99,8 @@ class _lt1pageState extends State<ltPage> {
                     builder: (BuildContext context){
                       return SizedBox(
                         height: 310,
-                      child : PemesananGuest(admin: admin,lantai: lantaikamar,),
+                        
+                      child : PemesananGuest(lantai: lantaikamar, admin: admin)
 
                       );
                     }
