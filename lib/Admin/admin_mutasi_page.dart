@@ -539,7 +539,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                               "fit": BoxFit.cover,
                               "width": 300.0,
                               "height": 300.0
-                            }),
+                            })
                         // decoration: const BoxDecoration(
                         //   image: DecorationImage(
                         //       image: AssetImage(

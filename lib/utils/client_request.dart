@@ -83,19 +83,20 @@ class ClientRequest {
   }
 
   static Widget getImageFromNetwork(
-      String url, String by, Map<String, dynamic>? style) {
-    String uri = url + by;
-    if (style == null) {
-      return Image.network(
+      String url, String path, Map<String, dynamic>? style) {
+    String uri = url + path;
+    return ClipOval(child: SizedBox.fromSize(
+      size: style!.isNotEmpty ? const Size.fromRadius(48) : Size.fromRadius(style["radius"]),
+      child: style.isNotEmpty ? Image.network(
+      uri,
+      fit: style["fit"],
+      width: style["width"],
+      height: style["height"],
+      scale: style["scale"],
+    ):Image.network(
         uri,
-      );
-    } else {
-      return Image.network(
-        uri,
-        fit: style["fit"],
-        width: style["width"],
-        height: style["height"],
-      );
-    }
+      )
+    ),);
+   
   }
 }

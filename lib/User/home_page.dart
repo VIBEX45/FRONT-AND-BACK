@@ -22,15 +22,15 @@ class _HomePageState extends State<HomePage> {
   // Bottom navBar
   int currentab = 0;
   final List<Widget> screens = [
-    DashboardPage(),
-    MutasiPage(),
-    NotifikasiPage(),
+    const DashboardPage(),
+    const MutasiPage(),
+    const NotifikasiPage(),
     const ProfilPage(),
-    langganan(),
+    const langganan(),
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currenscreen = DashboardPage();
+  Widget currenscreen = const DashboardPage();
 
   Color warna1 = Colors.brown.shade200;
   Color warna2 = Colors.brown;

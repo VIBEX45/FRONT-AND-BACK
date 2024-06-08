@@ -6,14 +6,14 @@ import 'package:komas_latihan/CostumView/info.dart';
 import 'package:komas_latihan/pages/intro_page.dart';
 import 'package:komas_latihan/pages/login_page.dart';
 import 'package:komas_latihan/pages/pemesanan/pemesananlt_page.dart';
+import 'package:komas_latihan/utils/client_request.dart';
+import 'package:komas_latihan/utils/settings.dart';
 import 'package:komas_latihan/utils/shared_pref.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
-
-  
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
@@ -29,44 +29,51 @@ class _DashboardPageState extends State<DashboardPage> {
   bool pilih2 = false;
   double tinggilt1 = 40;
   double tinggilt2 = 40;
-  
-  Future<bool> clearLoggedCache(String key) async{
+
+  Future<bool> clearLoggedCache(String key) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     return sp.remove(key);
   }
 
-  void logout(BuildContext context){
+  void logout(BuildContext context) {
     String key = "";
-    clearLoggedCache(key).then((value){
-      if(value == true){
+    clearLoggedCache(key).then((value) {
+      if (value == true) {
         setState(() {
           Navigator.of(context).pop();
-          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(admin: false)));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => LoginPage(admin: false)));
         });
-      }
-      else{
+      } else {
         debugPrint("Cannot Logout!");
       }
     });
   }
 
+  Future<List<String>?>? userCache;
   Future<List<String>?> cacheFetch(String key) async {
     List<String>? list = await MySharedPreferences.fetchFromShared(key);
     return list;
   }
-  
+
+  @override
+  initState() {
+    super.initState();
+    userCache = cacheFetch("_userLogged");
+  }
+
   @override
   Widget build(BuildContext context) {
     Future<List<String>?> log = cacheFetch("_userLogged");
     return Scaffold(
-    backgroundColor: Colors.white,
-    body: ListView(
-      scrollDirection: Axis.vertical,
-      children: [
-        Stack(
+      backgroundColor: Colors.white,
+      body: ListView(
+        scrollDirection: Axis.vertical,
+        children: [
+          Stack(
             children: [
               Container(
-              height: 275.0,
+                height: 275.0,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('lib/src/images/dashboardkos.jpeg'),
@@ -77,356 +84,381 @@ class _DashboardPageState extends State<DashboardPage> {
               Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 20, right:  10, left: 30),
+                    padding:
+                        const EdgeInsets.only(top: 20, right: 10, left: 30),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InkWell(
-                          onTap: () {
-        
-                          },
-                        child : 
-                        FutureBuilder(future: log,builder: (context, snapshot){
-                          if(snapshot.hasData){
-                            return Text(
-                              snapshot.data![0],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                  shadows: [
-                                    Shadow( // bottomLeft
-                                      offset: const Offset(-0.5, -0.5),
-                                      color: warna2
+                            onTap: () {},
+                            child: FutureBuilder(
+                                future: log,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(snapshot.data![0],
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            shadows: [
+                                              Shadow(
+                                                  // bottomLeft
+                                                  offset:
+                                                      const Offset(-0.5, -0.5),
+                                                  color: warna2),
+                                              Shadow(
+                                                  // bottomRight
+                                                  offset:
+                                                      const Offset(0.5, -0.5),
+                                                  color: warna2),
+                                              Shadow(
+                                                  // topRight
+                                                  offset:
+                                                      const Offset(0.5, 0.5),
+                                                  color: warna2),
+                                              Shadow(
+                                                  // topLeft
+                                                  offset:
+                                                      const Offset(-0.5, 0.5),
+                                                  color: warna2),
+                                            ]));
+                                  } else {
+                                    return Text("hi. Kids!",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            shadows: [
+                                              Shadow(
+                                                  // bottomLeft
+                                                  offset:
+                                                      const Offset(-0.5, -0.5),
+                                                  color: warna2),
+                                              Shadow(
+                                                  // bottomRight
+                                                  offset:
+                                                      const Offset(0.5, -0.5),
+                                                  color: warna2),
+                                              Shadow(
+                                                  // topRight
+                                                  offset:
+                                                      const Offset(0.5, 0.5),
+                                                  color: warna2),
+                                              Shadow(
+                                                  // topLeft
+                                                  offset:
+                                                      const Offset(-0.5, 0.5),
+                                                  color: warna2),
+                                            ]));
+                                  }
+                                })),
+                        PopupMenuButton(
+                            itemBuilder: (context) => [
+                                  // PopupMenuItem(
+                                  //   height: 40,
+                                  //   child: const Text(
+                                  //     "Admin Mode",
+                                  //     style: TextStyle(
+                                  //       fontSize: 12,
+                                  //       color: Colors.white
+                                  //     ),
+                                  //   ),
+                                  //   onTap: () {
+                                  //     setState(() {
+                                  //       Navigator.of(context).pop();
+                                  //       Navigator.push(context, MaterialPageRoute(builder: (context) => IntroPage(login: true)));
+                                  //     });
+                                  //   },
+                                  // ),
+                                  PopupMenuItem(
+                                    height: 40,
+                                    child: const Text(
+                                      'Ganti Akun',
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.white),
                                     ),
-                                  Shadow( // bottomRight
-                                    offset: const Offset(0.5, -0.5),
-                                    color: warna2
+                                    onTap: () {
+                                      setState(() {
+                                        Navigator.of(context).pop();
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    IntroPage(login: true)));
+                                      });
+                                    },
                                   ),
-                                  Shadow( // topRight
-                                    offset: const Offset(0.5, 0.5),
-                                    color: warna2
-                                  ),
-                                  Shadow( // topLeft
-                                    offset: const Offset(-0.5, 0.5),
-                                    color: warna2
-                                  ),
-                                  ]
-                                )
-                            );
-                          }
-                          else{
-                            return Text(
-                              "hi. Kids!",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                  shadows: [
-                                    Shadow( // bottomLeft
-                                      offset: const Offset(-0.5, -0.5),
-                                      color: warna2
+                                  PopupMenuItem(
+                                    height: 40,
+                                    child: const Text(
+                                      'Keluar',
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.white),
                                     ),
-                                    Shadow( // bottomRight
-                                      offset: const Offset(0.5, -0.5),
-                                      color: warna2
-                                    ),
-                                    Shadow( // topRight
-                                      offset: const Offset(0.5, 0.5),
-                                      color: warna2
-                                    ),
-                                    Shadow( // topLeft
-                                      offset: const Offset(-0.5, 0.5),
-                                      color: warna2
-                                    ),
-                                  ]
-                              )
-                            );
-                          }
-                        })
-                        
-                        ),
-                        PopupMenuButton (
-                          itemBuilder: (context) => [
-                            // PopupMenuItem(
-                            //   height: 40,
-                            //   child: const Text(
-                            //     "Admin Mode",
-                            //     style: TextStyle(
-                            //       fontSize: 12,
-                            //       color: Colors.white
-                            //     ),
-                            //   ),
-                            //   onTap: () {
-                            //     setState(() {
-                            //       Navigator.of(context).pop();
-                            //       Navigator.push(context, MaterialPageRoute(builder: (context) => IntroPage(login: true)));
-                            //     });
-                            //   },
-                            // ),
-                            PopupMenuItem(
-                              height: 40,
-                              child: const Text(
-                                'Ganti Akun',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white
-
-                                ),
-                              ),
-                              onTap: (){
-                                setState(() {
-                                  Navigator.of(context).pop();
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => IntroPage(login: true)));
-                                });
-                              },
-                            ),
-                            PopupMenuItem(
-                              height: 40,
-                              child: const Text(
-                                'keluar',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white
-
-                                ),
-                              ),
-                              onTap: (){
-                                logout(context);
-                                // exit(exitCode);
-                              },
-                            )
-                          ],
-
-                          color: warna2,
-                          position: PopupMenuPosition.under,
-                        child: Container(
-                          alignment: Alignment.topRight ,
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(image: AssetImage('lib/src/images/3.jpeg'),fit: BoxFit.cover),
-                            borderRadius: BorderRadius.circular(45),
-                            border: Border.all(
-                              color: Colors.white,
-                              style: BorderStyle.solid,
-                              width: 2
-                            )
-                          ),
-                        ),
-                        ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 150,
-                    ),
-                    Container(
-                      height: 90,
-                      width: 270,
-                      decoration: BoxDecoration(
-                        color: warna2,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [ BoxShadow(
-                      color: warna1,
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.only(top: 16, right: 18, left: 16),
-                        child: Row (
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Pembayaran(),
-                            Chat(),
-                            Info(),
-                          ]
-                        )
-                      ),
-                    ),
-                    
-                    Container(
-                       alignment: Alignment.bottomCenter,
-                      // padding: const EdgeInsets.only(bottom: 35),
-                      height: MediaQuery.of(context).size.height*0.4,
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          const SizedBox(
-                            height: 0,
-                          ),
-                          MaterialButton(
-                            onPressed: () {
-                              if (pilih1 == false) {
-                                setState(() {
-                                Navigator.push(
-                                  context,
-                                    MaterialPageRoute(
-                                      builder: (context) => 
-                                      PemesananltPage(admin: true, lantaikamar: true,),
-                                    ),
-                                  );
-                                });
-
-                              } if (pilih1 == true) {
-                                setState(() {
-                                  tinggilt1 = 140;
-                                  tinggilt2 = 40;
-                                  pilih1 = false;
-                                  pilih2 = true;
-                                });
-
-                              } else {
-                                tinggilt1 = 40;
-                                tinggilt2 = 40;
-                                pilih2 = true;
-                                pilih1 = true;
-                              }
-                              
-                            },
-                          shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(40.0) ),
-                          child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              alignment: Alignment.bottomLeft,
-                              padding: const EdgeInsets.only(left: 20, bottom: 5),
-                              
-                              height: tinggilt1,
-                              width: MediaQuery.of(context).size.width,
-                              decoration: BoxDecoration(
-                                image: const DecorationImage(
-                                  image: AssetImage('lib/src/images/2.jpeg'), 
-                                  fit: BoxFit.cover
-                                  ),
-                                border: Border.all(color: Colors.white , width: 3),
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: warna2,
-                                    spreadRadius: 3,
-                                    blurRadius: 7,
-                                  ),
+                                    onTap: () {
+                                      logout(context);
+                                      // exit(exitCode);
+                                    },
+                                  )
                                 ],
-                              ),
-                              child: Text(
-                                'Lt.1',
-                                style: TextStyle(fontSize: 20, 
-                                fontWeight: FontWeight.bold, 
-                                color: Colors.white, 
-                                shadows: [
-                                  Shadow( // bottomLeft
-                                    offset: const Offset(-1.5, -1.5),
-                                    color: warna2
-                                  ),
-                                  Shadow( // bottomRight
-                                    offset: const Offset(1.5, -1.5),
-                                    color: warna2
-                                  ),
-                                  Shadow( // topRight
-                                    offset: const Offset(1.5, 1.5),
-                                    color: warna2
-                                  ),
-                                  Shadow( // topLeft
-                                    offset: const Offset(-1.5, 1.5),
-                                    color: warna2
-                                  ),
-                                ]),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 11,
-                          ),
-                          MaterialButton(
-                              onPressed: () {
-                              if (pilih2 == false) {
-                                setState(() {
+                            color: warna2,
+                            position: PopupMenuPosition.under,
+                            child: FutureBuilder(
+                                future: userCache,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Container(
+                                      alignment: Alignment.topRight,
+                                      height: 50,
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(45),
+                                          border: Border.all(
+                                              color: Colors.white,
+                                              style: BorderStyle.solid,
+                                              width: 2)),
+                                      child: ClientRequest.getImageFromNetwork(
+                                          MySettings.getUrl(),
+                                          "user/profile/${snapshot.data![0]}",
+                                          <String, dynamic>{
+                                            "fit": BoxFit.fill,
+                                            "width": 90.0,
+                                            "height": 90.0,
+                                            "scale": 7.0,
+                                            "radius": 48.0
+                                          }),
+                                    );
+                                  } else {
+                                    return Container(
+                                      alignment: Alignment.topRight,
+                                      height: 50,
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                          image: const DecorationImage(
+                                              image: AssetImage(
+                                                  'lib/src/images/3.jpeg'),
+                                              fit: BoxFit.cover),
+                                          borderRadius:
+                                              BorderRadius.circular(45),
+                                          border: Border.all(
+                                              color: Colors.white,
+                                              style: BorderStyle.solid,
+                                              width: 2)),
+                                    );
+                                  }
+                                })),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 150,
+                  ),
+                  Container(
+                    height: 90,
+                    width: 270,
+                    decoration: BoxDecoration(
+                      color: warna2,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: warna1,
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: const Padding(
+                        padding: EdgeInsets.only(top: 16, right: 18, left: 16),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Pembayaran(),
+                              Chat(),
+                              Info(),
+                            ])),
+                  ),
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    // padding: const EdgeInsets.only(bottom: 35),
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const SizedBox(
+                          height: 0,
+                        ),
+                        MaterialButton(
+                          onPressed: () {
+                            if (pilih1 == false) {
+                              setState(() {
                                 Navigator.push(
                                   context,
-                                    MaterialPageRoute(
-                                      builder: (context) => 
-                                      PemesananltPage(admin: true, lantaikamar: false,),
+                                  MaterialPageRoute(
+                                    builder: (context) => PemesananltPage(
+                                      admin: true,
+                                      lantaikamar: true,
                                     ),
-                                  );
-                                });
-                              } if (pilih2 == true) {
-                                setState(() {
-                                  tinggilt1 = 40;
-                                  tinggilt2 = 140;
-                                  pilih2 = false;
-                                  pilih1 = true;
-                                  
-                                });
-                              } else {
-                                tinggilt1 = 40;
+                                  ),
+                                );
+                              });
+                            }
+                            if (pilih1 == true) {
+                              setState(() {
+                                tinggilt1 = 140;
                                 tinggilt2 = 40;
+                                pilih1 = false;
                                 pilih2 = true;
-                                pilih1 = true;
-                              }
-                              },
-                            shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(40.0) ),
-                              child: AnimatedContainer(
-                                  alignment: Alignment.bottomLeft,
-                                  padding: EdgeInsets.only(left: 20, bottom: 5),
-                                  duration: const Duration(milliseconds: 200),
-                                  height: tinggilt2,
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    image: const DecorationImage(
-                                      image: AssetImage('lib/src/images/1.jpeg'), 
-                                      fit: BoxFit.cover
-                                      ),
-                                      
-                                    border: Border.all(color: Colors.white , width: 3),
-                                    borderRadius: BorderRadius.circular(20),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: warna2,
-                                        spreadRadius: 3,
-                                        blurRadius: 7,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Text(
-                                    'Lt.2',
-                                    style: TextStyle(fontSize: 20, 
-                                    fontWeight: FontWeight.bold, 
-                                    color: Colors.white, 
-                                    shadows: [
-                                      Shadow( // bottomLeft
-                                        offset: const Offset(-1.5, -1.5),
-                                        color: warna2
-                                      ),
-                                      Shadow( // bottomRight
-                                        offset: const Offset(1.5, -1.5),
-                                        color: warna2
-                                      ),
-                                      Shadow( // topRight
-                                        offset: const Offset(1.5, 1.5),
-                                        color: warna2
-                                      ),
-                                      Shadow( // topLeft
-                                        offset: const Offset(-1.5, 1.5),
-                                        color: warna2
-                                      ),
-                                    ]),
-                                  ),
-                              ),
+                              });
+                            } else {
+                              tinggilt1 = 40;
+                              tinggilt2 = 40;
+                              pilih2 = true;
+                              pilih1 = true;
+                            }
+                          },
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40.0)),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            alignment: Alignment.bottomLeft,
+                            padding: const EdgeInsets.only(left: 20, bottom: 5),
+                            height: tinggilt1,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              image: const DecorationImage(
+                                  image: AssetImage('lib/src/images/2.jpeg'),
+                                  fit: BoxFit.cover),
+                              border: Border.all(color: Colors.white, width: 3),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: warna2,
+                                  spreadRadius: 3,
+                                  blurRadius: 7,
+                                ),
+                              ],
                             ),
+                            child: Text(
+                              'Lt.1',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  shadows: [
+                                    Shadow(
+                                        // bottomLeft
+                                        offset: const Offset(-1.5, -1.5),
+                                        color: warna2),
+                                    Shadow(
+                                        // bottomRight
+                                        offset: const Offset(1.5, -1.5),
+                                        color: warna2),
+                                    Shadow(
+                                        // topRight
+                                        offset: const Offset(1.5, 1.5),
+                                        color: warna2),
+                                    Shadow(
+                                        // topLeft
+                                        offset: const Offset(-1.5, 1.5),
+                                        color: warna2),
+                                  ]),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 11,
+                        ),
+                        MaterialButton(
+                          onPressed: () {
+                            if (pilih2 == false) {
+                              setState(() {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PemesananltPage(
+                                      admin: true,
+                                      lantaikamar: false,
+                                    ),
+                                  ),
+                                );
+                              });
+                            }
+                            if (pilih2 == true) {
+                              setState(() {
+                                tinggilt1 = 40;
+                                tinggilt2 = 140;
+                                pilih2 = false;
+                                pilih1 = true;
+                              });
+                            } else {
+                              tinggilt1 = 40;
+                              tinggilt2 = 40;
+                              pilih2 = true;
+                              pilih1 = true;
+                            }
+                          },
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40.0)),
+                          child: AnimatedContainer(
+                            alignment: Alignment.bottomLeft,
+                            padding: EdgeInsets.only(left: 20, bottom: 5),
+                            duration: const Duration(milliseconds: 200),
+                            height: tinggilt2,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              image: const DecorationImage(
+                                  image: AssetImage('lib/src/images/1.jpeg'),
+                                  fit: BoxFit.cover),
+                              border: Border.all(color: Colors.white, width: 3),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: warna2,
+                                  spreadRadius: 3,
+                                  blurRadius: 7,
+                                ),
+                              ],
+                            ),
+                            child: Text(
+                              'Lt.2',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  shadows: [
+                                    Shadow(
+                                        // bottomLeft
+                                        offset: const Offset(-1.5, -1.5),
+                                        color: warna2),
+                                    Shadow(
+                                        // bottomRight
+                                        offset: const Offset(1.5, -1.5),
+                                        color: warna2),
+                                    Shadow(
+                                        // topRight
+                                        offset: const Offset(1.5, 1.5),
+                                        color: warna2),
+                                    Shadow(
+                                        // topLeft
+                                        offset: const Offset(-1.5, 1.5),
+                                        color: warna2),
+                                  ]),
+                            ),
+                          ),
+                        ),
                         const SizedBox(
                           height: 40,
                         )
-                        
-                        ],
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-              ],
-            ),
-      ],
-    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
