@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:komas_latihan/pages/guestlt_page.dart';
+import 'package:komas_latihan/Guest/guestlt_page.dart';
 import 'package:komas_latihan/pages/pemesanan/pemesananlt_page.dart';
 import 'package:komas_latihan/pages/pemesanan_page.dart';
 

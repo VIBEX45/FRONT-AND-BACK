@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:komas_latihan/pages/transaksi.dart';
 import 'package:flutter/material.dart';
 import 'package:komas_latihan/utils/client_request.dart';
@@ -415,7 +416,9 @@ class _PemesananState extends State<Pemesanan> {
         width: lebar,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: pesanlt1[index].tombol,
+            color: pesanlt1[index].tersedia
+                    ? pesanlt1[index].tombol
+                    : const Color.fromRGBO(50, 50, 50, 10),
             borderRadius: BorderRadius.circular(3),
             boxShadow: const [
               BoxShadow(
@@ -499,8 +502,16 @@ class _PemesananState extends State<Pemesanan> {
               ),
         InkWell(
           onTap: () {
-            widget.admin
-                ? setState(() {
+            widget.admin ? 
+                outbool?
+                CoolAlert.show(
+                  context: context, 
+                  type: CoolAlertType.warning,
+                  title: "",
+                  text: 'Kamar Belum Dipilih',
+                  
+                ):
+                setState(() {
                     Navigator.of(context).pop();
                     Navigator.push(
                         context,

@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:komas_latihan/utils/settings.dart';
 import 'package:komas_latihan/utils/shared_pref.dart';
 
+// ignore: must_be_immutable
 class BuktiTransfer extends StatefulWidget {
   String? userName, phoneNumber, email, roomNumber, floorNumber;
 
