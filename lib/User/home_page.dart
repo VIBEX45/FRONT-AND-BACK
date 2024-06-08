@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     const MutasiPage(),
     const NotifikasiPage(),
     const ProfilPage(),
-    const langganan(),
+    LanggananApp(),
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
         child: FloatingActionButton(
           onPressed: (){
             setState(() {
-            currenscreen = langganan();
+            currenscreen = LanggananApp();
             currentab = 4;
             });
           },
