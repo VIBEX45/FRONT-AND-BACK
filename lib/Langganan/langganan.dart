@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -29,7 +30,7 @@ class _LanggananAppState extends State<LanggananApp> {
   // Data contoh
   final List<Langganan> subscriptions = [
     Langganan(
-      date: "2024-06-07",
+      date: "2024-05-17",
       username: "andy",
       roomDetails: "kamar 05, Lt. 1",
       pricePer30Days: "Rp. 800.000 - 30 Hari",
@@ -49,9 +50,9 @@ class _LanggananAppState extends State<LanggananApp> {
       for (var subscription in subscriptions) {
         int remainingDays = calculateRemainingDays(subscription.date);
         if (remainingDays <= 5 && remainingDays > 0) {
-          _showAlertDialog('Peringatan: Segera lakukan pembayaran untuk ${subscription.username}!');
+          _showAlertDialog('Peringatan: Segera lakukan pembayaran untuk ${subscription.roomDetails}');
         } else if (remainingDays <= 0 && remainingDays > -10) {
-          _showAlertDialog('Peringatan: Sudah melewati batas pembayaran untuk ${subscription.username}!');
+          _showAlertDialog('Peringatan: Sudah melewati batas pembayaran untuk ${subscription.roomDetails}. Segera lakukan pembayaran');
         }
       }
     });
@@ -66,13 +67,9 @@ class _LanggananAppState extends State<LanggananApp> {
     if (remainingDays > 0) {
       return remainingDays;
     } else if (remainingDays >= -10) {
-
       return remainingDays;
-
     } else {
-
       return -11;
-
     }
   }
 
@@ -97,6 +94,9 @@ class _LanggananAppState extends State<LanggananApp> {
   }
 
   void _showDetailDialog(Langganan subscription, int remainingDays) {
+    final nextPaymentDate = DateTime.now().add(Duration(days: remainingDays));
+    final nextPaymentEndDate = nextPaymentDate.add(const Duration(days: 30));
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -108,7 +108,11 @@ class _LanggananAppState extends State<LanggananApp> {
             children: [
               Text('Tanggal Pemesanan: ${DateFormat('yyyy-MM-dd').format(DateTime.parse(subscription.date))}'),
               Text('Nomor Kamar dan Lantai: ${subscription.roomDetails}'),
-              Text('Harga per 30 Hari: ${subscription.pricePer30Days}'),
+              const SizedBox(height: 10),
+              Text('Pembayaran Bulan Selanjutnya:'),
+              Text('Tanggal Mulai: ${DateFormat('yyyy-MM-dd').format(nextPaymentDate)}'),
+              Text('Tanggal Berakhir: ${DateFormat('yyyy-MM-dd').format(nextPaymentEndDate)}'),
+              Text('Harga: ${subscription.pricePer30Days}'),
               Text('Sisa Waktu: $remainingDays Hari'),
             ],
           ),
@@ -117,16 +121,49 @@ class _LanggananAppState extends State<LanggananApp> {
               child: const Text('Lanjut Langganan'),
               onPressed: () {
                 Navigator.of(context).pop();
-                
+                _showConfirmationDialog(subscription, nextPaymentDate, nextPaymentEndDate);
               },
             ),
             TextButton(
-              child: const Text('Batalkan Langganan'),
+              child: const Text('Kembali'),
               onPressed: () {
                 Navigator.of(context).pop();
-                setState(() {
-                  subscriptions.remove(subscription);
-                });
+              },
+            ),
+            
+          ],
+        );
+      },
+    );
+  }
+
+  void _showConfirmationDialog(Langganan subscription, DateTime nextPaymentDate, DateTime nextPaymentEndDate) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Konfirmasi Pembayaran'),
+          content: Text(
+              'Apakah Anda ingin melanjutkan langganan untuk ${subscription.username} dari ${DateFormat('yyyy-MM-dd').format(nextPaymentDate)} hingga ${DateFormat('yyyy-MM-dd').format(nextPaymentEndDate)} dengan harga ${subscription.pricePer30Days}?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Tidak'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Ya'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                CoolAlert.show(
+                      context: context, 
+                      type: CoolAlertType.success,
+                      title: 'Pembayaran diproses!',
+                      titleTextStyle: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                      text : 'Menunggu Verfikasi Langganan yang diperpanjang dari ${DateFormat('yyyy-MM-dd').format(nextPaymentDate)} hingga ${DateFormat('yyyy-MM-dd').format(nextPaymentEndDate)} untuk bulan depan',
+                      textTextStyle: TextStyle(fontSize: 12)
+                    );
               },
             ),
           ],
@@ -161,9 +198,7 @@ class _LanggananAppState extends State<LanggananApp> {
           final subscription = subscriptions[index];
           int remainingDays = calculateRemainingDays(subscription.date);
 
-
           if (remainingDays == -11) {
-            
             return ListTile(
               title: Text(
                 "Data untuk ${subscription.username} telah dihapus",
@@ -231,8 +266,8 @@ class _LanggananAppState extends State<LanggananApp> {
                         ),
                         Text(
                           remainingDays > 0
-                              ? '$remainingDays Hari'
-                              : '${remainingDays.abs()} Hari (-)',
+                              ? 'Tersisa $remainingDays Hari lagi'
+                              : 'Telat Bayar ${remainingDays.abs()} Hari',
                           style: TextStyle(
                             fontSize: 13,
                             color: remainingDays > 0
@@ -253,4 +288,3 @@ class _LanggananAppState extends State<LanggananApp> {
     );
   }
 }
-
