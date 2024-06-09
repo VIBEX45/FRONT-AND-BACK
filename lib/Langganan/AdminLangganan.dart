@@ -31,7 +31,7 @@ class _AdminLanggananAppState extends State<AdminLanggananApp> {
   // Data contoh
   final List<AdminLangganan> subscriptions = [
     AdminLangganan(
-      date: "2024-06-07",
+      date: "2024-05-15",
       username: "andy",
       roomDetails: "kamar 05, Lt. 1",
       pricePer30Days: "Rp. 800.000 - 30 Hari",
@@ -50,10 +50,10 @@ class _AdminLanggananAppState extends State<AdminLanggananApp> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       for (var subscription in subscriptions) {
         int remainingDays = calculateRemainingDays(subscription);
-        if (remainingDays <= 5 && remainingDays > 0) {
-          _showAlertDialog('Peringatan: Segera lakukan pembayaran untuk ${subscription.username}!');
+        if (remainingDays <= 3 && remainingDays > 0) {
+          _showAlertDialog('pembayaran untuk ${subscription.username} di ${subscription.roomDetails} sudah dekat');
         } else if (remainingDays <= 0 && remainingDays > -10) {
-          _showAlertDialog('Peringatan: Sudah melewati batas pembayaran untuk ${subscription.username}!');
+          _showAlertDialog('pembayaran untuk ${subscription.username} di ${subscription.roomDetails} telah melewati batas');
         }
       }
     });
@@ -79,7 +79,7 @@ class _AdminLanggananAppState extends State<AdminLanggananApp> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Peringatan'),
+          title: const Text('Pemberitahuan'),
           content: Text(message),
           actions: <Widget>[
             TextButton(
