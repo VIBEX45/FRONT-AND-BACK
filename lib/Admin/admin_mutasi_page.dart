@@ -663,6 +663,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                 child: InkWell(
                     onTap: () {
                       setState(() {
+                        
                         perip = true;
                         users[index].isDenied = false;
                         // mutasi[index].readiable = false;
