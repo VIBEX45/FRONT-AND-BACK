@@ -85,18 +85,39 @@ class ClientRequest {
   static Widget getImageFromNetwork(
       String url, String path, Map<String, dynamic>? style) {
     String uri = url + path;
-    return ClipOval(child: SizedBox.fromSize(
-      size: style!.isNotEmpty ? const Size.fromRadius(48) : Size.fromRadius(style["radius"]),
-      child: style.isNotEmpty ? Image.network(
-      uri,
-      fit: style["fit"],
-      width: style["width"],
-      height: style["height"],
-      scale: style["scale"],
-    ):Image.network(
+    return ClipOval(
+      child: SizedBox.fromSize(
+          size: style!.isNotEmpty
+              ? const Size.fromRadius(48)
+              : Size.fromRadius(style["radius"]),
+          child: style.isNotEmpty
+              ? Image.network(
+                  uri,
+                  fit: style["fit"],
+                  width: style["width"],
+                  height: style["height"],
+                  scale: style["scale"] ?? 5.0,
+                )
+              : Image.network(
+                  uri,
+                )),
+    );
+  }
+
+  static Widget getPaymnentProofImageFromNetwork(
+      String url, String path, Map<String, dynamic>? style) {
+    String uri = url + path;
+    if (style!.isEmpty) {
+      return Image.network(
         uri,
-      )
-    ),);
-   
+      );
+    } else {
+      return Image.network(
+        uri,
+        fit: style["fit"],
+        width: style["width"],
+        height: style["height"],
+      );
+    }
   }
 }

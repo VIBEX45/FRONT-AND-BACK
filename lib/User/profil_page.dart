@@ -254,7 +254,7 @@ class _ProfilPageState extends State<ProfilPage> {
                                               "fit": BoxFit.none,
                                               "width": 90.0,
                                               "height": 90.0,
-                                              "scale":5.0
+                                              "scale": 5.0
                                             }));
                               } else {
                                 return Padding(

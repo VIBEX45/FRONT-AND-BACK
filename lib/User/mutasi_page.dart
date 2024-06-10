@@ -191,7 +191,7 @@ class _MutasiPageState extends State<MutasiPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "${history[index].startDate}",
+                        "${history[index].startDate} s/d ${history[index].endDate}",
                         // (DateTime.fromMillisecondsSinceEpoch(
                         //         int.parse(history[index].startDate!))
                         //     .toIso8601String()),

@@ -532,13 +532,13 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                         alignment: Alignment.center,
                         height: 80,
                         width: MediaQuery.of(context).size.width,
-                        child: ClientRequest.getImageFromNetwork(
+                        child: ClientRequest.getPaymnentProofImageFromNetwork(
                             MySettings.getUrl(),
                             "room/payment/proof/user/${users[index].username!}",
                             <String, dynamic>{
                               "fit": BoxFit.cover,
                               "width": 300.0,
-                              "height": 300.0
+                              "height": 300.0,
                             })
                         // decoration: const BoxDecoration(
                         //   image: DecorationImage(
@@ -549,13 +549,13 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                       )
                     : Container(
                         alignment: Alignment.center,
-                        child: ClientRequest.getImageFromNetwork(
+                        child: ClientRequest.getPaymnentProofImageFromNetwork(
                             MySettings.getUrl(),
                             "room/payment/proof/user/${users[index].username!}",
                             <String, dynamic>{
-                              "fit": BoxFit.cover,
-                              "width": 300.0,
-                              "height": 300.0
+                              "fit": BoxFit.contain,
+                              "width": 500.0,
+                              "height": 500.0
                             }),
                         // decoration: const BoxDecoration(
                         //   image: DecorationImage(
@@ -610,45 +610,45 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  contentPadding: EdgeInsets.zero,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  actions: [
-                                    Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 25),
-                                        child: TextButton(
-                                            onPressed: () {
-                                              setState(() {});
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text(
-                                              'oke',
-                                              style: TextStyle(
-                                                  fontSize: 12, color: warna2),
-                                            )),
-                                      ),
-                                    ),
-                                  ],
-                                ));
-                      });
-                    },
-                    child: const Text(
-                      'Edit',
-                      style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.red),
-                    )),
+                // GestureDetector(
+                //     onTap: () {
+                //       setState(() {
+                //         showDialog(
+                //             context: context,
+                //             builder: (context) => AlertDialog(
+                //                   contentPadding: EdgeInsets.zero,
+                //                   shape: RoundedRectangleBorder(
+                //                     borderRadius: BorderRadius.circular(30),
+                //                   ),
+                //                   actions: [
+                //                     Center(
+                //                       child: Padding(
+                //                         padding: const EdgeInsets.only(top: 25),
+                //                         child: TextButton(
+                //                             onPressed: () {
+                //                               setState(() {});
+                //                               Navigator.of(context).pop();
+                //                             },
+                //                             child: Text(
+                //                               'oke',
+                //                               style: TextStyle(
+                //                                   fontSize: 12, color: warna2),
+                //                             )),
+                //                       ),
+                //                     ),
+                //                   ],
+                //                 ));
+                //       });
+                //     },
+                //     child: const Text(
+                //       'Edit',
+                //       style: TextStyle(
+                //           fontSize: 10,
+                //           color: Colors.red,
+                //           fontWeight: FontWeight.bold,
+                //           decoration: TextDecoration.underline,
+                //           decorationColor: Colors.red),
+                //     )),
               ],
             ),
           ],
