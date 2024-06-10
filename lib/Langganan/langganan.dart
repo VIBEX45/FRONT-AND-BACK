@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:komas_latihan/pages/transaksi.dart';
+import 'package:komas_latihan/utils/client_request.dart';
+import 'package:komas_latihan/utils/settings.dart';
+import 'package:komas_latihan/utils/shared_pref.dart';
 
 class Langganan {
   final String date;
@@ -13,6 +17,23 @@ class Langganan {
     required this.roomDetails,
     required this.pricePer30Days,
   });
+}
+
+class Subscribe {
+  String? userName, roomNumber, floorNumber, roomPrice, startDate, endDate, due;
+  bool? isPaid, isVerified;
+
+  Subscribe.fromJson(Map<String, dynamic> json) {
+    userName = json["username"];
+    roomNumber = json["room_number"];
+    floorNumber = json["floor_number"];
+    roomPrice = json["room_price"];
+    startDate = json["start_date"];
+    endDate = json["end_date"];
+    due = json["due"];
+    isPaid = int.parse(json["paid"]) > 0 ? true : false;
+    isVerified = int.parse(json["verified"]) > 0 ? true : false;
+  }
 }
 
 class LanggananApp extends StatefulWidget {
@@ -42,21 +63,6 @@ class _LanggananAppState extends State<LanggananApp> {
     ),
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      for (var subscription in subscriptions) {
-        int remainingDays = calculateRemainingDays(subscription.date);
-        if (remainingDays <= 5 && remainingDays > 0) {
-          _showAlertDialog('Peringatan: Segera lakukan pembayaran untuk ${subscription.username}!');
-        } else if (remainingDays <= 0 && remainingDays > -10) {
-          _showAlertDialog('Peringatan: Sudah melewati batas pembayaran untuk ${subscription.username}!');
-        }
-      }
-    });
-  }
-
   int calculateRemainingDays(String startDate) {
     final start = DateTime.parse(startDate);
     final now = DateTime.now();
@@ -66,13 +72,9 @@ class _LanggananAppState extends State<LanggananApp> {
     if (remainingDays > 0) {
       return remainingDays;
     } else if (remainingDays >= -10) {
-
       return remainingDays;
-
     } else {
-
       return -11;
-
     }
   }
 
@@ -96,19 +98,30 @@ class _LanggananAppState extends State<LanggananApp> {
     );
   }
 
-  void _showDetailDialog(Langganan subscription, int remainingDays) {
+  void cancelRentSubs(url) {
+    final response = ClientRequest.deleteData(url).then((value) {
+      if (value["status"] == "OK") {
+        Navigator.of(context).pop();
+        setState(() {});
+      }
+    });
+  }
+
+  void _showDetailDialog(Subscribe sub, int remainingDays) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Detail Pembayaran - ${subscription.username}'),
+          title: Text('Detail Pembayaran - ${sub.userName}'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Tanggal Pemesanan: ${DateFormat('yyyy-MM-dd').format(DateTime.parse(subscription.date))}'),
-              Text('Nomor Kamar dan Lantai: ${subscription.roomDetails}'),
-              Text('Harga per 30 Hari: ${subscription.pricePer30Days}'),
+              Text(
+                  'Tanggal Pemesanan: ${DateFormat('dd-MM-yyyy').format(DateTime.parse(sub.startDate!))}'),
+              Text(
+                  'Nomor Kamar dan Lantai: Kamar No.${sub.roomNumber} Lt. ${sub.floorNumber}'),
+              Text('Harga per 30 Hari: Rp. ${sub.roomPrice}'),
               Text('Sisa Waktu: $remainingDays Hari'),
             ],
           ),
@@ -117,140 +130,284 @@ class _LanggananAppState extends State<LanggananApp> {
               child: const Text('Lanjut Langganan'),
               onPressed: () {
                 Navigator.of(context).pop();
-                
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Transaksi(
+
+
+                              kamar: sub.roomNumber!,
+                              lantai: sub.floorNumber!,
+                              harga: int.parse(sub.roomPrice!),
+                            )));
               },
             ),
-            TextButton(
-              child: const Text('Batalkan Langganan'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                setState(() {
-                  subscriptions.remove(subscription);
-                });
-              },
-            ),
+            // TextButton(
+            //   child: const Text('Batalkan Langganan'),
+            //   onPressed: () {
+            //     cancelRentSubs(MySettings.getUrl() +
+            //         ("/rent/delete/${sub.userName}/${sub.roomNumber}"));
+            //   },
+            // ),
           ],
         );
       },
     );
   }
 
+  Future<List<Subscribe>>? futureSubs;
+  Future<List<Subscribe>> getFutureSubs(String url) async {
+    final response = await ClientRequest.getAll(url);
+    List<Subscribe> subs = [];
+    response.forEach((value) {
+      subs.add(Subscribe.fromJson(value));
+    });
+    return subs;
+  }
+
+  //TODO: Connect Langganan to BE
+  @override
+  void initState() {
+    super.initState();
+    print("hello");
+    futureSubs = getFutureSubs(MySettings.getUrl() + ("rent/users"));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      for (var subscription in subscriptions) {
+        int remainingDays = calculateRemainingDays(subscription.date);
+        if (remainingDays <= 5 && remainingDays > 0) {
+          _showAlertDialog(
+              'Peringatan: Segera lakukan pembayaran untuk ${subscription.username}!');
+        } else if (remainingDays <= 0 && remainingDays > -10) {
+          _showAlertDialog(
+              'Peringatan: Sudah melewati batas pembayaran untuk ${subscription.username}!');
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      extendBody: true,
-      appBar: AppBar(
-        toolbarHeight: 90,
-        backgroundColor: warna2,
-        automaticallyImplyLeading: false,
-        title: const Center(
-          child: Text(
-            "Langganan",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
+        backgroundColor: Colors.white,
+        extendBody: true,
+        appBar: AppBar(
+          toolbarHeight: 90,
+          backgroundColor: warna2,
+          automaticallyImplyLeading: false,
+          title: const Center(
+            child: Text(
+              "Langganan",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+              ),
             ),
           ),
         ),
-      ),
-      body: ListView.builder(
-        itemCount: subscriptions.length,
-        itemBuilder: (context, index) {
-          final subscription = subscriptions[index];
-          int remainingDays = calculateRemainingDays(subscription.date);
+        body: FutureBuilder(
+            future: futureSubs,
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                return futureListView(context, snapshot.data!);
+              } else {
+                return emptySubs();
+              }
+            }));
+  }
+// ListView.builder(
+//         itemCount: subscriptions.length,
+//         itemBuilder: (context, index) {
+//           final subscription = subscriptions[index];
+//           int remainingDays = calculateRemainingDays(subscription.date);
 
+//           if (remainingDays == -11) {
+//             return ListTile(
+//               title: Text(
+//                 "Data untuk ${subscription.username} telah dihapus",
+//                 style: const TextStyle(
+//                   fontSize: 16,
+//                   fontWeight: FontWeight.bold,
+//                   color: Colors.red,
+//                 ),
+//               ),
+//             );
+//           }
 
-          if (remainingDays == -11) {
-            
-            return ListTile(
-              title: Text(
-                "Data untuk ${subscription.username} telah dihapus",
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                ),
-              ),
-            );
-          }
+//           return GestureDetector(
+//             onTap: () => _showDetailDialog(subscription, remainingDays),
+//             child: Card(
+//               child: Container(
+//                 margin: const EdgeInsets.only(
+//                     left: 15, top: 10, right: 15, bottom: 10),
+//                 child: Column(
+//                   children: [
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                       children: [
+//                         Text(
+//                           DateFormat('yyyy-MM-dd')
+//                               .format(DateTime.parse(subscription.date)),
+//                           style: const TextStyle(
+//                             fontSize: 10,
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                     const SizedBox(height: 7),
+//                     Column(
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       children: [
+//                         Row(
+//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                           children: [
+//                             Text(
+//                               subscription.username,
+//                               style: const TextStyle(
+//                                 fontWeight: FontWeight.bold,
+//                                 fontSize: 14,
+//                               ),
+//                             ),
+//                             Text(
+//                               subscription.pricePer30Days,
+//                               style: const TextStyle(
+//                                 fontWeight: FontWeight.bold,
+//                                 fontSize: 14,
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ],
+//                     ),
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                       children: [
+//                         Text(
+//                           subscription.roomDetails,
+//                           style: const TextStyle(
+//                             fontSize: 12,
+//                           ),
+//                         ),
+//                         Text(
+//                           remainingDays > 0
+//                               ? '$remainingDays Hari'
+//                               : '${remainingDays.abs()} Hari (-)',
+//                           style: TextStyle(
+//                             fontSize: 13,
+//                             color:
+//                                 remainingDays > 0 ? Colors.black : Colors.red,
+//                             fontWeight: FontWeight.bold,
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           );
+//         },
+//       ),
 
-          return GestureDetector(
-            onTap: () => _showDetailDialog(subscription, remainingDays),
-            child: Card(
-              child: Container(
-                margin: const EdgeInsets.only(
-                    left: 15, top: 10, right: 15, bottom: 10),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          DateFormat('yyyy-MM-dd').format(DateTime.parse(subscription.date)),
-                          style: const TextStyle(
-                            fontSize: 10,
-                          ),
+  Widget emptySubs() {
+    return const Center(
+        child: Text(
+      "Belum ada mutasi",
+      style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+    ));
+  }
+
+  Widget futureListView(BuildContext context, List<Subscribe> subs) {
+    return ListView.builder(
+      itemCount: subs.length,
+      itemBuilder: (context, index) {
+        // final subscription = subscriptions[index];
+        int remainingDays = calculateRemainingDays(subs[index].startDate!);
+
+        // if (remainingDays == -11) {
+        //   return ListTile(
+        //     title: Text(
+        //       "Data untuk ${subs[index].userName} telah dihapus",
+        //       style: const TextStyle(
+        //         fontSize: 16,
+        //         fontWeight: FontWeight.bold,
+        //         color: Colors.red,
+        //       ),
+        //     ),
+        //   );
+        // }
+
+        return GestureDetector(
+          onTap: () => _showDetailDialog(subs[index], remainingDays),
+          child: Card(
+            child: Container(
+              margin: const EdgeInsets.only(
+                  left: 15, top: 10, right: 15, bottom: 10),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "${DateFormat('dd-MM-yyyy').format(DateTime.parse(subs[index].startDate!))} s/d ${DateFormat('dd-MM-yyyy').format(DateTime.parse(subs[index].endDate!))}",
+                        style: const TextStyle(
+                          fontSize: 10,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 7),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              subscription.username,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 7),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            subs[index].userName!,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
-                            Text(
-                              subscription.pricePer30Days,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
+                          ),
+                          Text(
+                            "Rp. ${subs[index].roomPrice}",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          subscription.roomDetails,
-                          style: const TextStyle(
-                            fontSize: 12,
                           ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Kamar No.${subs[index].roomNumber} Lt.${subs[index].floorNumber}",
+                        style: const TextStyle(
+                          fontSize: 12,
                         ),
-                        Text(
-                          remainingDays > 0
-                              ? '$remainingDays Hari'
-                              : '${remainingDays.abs()} Hari (-)',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: remainingDays > 0
-                                ? Colors.black
-                                : Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      ),
+                      Text(
+                        remainingDays > 0
+                            ? '$remainingDays Hari'
+                            : '${remainingDays.abs()} Hari (-)',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: remainingDays > 0 ? Colors.black : Colors.red,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
-

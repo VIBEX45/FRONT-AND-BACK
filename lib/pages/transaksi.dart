@@ -245,7 +245,7 @@ class _TransaksiState extends State<Transaksi> {
                       fontSize: 13, color: warna2, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  '1 bulan',
+                  '30 Hari',
                   style: TextStyle(
                       fontSize: 13, color: warna2, fontWeight: FontWeight.bold),
                 ),
