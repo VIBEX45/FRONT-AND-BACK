@@ -23,7 +23,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
     AdminMutasiPage(),
     AdminNotifikasiPage(),
     const AdminProfilPage(),
-    adminLanggananApp(),
+    AdminLanggananApp()
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -48,7 +48,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         child: FloatingActionButton(
           onPressed: (){
             setState(() {
-            anotherscreen = adminLanggananApp();
+            anotherscreen = AdminLanggananApp();
             currentab = 4;
             });
           },

@@ -1,40 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class adminLangganan {
-  String date;
+class AdminLangganan {
+  final String date;
   final String username;
   final String roomDetails;
   final String pricePer30Days;
+  int addedDays;
 
-  adminLangganan({
+  AdminLangganan({
     required this.date,
     required this.username,
     required this.roomDetails,
     required this.pricePer30Days,
+    this.addedDays = 0,
   });
 }
 
-class adminLanggananApp extends StatefulWidget {
-  const adminLanggananApp({super.key});
+class AdminLanggananApp extends StatefulWidget {
+  const AdminLanggananApp({super.key});
 
   @override
-  State<adminLanggananApp> createState() => _adminLanggananAppState();
+  State<AdminLanggananApp> createState() => _AdminLanggananAppState();
 }
 
-class _adminLanggananAppState extends State<adminLanggananApp> {
+class _AdminLanggananAppState extends State<AdminLanggananApp> {
   Color warna1 = Colors.brown.shade200;
   Color warna2 = Colors.brown;
 
   // Data contoh
-  final List<adminLangganan> subscriptions = [
-    adminLangganan(
-      date: "2024-06-07",
+  final List<AdminLangganan> subscriptions = [
+    AdminLangganan(
+      date: "2024-05-15",
       username: "andy",
       roomDetails: "kamar 05, Lt. 1",
       pricePer30Days: "Rp. 800.000 - 30 Hari",
     ),
-    adminLangganan(
+    AdminLangganan(
       date: "2024-06-01",
       username: "vibex",
       roomDetails: "kamar 01, Lt. 1",
@@ -47,21 +49,21 @@ class _adminLanggananAppState extends State<adminLanggananApp> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       for (var subscription in subscriptions) {
-        int remainingDays = calculateRemainingDays(subscription.date);
-        if (remainingDays <= 5 && remainingDays > 0) {
-          _showAlertDialog('Peringatan: Segera lakukan pembayaran untuk ${subscription.username}!');
+        int remainingDays = calculateRemainingDays(subscription);
+        if (remainingDays <= 3 && remainingDays > 0) {
+          _showAlertDialog('pembayaran untuk ${subscription.username} di ${subscription.roomDetails} sudah dekat');
         } else if (remainingDays <= 0 && remainingDays > -10) {
-          _showAlertDialog('Peringatan: Sudah melewati batas pembayaran untuk ${subscription.username}!');
+          _showAlertDialog('pembayaran untuk ${subscription.username} di ${subscription.roomDetails} telah melewati batas');
         }
       }
     });
   }
 
-  int calculateRemainingDays(String startDate) {
-    final start = DateTime.parse(startDate);
+  int calculateRemainingDays(AdminLangganan subscription) {
+    final start = DateTime.parse(subscription.date);
     final now = DateTime.now();
     final difference = now.difference(start).inDays;
-    final remainingDays = 30 - difference;
+    final remainingDays = 30 - difference + subscription.addedDays;
 
     if (remainingDays > 0) {
       return remainingDays;
@@ -77,7 +79,7 @@ class _adminLanggananAppState extends State<adminLanggananApp> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Peringatan'),
+          title: const Text('Pemberitahuan'),
           content: Text(message),
           actions: <Widget>[
             TextButton(
@@ -92,21 +94,17 @@ class _adminLanggananAppState extends State<adminLanggananApp> {
     );
   }
 
-  void _showDetailDialog(adminLangganan subscription, int remainingDays) {
+  void _showAddDaysDialog(AdminLangganan subscription) {
     final TextEditingController daysController = TextEditingController();
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Detail Pembayaran - ${subscription.username}'),
+          title: Text('Tambah Hari - ${subscription.username}'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Tanggal Pemesanan: ${DateFormat('yyyy-MM-dd').format(DateTime.parse(subscription.date))}'),
-              Text('Nomor Kamar dan Lantai: ${subscription.roomDetails}'),
-              Text('Harga per 30 Hari: ${subscription.pricePer30Days}'),
-              Text('Sisa Waktu: $remainingDays Hari'),
               TextField(
                 controller: daysController,
                 keyboardType: TextInputType.number,
@@ -122,20 +120,44 @@ class _adminLanggananAppState extends State<adminLanggananApp> {
               onPressed: () {
                 final int? newRemainingDays = int.tryParse(daysController.text);
                 if (newRemainingDays != null && newRemainingDays >= 0) {
-                  setState(() {
-                    subscription.date = DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(Duration(days: 30 - newRemainingDays)));
-                  });
+                  Navigator.of(context).pop();
+                  _showConfirmDaysDialog(subscription, newRemainingDays);
                 }
+              },
+            ),
+            TextButton(
+              child: const Text('Batal'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showConfirmDaysDialog(AdminLangganan subscription, int newRemainingDays) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Konfirmasi Tambah Hari'),
+          content: Text('Apakah Anda yakin ingin menambah $newRemainingDays hari untuk ${subscription.username}?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Ya'),
+              onPressed: () {
+                setState(() {
+                  subscription.addedDays += newRemainingDays;
+                });
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('Batalkan Langganan'),
+              child: const Text('Tidak'),
               onPressed: () {
                 Navigator.of(context).pop();
-                setState(() {
-                  subscriptions.remove(subscription);
-                });
               },
             ),
           ],
@@ -168,7 +190,7 @@ class _adminLanggananAppState extends State<adminLanggananApp> {
         itemCount: subscriptions.length,
         itemBuilder: (context, index) {
           final subscription = subscriptions[index];
-          int remainingDays = calculateRemainingDays(subscription.date);
+          int remainingDays = calculateRemainingDays(subscription);
 
           if (remainingDays == -11) {
             return ListTile(
@@ -183,29 +205,28 @@ class _adminLanggananAppState extends State<adminLanggananApp> {
             );
           }
 
-          return GestureDetector(
-            onTap: () => _showDetailDialog(subscription, remainingDays),
-            child: Card(
-              child: Container(
-                margin: const EdgeInsets.only(
-                    left: 15, top: 10, right: 15, bottom: 10),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          DateFormat('yyyy-MM-dd').format(DateTime.parse(subscription.date)),
-                          style: const TextStyle(
-                            fontSize: 10,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 7),
-                    Column(
+          return Card(
+            child: Container(
+              margin: const EdgeInsets.only(left: 15, top: 10, bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              DateFormat('yyyy-MM-dd').format(DateTime.parse(subscription.date)),
+                              style: const TextStyle(
+                                fontSize: 10,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 7),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -225,33 +246,55 @@ class _adminLanggananAppState extends State<adminLanggananApp> {
                             ),
                           ],
                         ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              subscription.roomDetails,
+                              style: const TextStyle(
+                                fontSize: 12,
+                              ),
+                            ),
+                            Text(
+                              remainingDays > 0
+                                  ? '$remainingDays Hari'
+                                  : '${remainingDays.abs()} Hari (-)',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: remainingDays > 0
+                                    ? Colors.black
+                                    : Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          subscription.roomDetails,
-                          style: const TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                        Text(
-                          remainingDays > 0
-                              ? '$remainingDays Hari'
-                              : '${remainingDays.abs()} Hari (-)',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: remainingDays > 0
-                                ? Colors.black
-                                : Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                  ),
+                  PopupMenuButton<String>(
+                    color: warna2,
+                    onSelected: (value) {
+                      if (value == 'Tambah Hari') {
+                        _showAddDaysDialog(subscription);
+                      } else if (value == 'Hapus Langganan') {
+                        setState(() {
+                          subscriptions.remove(subscription);
+                        });
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return {'Tambah Hari', 'Hapus Langganan'}
+                          .map((String choice) {
+                        return PopupMenuItem<String>(
+                          value: choice,
+                          child: Text(choice, style: TextStyle(color: Colors.white)),
+                        );
+                      }).toList();
+                    },
+                    icon: Icon(Icons.more_vert, color: warna2),
+                  ),
+                ],
               ),
             ),
           );
@@ -260,4 +303,3 @@ class _adminLanggananAppState extends State<adminLanggananApp> {
     );
   }
 }
-

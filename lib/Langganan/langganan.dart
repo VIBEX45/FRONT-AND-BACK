@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:komas_latihan/pages/transaksi.dart';
@@ -50,7 +51,7 @@ class _LanggananAppState extends State<LanggananApp> {
   // Data contoh
   final List<Langganan> subscriptions = [
     Langganan(
-      date: "2024-06-07",
+      date: "2024-05-17",
       username: "andy",
       roomDetails: "kamar 05, Lt. 1",
       pricePer30Days: "Rp. 800.000 - 30 Hari",
@@ -121,7 +122,11 @@ class _LanggananAppState extends State<LanggananApp> {
                   'Tanggal Pemesanan: ${DateFormat('dd-MM-yyyy').format(DateTime.parse(sub.startDate!))}'),
               Text(
                   'Nomor Kamar dan Lantai: Kamar No.${sub.roomNumber} Lt. ${sub.floorNumber}'),
-              Text('Harga per 30 Hari: Rp. ${sub.roomPrice}'),
+              const SizedBox(height: 10),
+              // Text('Pembayaran Bulan Selanjutnya:'),
+              // Text('Tanggal Mulai: ${DateFormat('yyyy-MM-dd').format(nextPaymentDate)}'),
+              // Text('Tanggal Berakhir: ${DateFormat('yyyy-MM-dd').format(nextPaymentEndDate)}'),
+              // Text('Harga: Rp. ${sub.roomPrice}'),
               Text('Sisa Waktu: $remainingDays Hari'),
             ],
           ),
