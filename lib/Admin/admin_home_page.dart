@@ -19,11 +19,11 @@ class _AdminHomePageState extends State<AdminHomePage> {
   // Bottom navBar
   int currentab = 0;
   final List<Widget> screens = [
-    AdminDashboardPage(),
-    AdminMutasiPage(),
-    AdminNotifikasiPage(),
+    const AdminDashboardPage(),
+    const AdminMutasiPage(),
+    const AdminNotifikasiPage(),
     const AdminProfilPage(),
-    AdminLanggananApp()
+    const AdminLanggananApp()
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();

@@ -158,7 +158,7 @@ class _MutasiPageState extends State<MutasiPage> {
         body: FutureBuilder(
           future: futureUserHistory,
           builder: (contet, snapshot) {
-            if (snapshot.hasData && snapshot.data != []) {
+            if (snapshot.hasData && snapshot.data!.isNotEmpty) {
               return historyWidget(selectedIndex, snapshot.data!);
             } else {
               return emptyHistory();

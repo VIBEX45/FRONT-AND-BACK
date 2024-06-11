@@ -32,8 +32,8 @@ class Subscribe {
     startDate = json["start_date"];
     endDate = json["end_date"];
     due = json["due"];
-    isPaid = int.parse(json["paid"]) > 0 ? true : false;
-    isVerified = int.parse(json["verified"]) > 0 ? true : false;
+    isPaid = json["paid"] > 0 ? true : false;
+    isVerified = json["verified"] > 0 ? true : false;
   }
 }
 
@@ -108,7 +108,8 @@ class _LanggananAppState extends State<LanggananApp> {
     });
   }
 
-  void _showDetailDialog(Subscribe sub, int remainingDays) {
+  void _showDetailDialog(Subscribe sub, String remainingDays) {
+    int due = int.parse(remainingDays);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -131,22 +132,26 @@ class _LanggananAppState extends State<LanggananApp> {
             ],
           ),
           actions: <Widget>[
-            TextButton(
-              child: const Text('Lanjut Langganan'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Transaksi(
-
-
-                              kamar: sub.roomNumber!,
-                              lantai: sub.floorNumber!,
-                              harga: int.parse(sub.roomPrice!),
-                            )));
-              },
-            ),
+            (due > 5 )
+                ? TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Tutup"))
+                : TextButton(
+                    child: const Text('Lanjut Langganan'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Transaksi(
+                                    kamar: sub.roomNumber!,
+                                    lantai: sub.floorNumber!,
+                                    harga: int.parse(sub.roomPrice!),
+                                  )));
+                    },
+                  ),
             // TextButton(
             //   child: const Text('Batalkan Langganan'),
             //   onPressed: () {
@@ -162,32 +167,37 @@ class _LanggananAppState extends State<LanggananApp> {
 
   Future<List<Subscribe>>? futureSubs;
   Future<List<Subscribe>> getFutureSubs(String url) async {
-    final response = await ClientRequest.getAll(url);
     List<Subscribe> subs = [];
-    response.forEach((value) {
-      subs.add(Subscribe.fromJson(value));
+    MySharedPreferences.fetchFromShared("_userLogged").then((value) {
+      ClientRequest.getAll(url + value![0]).then((response) {
+        response.forEach((value) {
+          setState(() {
+            subs.add(Subscribe.fromJson(value));
+          });
+        });
+      });
     });
+
     return subs;
   }
 
-  //TODO: Connect Langganan to BE
   @override
   void initState() {
     super.initState();
     print("hello");
-    futureSubs = getFutureSubs(MySettings.getUrl() + ("rent/users"));
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      for (var subscription in subscriptions) {
-        int remainingDays = calculateRemainingDays(subscription.date);
-        if (remainingDays <= 5 && remainingDays > 0) {
-          _showAlertDialog(
-              'Peringatan: Segera lakukan pembayaran untuk ${subscription.username}!');
-        } else if (remainingDays <= 0 && remainingDays > -10) {
-          _showAlertDialog(
-              'Peringatan: Sudah melewati batas pembayaran untuk ${subscription.username}!');
-        }
-      }
-    });
+    futureSubs = getFutureSubs(MySettings.getUrl() + ("rent/all/user/"));
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   for (var subscription in subscriptions) {
+    //     int remainingDays = calculateRemainingDays(subscription.date);
+    //     if (remainingDays <= 5 && remainingDays > 0) {
+    //       _showAlertDialog(
+    //           'Peringatan: Segera lakukan pembayaran untuk ${subscription.username}!');
+    //     } else if (remainingDays <= 0 && remainingDays > -10) {
+    //       _showAlertDialog(
+    //           'Peringatan: Sudah melewati batas pembayaran untuk ${subscription.username}!');
+    //     }
+    //   }
+    // });
   }
 
   @override
@@ -317,9 +327,28 @@ class _LanggananAppState extends State<LanggananApp> {
   Widget emptySubs() {
     return const Center(
         child: Text(
-      "Belum ada mutasi",
+      "Belum ada langganan",
       style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
     ));
+  }
+
+  void deleteRentWhenDue(String url, Subscribe sub) {
+    ClientRequest.deleteData(
+            "${url}${sub.roomNumber}/${sub.floorNumber}/${sub.userName}")
+        .then((value) {
+      print(value);
+      if (value["status"] == "OK") {
+        setState(() {
+          CoolAlert.show(
+            context: context,
+            type: CoolAlertType.info,
+            title: 'Berhasil',
+            text:
+                "\nTenggat Waktu telah habis, sewa ${sub.userName} telah dihapus\n",
+          );
+        });
+      }
+    });
   }
 
   Widget futureListView(BuildContext context, List<Subscribe> subs) {
@@ -342,8 +371,22 @@ class _LanggananAppState extends State<LanggananApp> {
         //   );
         // }
 
+        int due = int.parse(subs[index].due!);
+        if (due < -11) {
+          deleteRentWhenDue(MySettings.getUrl(), subs[index]);
+        }
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (due <= 5 && due > 0) {
+            _showAlertDialog(
+                'Peringatan: Segera lakukan pembayaran untuk ${subs[index].userName}!');
+          } else if (due <= 0 && due >= -10) {
+            _showAlertDialog(
+                'Peringatan: Sudah melewati batas pembayaran untuk ${subs[index].userName}!');
+          }
+        });
+
         return GestureDetector(
-          onTap: () => _showDetailDialog(subs[index], remainingDays),
+          onTap: () => _showDetailDialog(subs[index], subs[index].due!),
           child: Card(
             child: Container(
               margin: const EdgeInsets.only(

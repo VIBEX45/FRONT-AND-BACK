@@ -546,7 +546,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                         //           'lib/src/images/dashboardkos.jpeg'),
                         //       fit: BoxFit.cover),
                         // ),
-                      )
+                        )
                     : Container(
                         alignment: Alignment.center,
                         child: ClientRequest.getPaymnentProofImageFromNetwork(
@@ -657,13 +657,13 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
           height: 50,
         ),
         users.isNotEmpty ? accORdenie(index, users) : savecancel(index),
-      users[index].isDenied || users[index].isPaid! && users[index].isVerified!
+        users[index].isDenied ||
+                users[index].isPaid! && users[index].isVerified!
             ? Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: InkWell(
                     onTap: () {
                       setState(() {
-                        
                         perip = true;
                         users[index].isDenied = false;
                         // mutasi[index].readiable = false;
@@ -721,6 +721,30 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
     );
   }
 
+  void deleteDeniedRent(String url) {
+    ClientRequest.deleteData(url).then((response) {
+      if (response["status"] == "OK") {
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.success,
+          title: 'Ditolak',
+          text: "\nTransaksi Berhasil Ditolak\n",
+        );
+        setState(() {
+          futureUsers = fetchAllRentData(MySettings.getUrl() + ("rents"));
+        });
+      } else {
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.error,
+          title: 'Ditolak',
+          text: "\nTransaksi Gagal Ditolak\n",
+        );
+        setState(() {});
+      }
+    });
+  }
+
   //Copied from savecancel and used for FutureBuilder
   Widget accORdenie(int index, List<UserData> users) {
     return Padding(
@@ -732,13 +756,9 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
             onPressed: () {
               setState(() {
                 users[index].isDenied = true;
-                CoolAlert.show(
-                  context: context,
-                  type: CoolAlertType.error,
-                  title: 'Ditolak',
-                  text: "\nTransaksi Berhasil Ditolak\n",
-                );
                 perip = true;
+                deleteDeniedRent(
+                    "${MySettings.getUrl()}rent/delete/${users[index].roomNumber}/${users[index].floorNumber}/${users[index].username}");
               });
             },
             style: OutlinedButton.styleFrom(
@@ -760,7 +780,6 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                   .then((value) {
                 if (value) {
                   setState(() {
-                    
                     perip = true;
                     users[index].isPaid = true;
                     users[index].isVerified = true;
