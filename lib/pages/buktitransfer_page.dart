@@ -119,7 +119,7 @@ class _BuktiTransferState extends State<BuktiTransfer> {
       if (value["status"] == "OK") {
         getUsernameNuploadImage(
             "_userLogged",
-            MySettings.getUrl() + ("room/payment/proof/"),
+            MySettings.getUrl() + ("room/payment/proof/${int.parse(roomNumber).toString()}/${floorNumber}/"),
             "payment-proof",
             imgPath);
       } else {
@@ -186,8 +186,8 @@ class _BuktiTransferState extends State<BuktiTransfer> {
                     ? Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Container(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          height: 100,
+                          width: MediaQuery.of(context).size.width,
+                          height: 500,
                           decoration: BoxDecoration(
                             border: Border.all(width: 1, color: Colors.black),
                             boxShadow: [
@@ -198,7 +198,7 @@ class _BuktiTransferState extends State<BuktiTransfer> {
                             ],
                             image: DecorationImage(
                               image: FileImage(gambar!),
-                              fit: BoxFit.cover,
+                              fit: BoxFit.fill,
                             ),
                           ),
                         ),
@@ -210,8 +210,8 @@ class _BuktiTransferState extends State<BuktiTransfer> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Container(
-                            width: MediaQuery.of(context).size.width * 0.7,
-                            height: 100,
+                            width: MediaQuery.of(context).size.width,
+                            height: 500,
                             decoration: BoxDecoration(
                               border: Border.all(width: 1, color: Colors.black),
                               boxShadow: [
@@ -222,7 +222,7 @@ class _BuktiTransferState extends State<BuktiTransfer> {
                               ],
                               image: DecorationImage(
                                 image: FileImage(gambar!),
-                                fit: BoxFit.cover,
+                                fit: BoxFit.fill,
                               ),
                             ),
                           ),
@@ -249,9 +249,9 @@ class _BuktiTransferState extends State<BuktiTransfer> {
               height: 40,
             ),
             savecancel(),
-            const SizedBox(
-              height: 100,
-            ),
+            // const SizedBox(
+            //   height: 100,
+            // ),
           ]),
         ),
       ),

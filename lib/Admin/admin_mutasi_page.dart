@@ -1,5 +1,6 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:intl/intl.dart';
 import 'package:komas_latihan/utils/client_request.dart';
@@ -534,7 +535,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                         width: MediaQuery.of(context).size.width,
                         child: ClientRequest.getPaymnentProofImageFromNetwork(
                             MySettings.getUrl(),
-                            "room/payment/proof/user/${users[index].username!}",
+                            "room/payment/proof/user/${users[index].roomNumber}/${users[index].floorNumber}/${users[index].username!}",
                             <String, dynamic>{
                               "fit": BoxFit.cover,
                               "width": 300.0,
@@ -551,7 +552,7 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                         alignment: Alignment.center,
                         child: ClientRequest.getPaymnentProofImageFromNetwork(
                             MySettings.getUrl(),
-                            "room/payment/proof/user/${users[index].username!}",
+                            "room/payment/proof/user/${users[index].roomNumber}/${users[index].floorNumber}/${users[index].username!}",
                             <String, dynamic>{
                               "fit": BoxFit.contain,
                               "width": 500.0,
@@ -654,40 +655,40 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
           ],
         ),
         const SizedBox(
-          height: 50,
+          height: 30,
         ),
         users.isNotEmpty ? accORdenie(index, users) : savecancel(index),
-        users[index].isDenied ||
-                users[index].isPaid! && users[index].isVerified!
-            ? Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        perip = true;
-                        users[index].isDenied = false;
-                        // mutasi[index].readiable = false;
-                      });
-                    },
-                    borderRadius: BorderRadius.circular(15),
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 30,
-                      width: 90,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.red.shade400),
-                      child: const Text(
-                        textAlign: TextAlign.center,
-                        'Batalkan',
-                        style: TextStyle(fontSize: 11, color: Colors.white),
-                      ),
-                    )),
-              )
-            : const SizedBox(
-                height: 0,
-                width: 0,
-              ),
+        // users[index].isDenied ||
+        //         users[index].isPaid! && users[index].isVerified!
+        //     ? Padding(
+        //         padding: const EdgeInsets.only(top: 20),
+        //         child: InkWell(
+        //             onTap: () {
+        //               setState(() {
+        //                 perip = true;
+        //                 users[index].isDenied = false;
+        //                 // mutasi[index].readiable = false;
+        //               });
+        //             },
+        //             borderRadius: BorderRadius.circular(15),
+        //             child: Container(
+        //               alignment: Alignment.center,
+        //               height: 30,
+        //               width: 90,
+        //               decoration: BoxDecoration(
+        //                   borderRadius: BorderRadius.circular(15),
+        //                   color: Colors.red.shade400),
+        //               child: const Text(
+        //                 textAlign: TextAlign.center,
+        //                 'Batalkan',
+        //                 style: TextStyle(fontSize: 11, color: Colors.white),
+        //               ),
+        //             )),
+        //       )
+        //     : const SizedBox(
+        //         height: 0,
+        //         width: 0,
+        //       ),
         const SizedBox(
           height: 20,
         ),
@@ -752,7 +753,9 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          OutlinedButton(
+          (users[index].isPaid! && users[index].isVerified!)
+          ? const SizedBox()
+          : OutlinedButton(
             onPressed: () {
               setState(() {
                 users[index].isDenied = true;
@@ -772,42 +775,53 @@ class _AdminMutasiPageState extends State<AdminMutasiPage> {
                   fontSize: 10, letterSpacing: 2, color: Colors.black),
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              verifyUserPayment(
-                      MySettings.getUrl() + ("room/payment/proof/user/verify"),
-                      users[index])
-                  .then((value) {
-                if (value) {
-                  setState(() {
-                    perip = true;
-                    users[index].isPaid = true;
-                    users[index].isVerified = true;
-                    CoolAlert.show(
-                      context: context,
-                      type: CoolAlertType.success,
-                      title: 'Diverifikasi',
-                      text: "\nTransaksi Berhasil Diverifikasi\n",
-                    );
-                    // mutasi[index].readiable = true;
-                  });
-                }
-              });
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: warna2,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20))),
-            child: const Text(
-              "Terima",
-              style: TextStyle(
-                fontSize: 10,
-                letterSpacing: 2,
-                color: Colors.white,
-              ),
-            ),
-          ),
+          (users[index].isVerified!)
+              ? const Text(
+                  "Lunas",
+                  style: TextStyle(
+                    fontSize: 10,
+                    letterSpacing: 2,
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold
+                  ),
+                )
+              : ElevatedButton(
+                  onPressed: () {
+                    verifyUserPayment(
+                            MySettings.getUrl() +
+                                ("room/payment/proof/user/verify"),
+                            users[index])
+                        .then((value) {
+                      if (value) {
+                        setState(() {
+                          perip = true;
+                          users[index].isPaid = true;
+                          users[index].isVerified = true;
+                          CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.success,
+                            title: 'Diverifikasi',
+                            text: "\nTransaksi Berhasil Diverifikasi\n",
+                          );
+                          // mutasi[index].readiable = true;
+                        });
+                      }
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: warna2,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20))),
+                  child: const Text(
+                    "Terima",
+                    style: TextStyle(
+                      fontSize: 10,
+                      letterSpacing: 2,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
         ],
       ),
     );

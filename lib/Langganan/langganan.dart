@@ -334,7 +334,7 @@ class _LanggananAppState extends State<LanggananApp> {
 
   void deleteRentWhenDue(String url, Subscribe sub) {
     ClientRequest.deleteData(
-            "${url}${sub.roomNumber}/${sub.floorNumber}/${sub.userName}")
+            "${url}rent/delete/${sub.roomNumber}/${sub.floorNumber}/${sub.userName}")
         .then((value) {
       print(value);
       if (value["status"] == "OK") {
@@ -344,7 +344,7 @@ class _LanggananAppState extends State<LanggananApp> {
             type: CoolAlertType.info,
             title: 'Berhasil',
             text:
-                "\nTenggat Waktu telah habis, sewa ${sub.userName} telah dihapus\n",
+                "\nTenggat Waktu telah habis, sewa Anda untuk Kamar ${sub.roomNumber} Lt.${sub.floorNumber} telah dihapus\n",
           );
         });
       }
@@ -356,7 +356,7 @@ class _LanggananAppState extends State<LanggananApp> {
       itemCount: subs.length,
       itemBuilder: (context, index) {
         // final subscription = subscriptions[index];
-        int remainingDays = calculateRemainingDays(subs[index].startDate!);
+        // int remainingDays = calculateRemainingDays(subs[index].startDate!);
 
         // if (remainingDays == -11) {
         //   return ListTile(
@@ -439,12 +439,12 @@ class _LanggananAppState extends State<LanggananApp> {
                         ),
                       ),
                       Text(
-                        remainingDays > 0
-                            ? '$remainingDays Hari'
-                            : '${remainingDays.abs()} Hari (-)',
+                        int.parse(subs[index].due!) > 0
+                            ? 'Tersisa ${subs[index].due!} Hari'
+                            : 'Telat ${int.parse(subs[index].due!).abs()} Hari (-)',
                         style: TextStyle(
                           fontSize: 13,
-                          color: remainingDays > 0 ? Colors.black : Colors.red,
+                          color: int.parse(subs[index].due!) > 0 ? Colors.black : Colors.red,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

@@ -68,18 +68,18 @@ class _AdminLanggananAppState extends State<AdminLanggananApp> {
   void initState() {
     super.initState();
     futureSubs = getFutureSubs(MySettings.getUrl() + ("rent/users"));
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      for (var subscription in subscriptions) {
-        int remainingDays = calculateRemainingDays(subscription);
-        if (remainingDays <= 3 && remainingDays > 0) {
-          _showAlertDialog(
-              'pembayaran untuk ${subscription.username} di ${subscription.roomDetails} sudah dekat');
-        } else if (remainingDays <= 0 && remainingDays > -10) {
-          _showAlertDialog(
-              'pembayaran untuk ${subscription.username} di ${subscription.roomDetails} telah melewati batas');
-        }
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   for (var subscription in subscriptions) {
+    //     int remainingDays = calculateRemainingDays(subscription);
+    //     if (remainingDays <= 3 && remainingDays > 0) {
+    //       _showAlertDialog(
+    //           'pembayaran untuk ${subscription.username} di ${subscription.roomDetails} sudah dekat');
+    //     } else if (remainingDays <= 0 && remainingDays > -10) {
+    //       _showAlertDialog(
+    //           'pembayaran untuk ${subscription.username} di ${subscription.roomDetails} telah melewati batas');
+    //     }
+    //   }
+    // });
   }
 
   int calculateRemainingDays(AdminLangganan subscription) {
@@ -212,6 +212,25 @@ class _AdminLanggananAppState extends State<AdminLanggananApp> {
     });
   }
 
+  void deleteRentWhenDue(String url, Subscribe sub) {
+    ClientRequest.deleteData(
+            "${url}rent/delete/${sub.roomNumber}/${sub.floorNumber}/${sub.userName}")
+        .then((value) {
+      print(value);
+      if (value["status"] == "OK") {
+        setState(() {
+          CoolAlert.show(
+            context: context,
+            type: CoolAlertType.info,
+            title: 'Berhasil',
+            text:
+                "Sewa telah habis. Kamar ${sub.roomNumber} Lt.${sub.floorNumber} untuk ${sub.userName} telah dihapus",
+          );
+        });
+      }
+    });
+  }
+
   Widget futureListView(BuildContext context, List<Subscribe> subs) {
     print("FutureListView");
     return RefreshIndicator(
@@ -220,21 +239,12 @@ class _AdminLanggananAppState extends State<AdminLanggananApp> {
           itemCount: subs.length,
           itemBuilder: (context, index) {
             final subscription = subs[index];
-            int remainingDays = calculateUserRemainingDays(subs[index]);
+            // int remainingDays = calculateUserRemainingDays(subs[index]);
 
-            if (remainingDays == -11) {
-              return ListTile(
-                title: Text(
-                  "Data untuk ${subs[index].userName} telah dihapus",
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
-                ),
-              );
+            int due = int.parse(subs[index].due!);
+            if (due < -11) {
+              deleteRentWhenDue(MySettings.getUrl(), subs[index]);
             }
-
             return Card(
               child: Container(
                 margin: const EdgeInsets.only(left: 15, top: 10, bottom: 10),
@@ -444,7 +454,6 @@ class _AdminLanggananAppState extends State<AdminLanggananApp> {
               child: const Text('Ya'),
               onPressed: () {
                 setState(() {
-                  Navigator.of(context).pop();
                   deleteRent(MySettings.getUrl() +
                       ("rent/delete/${sub.roomNumber}/${sub.floorNumber}/${sub.userName}"));
                 });

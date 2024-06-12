@@ -164,7 +164,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                           fontSize: 12, color: Colors.white),
                                     ),
                                     onTap: () {
-                                      exit(exitCode);
+                                      logout(context);
                                     },
                                   )
                                 ],
@@ -236,14 +236,14 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                         ),
                       ],
                     ),
-                    child: const Padding(
-                        padding: EdgeInsets.only(top: 16, right: 18, left: 16),
+                    child: Padding(
+                        padding: const EdgeInsets.only(top: 16, right: 18, left: 16),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Pembayaran(),
-                              Chat(),
-                              Info(),
+                              Pembayaran(role: 1),
+                              const Chat(),
+                              const Info(),
                             ])),
                   ),
                   Container(

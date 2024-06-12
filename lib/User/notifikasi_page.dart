@@ -109,157 +109,58 @@ class _NotifikasiPageState extends State<NotifikasiPage> {
 
   @override
   Widget build(BuildContext context) {
-    return tambah
-        ? Scaffold(
-            appBar: AppBar(
-              toolbarHeight: 90,
-              backgroundColor: warna2,
-              automaticallyImplyLeading: false,
-              title: Stack(
-                children: [
-                  // Container(
-                  //   alignment: Alignment.centerLeft,
-                  //   width: 35,
-                  //   height: 35,
-                  //   decoration: const BoxDecoration(
-                  //     color: Colors.blue,
-                  //     shape: BoxShape.circle
-                  //   ),
-                  //   child: IconButton(
-                  //     icon: const Icon(
-                  //       Icons.add,
-                  //       color: Colors.white,
-                  //       size: 18,
-                  //     ),
-                  //     onPressed: () {
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 90,
+        backgroundColor: warna2,
+        automaticallyImplyLeading: false,
+        title: Stack(
+          children: [
+            // Container(
+            //   alignment: Alignment.centerLeft,
+            //   width: 35,
+            //   height: 35,
+            //   decoration: const BoxDecoration(
+            //     color: Colors.blue,
+            //     shape: BoxShape.circle
+            //   ),
+            //   child: IconButton(
+            //     icon: const Icon(
+            //       Icons.add,
+            //       color: Colors.white,
+            //       size: 18,
+            //     ),
+            //     onPressed: () {
 
-                  //     },
-                  //   ),
-                  // ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: const Text(
-                        "Notifikasi",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            body: FutureBuilder(
-                future: futureNotif,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                    return futureListView(context, snapshot.data!);
-                  } else {
-                    return emptyNotif();
-                  }
-                }),
-          )
-        : Scaffold(
-            appBar: AppBar(
-              toolbarHeight: 90,
-              backgroundColor: warna2,
-              automaticallyImplyLeading: false,
-              title: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: const Text(
-                        "Tambah Notifikasi",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            body: ListView(
-              children: [
-                Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    padding: const EdgeInsets.only(top: 90),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Nama Pengirim',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 12),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        TextField(
-                          controller: namaController,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp('[a-z A-Z 0-9]'))
-                          ],
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.only(bottom: 5),
-                            hintFadeDuration: Duration(milliseconds: 300),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            hintStyle: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const Text(
-                          'Deskripsi',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 12),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        TextField(
-                          controller: deskripsiController,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp('[a-z A-Z 0-9]'))
-                          ],
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.only(bottom: 5),
-                            border: OutlineInputBorder(),
-                            hintFadeDuration: Duration(milliseconds: 300),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            hintStyle: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        // savecancel()
-                      ],
-                    ),
-                  ),
+            //     },
+            //   ),
+            // ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Container(
+                alignment: Alignment.center,
+                child: const Text(
+                  "Notifikasi",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15),
                 ),
-              ],
+              ),
             ),
-          );
+          ],
+        ),
+      ),
+      body: FutureBuilder(
+          future: futureNotif,
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+              return futureListView(context, snapshot.data!);
+            } else {
+              return emptyNotif();
+            }
+          }),
+    );
   }
 
   void readNotif(List<Notification> notifs, int index) {
@@ -270,11 +171,8 @@ class _NotifikasiPageState extends State<NotifikasiPage> {
         setState(() {
           notifs[index].isRead = true;
         });
-      }
-      else{
-        setState(() {
-          
-        });
+      } else {
+        setState(() {});
       }
     });
   }
@@ -462,234 +360,4 @@ class _NotifikasiPageState extends State<NotifikasiPage> {
       style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
     ));
   }
-
-  // Widget listView() {
-  //   return ListView.separated(
-  //       itemBuilder: (context, index) {
-  //         return InkWell(
-  //           onTap: () {
-  //             setState(() {
-  //               showDialog(
-  //                   context: context,
-  //                   builder: (context) => AlertDialog(
-  //                         contentPadding: EdgeInsets.zero,
-  //                         shape: RoundedRectangleBorder(
-  //                           borderRadius: BorderRadius.circular(30),
-  //                         ),
-  //                         actions: [
-  //                           Center(
-  //                             child: Padding(
-  //                               padding: const EdgeInsets.only(top: 25),
-  //                               child: TextButton(
-  //                                   onPressed: () {
-  //                                     setState(() {
-  //                                       notif[index].read = true;
-  //                                     });
-  //                                     Navigator.of(context).pop();
-  //                                   },
-  //                                   child: Text(
-  //                                     'oke',
-  //                                     style: TextStyle(
-  //                                         fontSize: 12, color: warna2),
-  //                                   )),
-  //                             ),
-  //                           ),
-  //                         ],
-  //                         icon: Image.asset(
-  //                           'lib/src/images/dashboardkos.jpeg',
-  //                           height: 120,
-  //                           fit: BoxFit.cover,
-  //                         ),
-  //                         title: Text(
-  //                           textAlign: TextAlign.center,
-  //                           notif[index].notifpengirim,
-  //                           style: const TextStyle(
-  //                             fontWeight: FontWeight.bold,
-  //                             fontSize: 16,
-  //                           ),
-  //                         ),
-  //                         content: Padding(
-  //                           padding: const EdgeInsets.only(
-  //                               right: 25, left: 25, top: 15),
-  //                           child: Text(
-  //                             textAlign: TextAlign.center,
-  //                             notif[index].notifdesk,
-  //                             style: const TextStyle(
-  //                               fontSize: 10,
-  //                             ),
-  //                           ),
-  //                         ),
-  //                       ));
-
-  //               // AlertDialog(
-  //               // contentPadding: EdgeInsets.zero,
-  //               // shape: RoundedRectangleBorder(
-  //               //   borderRadius: BorderRadius.circular(borderRadius),
-  //               //   ),
-  //             });
-  //           },
-  //           child: Container(
-  //             margin: const EdgeInsets.only(
-  //                 left: 5, top: 10, right: 15, bottom: 10),
-  //             child: Row(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 notif[index].read
-  //                     ? Container(
-  //                         height: 50,
-  //                         width: 30,
-  //                         padding: const EdgeInsets.all(10),
-  //                         decoration: const BoxDecoration(
-  //                           shape: BoxShape.circle,
-  //                         ),
-  //                         child: Icon(Icons.notifications,
-  //                             size: 25, color: Colors.grey.shade700),
-  //                       )
-  //                     : Container(
-  //                         height: 50,
-  //                         width: 30,
-  //                         padding: const EdgeInsets.all(10),
-  //                         decoration: const BoxDecoration(
-  //                           shape: BoxShape.circle,
-  //                         ),
-  //                         child: Badge(
-  //                             child: Icon(Icons.notifications,
-  //                                 size: 25, color: Colors.grey.shade700)),
-  //                       ),
-  //                 Expanded(
-  //                   child: Container(
-  //                     margin: const EdgeInsets.only(left: 20, top: 8),
-  //                     child: Column(
-  //                       crossAxisAlignment: CrossAxisAlignment.start,
-  //                       children: [
-  //                         Column(
-  //                           crossAxisAlignment: CrossAxisAlignment.start,
-  //                           children: [
-  //                             Text(
-  //                               notif[index].notifpengirim,
-  //                               style: const TextStyle(
-  //                                 fontWeight: FontWeight.bold,
-  //                                 fontSize: 14,
-  //                               ),
-  //                             ),
-  //                             Row(
-  //                               mainAxisAlignment:
-  //                                   MainAxisAlignment.spaceBetween,
-  //                               children: [
-  //                                 Text(
-  //                                   notif[index].notifdesk.substring(0, 5) +
-  //                                       ending,
-  //                                   style: const TextStyle(
-  //                                     fontSize: 12,
-  //                                   ),
-  //                                 ),
-  //                                 notif[index].read
-  //                                     ? const Text(
-  //                                         'Dibaca',
-  //                                         style: TextStyle(
-  //                                             fontSize: 10,
-  //                                             color: Colors.green,
-  //                                             fontWeight: FontWeight.bold),
-  //                                       )
-  //                                     : const Text(
-  //                                         'Belum Dibaca',
-  //                                         style: TextStyle(
-  //                                             fontSize: 10,
-  //                                             color: Colors.red,
-  //                                             fontWeight: FontWeight.bold),
-  //                                       ),
-  //                               ],
-  //                             ),
-  //                           ],
-  //                         ),
-  //                         Container(
-  //                           margin: const EdgeInsets.only(top: 5),
-  //                           child: Row(
-  //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                             children: [
-  //                               Text(
-  //                                 notif[index].tanggl.toString(),
-  //                                 style: const TextStyle(
-  //                                   fontSize: 10,
-  //                                 ),
-  //                               ),
-  //                               Text(
-  //                                 notif[index].waktu.toString(),
-  //                                 style: const TextStyle(
-  //                                   fontSize: 10,
-  //                                 ),
-  //                               ),
-  //                             ],
-  //                           ),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         );
-  //       },
-  //       separatorBuilder: (context, index) {
-  //         return const Divider(
-  //           height: 0,
-  //         );
-  //       },
-  //       itemCount: notif.length);
-  // }
-
-  // Widget savecancel() {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(left: 20, right: 20),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //       children: [
-  //         OutlinedButton(
-  //           onPressed: () {
-  //             setState(() {
-  //               tambah = true;
-  //             });
-  //           },
-  //           style: OutlinedButton.styleFrom(
-  //             padding: const EdgeInsets.symmetric(horizontal: 20),
-  //             shape: RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.circular(20)),
-  //           ),
-  //           child: const Text(
-  //             "CANCEL",
-  //             style: TextStyle(
-  //                 fontSize: 10, letterSpacing: 2, color: Colors.black),
-  //           ),
-  //         ),
-  //         ElevatedButton(
-  //           onPressed: () {
-  //             String nama = namaController.text.trim();
-  //             String deskripsi = deskripsiController.text.trim();
-
-  //             setState(() {
-  //               namaController.text = '';
-  //               deskripsiController.text = '';
-  //               notif.add(Notif(notifpengirim: nama, notifdesk: deskripsi));
-  //               tambah = true;
-  //             });
-  //           },
-  //           style: ElevatedButton.styleFrom(
-  //               backgroundColor: warna2,
-  //               padding: const EdgeInsets.symmetric(horizontal: 20),
-  //               shape: RoundedRectangleBorder(
-  //                   borderRadius: BorderRadius.circular(20))),
-  //           child: const Text(
-  //             "SAVE",
-  //             style: TextStyle(
-  //               fontSize: 10,
-  //               letterSpacing: 2,
-  //               color: Colors.white,
-  //             ),
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
 }

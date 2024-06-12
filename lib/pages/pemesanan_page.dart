@@ -136,9 +136,6 @@ class _PemesananState extends State<Pemesanan> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // futureFloors = getFutureFloors(MySettings.getUrl() + ("/rooms"));
-    // futureUsers = fetchAllRentData(MySettings.getUrl() + ("rents"));
-    // fetchAllData();
     getFutureFloors(MySettings.getUrl() + ("rooms")).then((value) {
       int index = 0;
       if (value.length <= pesanlt1.length) {

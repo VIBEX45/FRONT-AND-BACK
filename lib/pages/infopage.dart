@@ -178,14 +178,14 @@ class _InfoPageState extends State<InfoPage> {
                         image: const DecorationImage(image: AssetImage('lib/src/images/1.jpeg'), fit: BoxFit.cover),
                       ),
                     ),
-                    Container(
-                      height: box,
-                      width: box,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: const DecorationImage(image: AssetImage('lib/src/images/3.jpeg'), fit: BoxFit.cover),
-                      ),
-                    ),
+                    // Container(
+                    //   height: box,
+                    //   width: box,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(10),
+                    //     image: const DecorationImage(image: AssetImage('lib/src/images/3.jpeg'), fit: BoxFit.cover),
+                    //   ),
+                    // ),
                     Container(
                       height: box,
                       width: box,

@@ -267,14 +267,14 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                       ],
                     ),
-                    child: const Padding(
-                        padding: EdgeInsets.only(top: 16, right: 18, left: 16),
+                    child: Padding(
+                        padding: const EdgeInsets.only(top: 16, right: 18, left: 16),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Pembayaran(),
-                              Chat(),
-                              Info(),
+                              Pembayaran(role: 3),
+                              const Chat(),
+                              const Info(),
                             ])),
                   ),
                   Container(
