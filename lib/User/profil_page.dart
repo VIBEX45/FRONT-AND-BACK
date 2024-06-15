@@ -77,7 +77,7 @@ class _ProfilPageState extends State<ProfilPage> {
 
   Future<bool> updateProfile(
       String username, String url, Map<String, dynamic> postBody) async {
-    final response = await ClientRequest.postData(url, postBody);
+    final response = await ClientRequest.updateData(url, postBody);
     if (response["status"] == "OK") {
       return true;
     } else {
@@ -88,19 +88,31 @@ class _ProfilPageState extends State<ProfilPage> {
   void getUsernameNuploadProfile(String key, String url, String multiPartField,
       String filePath, Map<String, dynamic> postBody) {
     MySharedPreferences.fetchFromShared(key).then((value) {
-      String pathUrl = url + value![0];
-      // print(pathUrl);
+      String username = value![0];
+      String pathUrl = url + username;
+      String updatePathUrl = MySettings.getUrl() + ("user/update/") + username;
       if (filePath.isEmpty) {
-        updateProfile(username, pathUrl, postBody).then((value) {
-          if (value) {
-            setState(() {
-              Navigator.of(context).pop();
-              CoolAlert.show(
-                context: context,
-                type: CoolAlertType.success,
-                title: 'Berhasil',
-                text: "\nBerhasil memperbarui profil\n",
-              );
+        updateProfile(username, updatePathUrl, postBody).then((isUpdate) {
+          if (isUpdate) {
+            MySharedPreferences.removeFromShared("_userLogged").then((isDel) {
+              if (isDel) {
+                MySharedPreferences.saveToSharedList(key, [
+                  postBody["username"],
+                  postBody["phonenumber"],
+                  postBody["email"],
+                  value[3],
+                  value[4]
+                ]);
+                setState(() {
+                  Navigator.of(context).pop();
+                  CoolAlert.show(
+                    context: context,
+                    type: CoolAlertType.success,
+                    title: 'Berhasil',
+                    text: "\nProfil Diperbarui\n",
+                  );
+                });
+              }
             });
           } else {
             debugPrint("Cannot Upload Profile!");
@@ -108,9 +120,9 @@ class _ProfilPageState extends State<ProfilPage> {
         });
       } else if (filePath.isNotEmpty && postBody.isEmpty) {
         uploadImage(pathUrl, multiPartField, filePath,
-                "profil-picture-of_" + value[0] + ".jpg")
-            .then((value) {
-          if (value) {
+                "profil-picture-of_" + username + ".jpg")
+            .then((uploaded) {
+          if (uploaded) {
             setState(() {
               Navigator.of(context).pop();
               CoolAlert.show(
@@ -125,19 +137,30 @@ class _ProfilPageState extends State<ProfilPage> {
           }
         });
       } else {
-        updateProfile(username, pathUrl, postBody).then((isUpload) {
+        updateProfile(username, updatePathUrl, postBody).then((isUpload) {
           uploadImage(pathUrl, multiPartField, filePath,
-                  "profil-picture-of_" + value[0] + ".jpg")
-              .then((value) {
-            if (value && isUpload) {
-              setState(() {
-                Navigator.of(context).pop();
-                CoolAlert.show(
-                  context: context,
-                  type: CoolAlertType.success,
-                  title: 'Berhasil',
-                  text: "\nBerhasil memperbarui profil\n",
-                );
+                  "profil-picture-of_" + postBody["username"] + ".jpg")
+              .then((uploaded) {
+            if (uploaded && isUpload) {
+              MySharedPreferences.removeFromShared("_userLogged").then((isDel) {
+                if (isDel) {
+                  MySharedPreferences.saveToSharedList(key, [
+                    postBody["username"],
+                    postBody["phonenumber"],
+                    postBody["email"],
+                    value[3],
+                    value[4]
+                  ]);
+                  setState(() {
+                    Navigator.of(context).pop();
+                    CoolAlert.show(
+                      context: context,
+                      type: CoolAlertType.success,
+                      title: 'Berhasil',
+                      text: "\nProfil Diperbarui\n",
+                    );
+                  });
+                }
               });
             } else {
               debugPrint("Cannot Upload Profile and Image!");
@@ -286,42 +309,6 @@ class _ProfilPageState extends State<ProfilPage> {
                                 );
                               }
                             }),
-                    // : (username.isNotEmpty)
-                    //     ? Padding(
-                    //         padding: const EdgeInsets.only(top: 30),
-                    //         child: userProfileImage(MySettings.getUrl(),
-                    //             "user/profil/$username", <String, dynamic>{
-                    //           "fit": BoxFit.cover,
-                    //           "width": 90.0,
-                    //           "height": 90.0
-                    //         }))
-                    //     : Padding(
-                    //         padding: const EdgeInsets.only(top: 30),
-                    //         child: Container(
-                    //           width: 90,
-                    //           height: 90,
-                    //           decoration: BoxDecoration(
-                    //             border: Border.all(
-                    //                 width: 1, color: Colors.black),
-                    //             boxShadow: [
-                    //               BoxShadow(
-                    //                   spreadRadius: 2,
-                    //                   blurRadius: 10,
-                    //                   color: warna1.withOpacity(0.2)),
-                    //             ],
-                    //             shape: BoxShape.circle,
-                    //             //   image: const DecorationImage(
-                    //             //     image:
-                    //             //         AssetImage('lib/src/images/3.jpeg'),
-                    //             //     fit: BoxFit.cover,
-                    //             //   ),
-                    //           ),
-                    //           child: const Icon(
-                    //             Icons.person,
-                    //             size: 30,
-                    //           ),
-                    //         ),
-                    //       ),
                     Positioned(
                       bottom: 0,
                       right: 0,
@@ -995,7 +982,7 @@ class _ProfilPageState extends State<ProfilPage> {
               String masukkannama = masukkannamaController.text.trim();
               // String masukkankamar = masukkankamarController.text.trim();
               String masukkantelp = masukkantelpController.text.trim();
-              masukkantelp = sanitizedNumber(masukkantelp);
+              masukkantelp = masukkantelp.isNotEmpty ? sanitizedNumber(masukkantelp) : "";
               String masukkanemail = masukkanemailController.text.trim();
               String masukkanpassword = masukkanpasswordController.text.trim();
               //
@@ -1004,12 +991,12 @@ class _ProfilPageState extends State<ProfilPage> {
                   masukkantelp.isNotEmpty &&
                   masukkanemail.isNotEmpty &&
                   masukkanpassword.isNotEmpty &&
-                  imgPath!.isNotEmpty) {
+                  imgPath == null) {
                 getUsernameNuploadProfile(
                     "_userLogged",
                     MySettings.getUrl() + ("user/profile/upload/"),
                     "profile-pict",
-                    imgPath!, <String, dynamic>{
+                    "", <String, dynamic>{
                   "username": masukkannama,
                   "phonenumber": masukkantelp,
                   "email": masukkanemail,
@@ -1034,31 +1021,6 @@ class _ProfilPageState extends State<ProfilPage> {
                 kontak[selectedindex].masukkanpassword = masukkanpassword;
                 pilihan = true;
               });
-
-              // //
-              // if (masukkannama.isNotEmpty &&
-              //     masukkankamar.isNotEmpty &&
-              //     masukkantelp.isNotEmpty &&
-              //     masukkanemail.isNotEmpty &&
-              //     masukkanpassword.isNotEmpty) {
-              //   if (kontak.isEmpty) {
-              //     setState(() {
-              //       masukkannamaController.text = '';
-              //       masukkankamarController.text = '';
-              //       masukkantelpController.text = '';
-              //       masukkanemailController.text = '';
-              //       masukkanpasswordController.text = '';
-              //       kontak.add(Kontak(
-              //           masukkankamar: masukkankamar,
-              //           masukkannama: masukkannama,
-              //           masukkantelp: masukkantelp,
-              //           masukkanemail: masukkanemail,
-              //           masukkanpassword: masukkanpassword));
-              //       pilihan = true;
-              //     });
-              //   }
-              //   });
-              // }
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: warna2,
